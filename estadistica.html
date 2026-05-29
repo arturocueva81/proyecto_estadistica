@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estadística Aplicada</title>
+    <link rel="stylesheet" href="estadistica.css">
+</head>
+<body>
+
+    <!-- ================================================== -->
+    <!-- MENU DE NAVEGACION (nav)                           -->
+    <!-- ================================================== -->
+    <nav>
+        <button onclick="mostrarSeccion('portada')">Portada</button>
+        <button onclick="mostrarSeccion('que-es')">¿Qué es la Estadística?</button>
+        <button onclick="mostrarSeccion('media')">Media</button>
+        <button onclick="mostrarSeccion('mediana')">Mediana</button>
+        <button onclick="mostrarSeccion('moda')">Moda</button>
+        <button onclick="mostrarSeccion('min-max')">Mínimo y Máximo</button>
+        <button onclick="mostrarSeccion('rango')">Rango</button>
+        <button onclick="mostrarSeccion('varianza')">Varianza</button>
+        <button onclick="mostrarSeccion('desviacion')">Desviación Estándar</button>
+    </nav>
+
+    <!-- ================================================== -->
+    <!-- SECCION 1: PORTADA                                 -->
+    <!-- ================================================== -->
+    <section id="portada">
+        <h1>Estadística Aplicada</h1>
+        <h2>Proyecto de Matemática 1</h2>
+        <img src="images/portada.png" width="100%">
+
+        <p>
+            Este sitio web presenta los conceptos fundamentales de la
+            estadística descriptiva, con definiciones claras y ejemplos
+            prácticos para facilitar su comprensión.
+        </p>
+        <p>
+            Usa el menú de navegación superior para explorar cada tema.
+        </p>
+    </section>
+
+    <!-- ================================================== -->
+    <!-- SECCION 2: QUE ES LA ESTADISTICA                   -->
+    <!-- ================================================== -->
+    <section id="que-es" class="oculto">
+        <h2>¿Qué es la Estadística?</h2>
+
+        <img src="images/estadistica.png" width="100%">
+
+        <h3>Definición</h3>
+        <p>
+            La estadística es una rama de las matemáticas que se encarga de
+            recopilar, organizar, analizar e interpretar datos numéricos.
+            Su objetivo es obtener conclusiones útiles a partir de la
+            información recopilada.
+        </p>
+        <p>Existen dos tipos principales:</p>
+
+        <!-- Lista desordenada (ul) con los tipos de estadistica -->
+        <!-- Cada elemento de la lista es un <li> -->
+        <ul>
+            <li>
+                <strong>Estadística descriptiva:</strong> resume y describe
+                las características de un conjunto de datos.
+            </li>
+            <li>
+                <strong>Estadística inferencial:</strong> permite hacer
+                predicciones o generalizaciones a partir de una muestra.
+            </li>
+        </ul>
+
+        <!-- Subtitulo para el ejemplo -->
+        <h3>Ejemplo</h3>
+        <p>
+            Un profesor registra las calificaciones de 5 estudiantes:
+            <strong>7, 8, 6, 9, 10</strong>.
+        </p>
+        <p>
+            Con estadística descriptiva podemos calcular el promedio,
+            la mediana, el valor más alto y el más bajo de esas
+            calificaciones para entender mejor el rendimiento del grupo.
+        </p>
+    </section>
+
+    <!-- ================================================== -->
+    <!-- SECCION 3: MEDIA (PROMEDIO)                        -->
+    <!-- ================================================== -->
+    <section id="media" class="oculto">
+        <h2>Media (Promedio)</h2>
+        <img src="images/media.jpg" width="50%">
+
+        <h3>Definición</h3>
+        <p>
+            La media aritmética, comúnmente llamada promedio, es el
+            resultado de sumar todos los valores de un conjunto de datos
+            y dividir esa suma entre la cantidad total de valores.
+        </p>
+        <p>
+            <strong>Fórmula:</strong>
+            Media = Suma de todos los valores / Cantidad de valores
+        </p>
+
+        <h3>Ejemplo</h3>
+        <p>Las edades de 5 personas son: <strong>20, 25, 30, 22, 28</strong></p>
+        <p>
+            Paso 1: Sumamos todos los valores:
+            20 + 25 + 30 + 22 + 28 = <strong>125</strong>
+        </p>
+        <p>
+            Paso 2: Dividimos entre la cantidad de valores (5):
+            125 / 5 = <strong>25</strong>
+        </p>
+        <p>La media de las edades es <strong>25 años</strong>.</p>
+
+        <!-- ================================================== -->
+        <!-- CAJA CONSOLA: Como calcular la MEDIA en JavaScript  -->
+        <!-- La clase "consola" le da fondo negro y texto verde   -->
+        <!-- La etiqueta <pre> conserva los espacios y saltos    -->
+        <!-- de linea tal como estan escritos en el codigo.      -->
+        <!-- ================================================== -->
+        <h3>¿Cómo se calcula en JavaScript?</h3>
+        <pre class="consola">
+// --- Calcular la MEDIA (Promedio) en JavaScript ---
+
+// Paso 1: Crear un array con los datos
+var datos = [20, 25, 30, 22, 28];
+
+// Paso 2: Crear una variable para acumular la suma
+// Empieza en 0 porque aun no hemos sumado nada
+var suma = 0;
+
+// Paso 3: Recorrer el array con un ciclo for
+// El for va desde la posicion 0 hasta la ultima posicion
+// datos.length nos dice cuantos elementos tiene el array
+for (var i = 0; i &lt; datos.length; i++) {
+    // En cada vuelta, sumamos el valor actual al acumulador
+    suma = suma + datos[i];
+}
+
+// Paso 4: Dividir la suma entre la cantidad de datos
+var media = suma / datos.length;
+
+// Paso 5: Mostrar el resultado en la consola del navegador
+console.log("La media es: " + media);
+// Resultado: La media es: 25
+        </pre>
+    </section>
+
+    <!-- ================================================== -->
+    <!-- SECCION 4: MEDIANA                                 -->
+    <!-- ================================================== -->
+    <section id="mediana" class="oculto">
+        <h2>Mediana</h2>
+        <img src="images/mediana.jpg" width="50%">
+
+        <h3>Definición</h3>
+        <p>
+            La mediana es el valor que se encuentra exactamente en el
+            centro de un conjunto de datos cuando estos están ordenados
+            de menor a mayor.
+        </p>
+        <p>
+            Si la cantidad de datos es impar, la mediana es el valor
+            central. Si es par, la mediana es el promedio de los dos
+            valores centrales.
+        </p>
+
+        <h3>Ejemplo con cantidad impar</h3>
+        <p>Datos: <strong>3, 7, 1, 9, 5</strong></p>
+        <p>
+            Paso 1: Ordenamos de menor a mayor:
+            1, 3, <strong>5</strong>, 7, 9
+        </p>
+        <p>Paso 2: El valor del centro es <strong>5</strong></p>
+        <p>La mediana es <strong>5</strong>.</p>
+
+        <h3>Ejemplo con cantidad par</h3>
+        <p>Datos: <strong>2, 4, 6, 8</strong></p>
+        <p>
+            Paso 1: Ya están ordenados:
+            2, <strong>4, 6</strong>, 8
+        </p>
+        <p>Paso 2: Los dos valores centrales son 4 y 6</p>
+        <p>Paso 3: Promediamos: (4 + 6) / 2 = <strong>5</strong></p>
+        <p>La mediana es <strong>5</strong>.</p>
+
+        <!-- ================================================== -->
+        <!-- CAJA CONSOLA: Como calcular la MEDIANA en JavaScript -->
+        <!-- ================================================== -->
+        <h3>¿Cómo se calcula en JavaScript?</h3>
+        <pre class="consola">
+// --- Calcular la MEDIANA en JavaScript ---
+
+// Paso 1: Crear un array con los datos
+var datos = [3, 7, 1, 9, 5];
+
+// Paso 2: Ordenar el array de menor a mayor
+// El metodo sort() ordena, pero necesita una funcion
+// que le diga como comparar numeros.
+// Si (a - b) es negativo, "a" va primero.
+// Si (a - b) es positivo, "b" va primero.
+datos.sort(function(a, b) {
+    return a - b;
+});
+// Ahora datos = [1, 3, 5, 7, 9]
+
+// Paso 3: Encontrar la posicion del centro
+// Math.floor() redondea hacia abajo (quita decimales)
+var centro = Math.floor(datos.length / 2);
+
+// Paso 4: Verificar si la cantidad de datos es par o impar
+// El operador % (modulo) nos da el residuo de la division
+// Si el residuo de dividir entre 2 es 0, el numero es par
+var mediana;
+
+if (datos.length % 2 === 0) {
+    // Si es PAR: promediamos los dos valores centrales
+    mediana = (datos[centro - 1] + datos[centro]) / 2;
+} else {
+    // Si es IMPAR: tomamos el valor del centro directamente
+    mediana = datos[centro];
+}
+
+console.log("La mediana es: " + mediana);
+// Resultado: La mediana es: 5
+        </pre>
+    </section>
+
+    <!-- ================================================== -->
+    <!-- SECCION 5: MODA                                    -->
+    <!-- ================================================== -->
+    <section id="moda" class="oculto">
+        <h2>Moda</h2>
+        <img src="images/moda.jpg" width="50%">
+
+        <h3>Definición</h3>
+        <p>
+            La moda es el valor que más se repite dentro de un conjunto
+            de datos. Un conjunto puede tener una moda (unimodal), dos
+            modas (bimodal), varias modas (multimodal) o ninguna moda
+            si todos los valores aparecen la misma cantidad de veces.
+        </p>
+
+        <h3>Ejemplo</h3>
+        <p>
+            Calificaciones de un grupo:
+            <strong>8, 7, 9, 8, 10, 8, 7</strong>
+        </p>
+        <p>Contamos las repeticiones:</p>
+
+        <!-- Lista desordenada con el conteo de cada valor -->
+        <ul>
+            <li>7 aparece 2 veces</li>
+            <li>8 aparece 3 veces</li>
+            <li>9 aparece 1 vez</li>
+            <li>10 aparece 1 vez</li>
+        </ul>
+        <p>
+            El valor que más se repite es el <strong>8</strong>,
+            por lo tanto la moda es <strong>8</strong>.
+        </p>
+
+        <!-- ================================================== -->
+        <!-- CAJA CONSOLA: Como calcular la MODA en JavaScript   -->
+        <!-- ================================================== -->
+        <h3>¿Cómo se calcula en JavaScript?</h3>
+        <pre class="consola">
+// --- Calcular la MODA en JavaScript ---
+
+// Paso 1: Crear un array con los datos
+var datos = [8, 7, 9, 8, 10, 8, 7];
+
+// Paso 2: Crear un array de objetos para contar repeticiones
+// Cada objeto tendra: { valor: numero, conteo: veces }
+var conteos = [];
+
+// Paso 3: Recorrer cada dato y contar cuantas veces aparece
+for (var i = 0; i &lt; datos.length; i++) {
+
+    // Buscamos si el valor ya existe en nuestro array de conteos
+    var encontrado = false;
+
+    for (var j = 0; j &lt; conteos.length; j++) {
+        // Si ya existe, aumentamos su conteo en 1
+        if (conteos[j].valor === datos[i]) {
+            conteos[j].conteo = conteos[j].conteo + 1;
+            encontrado = true;
+        }
+    }
+
+    // Si no lo encontramos, lo agregamos con conteo = 1
+    if (encontrado === false) {
+        conteos.push({ valor: datos[i], conteo: 1 });
+    }
+}
+
+// Paso 4: Buscar cual tiene el conteo mas alto
+var moda = conteos[0].valor;
+var maxConteo = conteos[0].conteo;
+
+for (var k = 1; k &lt; conteos.length; k++) {
+    if (conteos[k].conteo > maxConteo) {
+        maxConteo = conteos[k].conteo;
+        moda = conteos[k].valor;
+    }
+}
+
+console.log("La moda es: " + moda);
+// Resultado: La moda es: 8
+        </pre>
+    </section>
+
+    <!-- ================================================== -->
+    <!-- SECCION 6: VALOR MINIMO Y VALOR MAXIMO             -->
+    <!-- ================================================== -->
+    <section id="min-max" class="oculto">
+        <h2>Valor Mínimo y Valor Máximo</h2>
+        <img src="images/val_min_max.jpeg" width="50%">
+
+        <h3>Definición</h3>
+        <p>
+            El <strong>valor mínimo</strong> es el número más pequeño
+            dentro de un conjunto de datos.
+        </p>
+        <p>
+            El <strong>valor máximo</strong> es el número más grande
+            dentro de un conjunto de datos.
+        </p>
+        <p>
+            Estos dos valores nos permiten conocer los extremos del
+            conjunto y son la base para calcular el rango.
+        </p>
+
+        <h3>Ejemplo</h3>
+        <p>
+            Temperaturas registradas durante una semana:
+            <strong>18, 22, 15, 28, 20, 25, 17</strong>
+        </p>
+        <p>Ordenamos de menor a mayor: 15, 17, 18, 20, 22, 25, 28</p>
+        <p>Valor mínimo: <strong>15°C</strong></p>
+        <p>Valor máximo: <strong>28°C</strong></p>
+
+        <!-- ================================================== -->
+        <!-- CAJA CONSOLA: Como calcular MIN y MAX en JavaScript  -->
+        <!-- ================================================== -->
+        <h3>¿Cómo se calcula en JavaScript?</h3>
+        <pre class="consola">
+// --- Calcular el MINIMO y MAXIMO en JavaScript ---
+
+// Paso 1: Crear un array con los datos
+var datos = [18, 22, 15, 28, 20, 25, 17];
+
+// Paso 2: Asumimos que el primer valor es el minimo y el maximo
+// Despues lo compararemos con los demas valores
+var minimo = datos[0];
+var maximo = datos[0];
+
+// Paso 3: Recorrer el array desde la posicion 1
+// (la posicion 0 ya la usamos arriba)
+for (var i = 1; i &lt; datos.length; i++) {
+
+    // Si el valor actual es menor que el minimo guardado,
+    // actualizamos el minimo
+    if (datos[i] &lt; minimo) {
+        minimo = datos[i];
+    }
+
+    // Si el valor actual es mayor que el maximo guardado,
+    // actualizamos el maximo
+    if (datos[i] > maximo) {
+        maximo = datos[i];
+    }
+}
+
+console.log("Valor minimo: " + minimo);
+console.log("Valor maximo: " + maximo);
+// Resultado: Valor minimo: 15
+// Resultado: Valor maximo: 28
+        </pre>
+    </section>
+
+    <!-- ================================================== -->
+    <!-- SECCION 7: RANGO                                   -->
+    <!-- ================================================== -->
+    <section id="rango" class="oculto">
+        <h2>Rango</h2>
+        <img src="images/rango.jpg" width="50%">
+
+        <h3>Definición</h3>
+        <p>
+            El rango es la diferencia entre el valor máximo y el valor
+            mínimo de un conjunto de datos. Nos indica qué tan dispersos
+            o separados están los datos.
+        </p>
+        <p>
+            <strong>Fórmula:</strong>
+            Rango = Valor Máximo - Valor Mínimo
+        </p>
+
+        <h3>Ejemplo</h3>
+        <p>
+            Temperaturas de la semana:
+            <strong>15, 17, 18, 20, 22, 25, 28</strong>
+        </p>
+        <p>Valor máximo: 28</p>
+        <p>Valor mínimo: 15</p>
+        <p>Rango = 28 - 15 = <strong>13°C</strong></p>
+        <p>
+            Esto significa que la temperatura varió 13 grados
+            durante la semana.
+        </p>
+
+        <!-- ================================================== -->
+        <!-- CAJA CONSOLA: Como calcular el RANGO en JavaScript  -->
+        <!-- ================================================== -->
+        <h3>¿Cómo se calcula en JavaScript?</h3>
+        <pre class="consola">
+// --- Calcular el RANGO en JavaScript ---
+
+// Paso 1: Crear un array con los datos
+var datos = [15, 17, 18, 20, 22, 25, 28];
+
+// Paso 2: Encontrar el minimo y el maximo
+// Reutilizamos la misma logica de la seccion anterior
+var minimo = datos[0];
+var maximo = datos[0];
+
+for (var i = 1; i &lt; datos.length; i++) {
+    if (datos[i] &lt; minimo) {
+        minimo = datos[i];
+    }
+    if (datos[i] > maximo) {
+        maximo = datos[i];
+    }
+}
+
+// Paso 3: El rango es la resta del maximo menos el minimo
+var rango = maximo - minimo;
+
+console.log("El rango es: " + rango);
+// Resultado: El rango es: 13
+        </pre>
+    </section>
+
+    <!-- ================================================== -->
+    <!-- SECCION 8: VARIANZA                                -->
+    <!-- ================================================== -->
+    <section id="varianza" class="oculto">
+        <h2>Varianza</h2>
+        <img src="images/varianza.jpg" width="50%">
+
+        <h3>Definición</h3>
+        <p>
+            La varianza mide qué tan lejos están los datos respecto a
+            la media (promedio). Si la varianza es alta, los datos están
+            muy dispersos. Si es baja, los datos están cercanos al
+            promedio.
+        </p>
+        <p><strong>Pasos para calcularla:</strong></p>
+
+        <!-- Lista ordenada (ol) porque los pasos van en orden -->
+        <ol>
+            <li>Calcular la media del conjunto.</li>
+            <li>Restar la media a cada valor (obtener las diferencias).</li>
+            <li>Elevar cada diferencia al cuadrado.</li>
+            <li>Sumar todas las diferencias al cuadrado.</li>
+            <li>Dividir entre la cantidad total de datos.</li>
+        </ol>
+
+        <h3>Ejemplo</h3>
+        <p>Datos: <strong>4, 8, 6, 2, 10</strong></p>
+        <p>
+            Paso 1 - Media:
+            (4 + 8 + 6 + 2 + 10) / 5 = <strong>6</strong>
+        </p>
+        <p>
+            Paso 2 - Diferencias:
+            (4-6), (8-6), (6-6), (2-6), (10-6) = -2, 2, 0, -4, 4
+        </p>
+        <p>Paso 3 - Cuadrados: 4, 4, 0, 16, 16</p>
+        <p>
+            Paso 4 - Suma de cuadrados:
+            4 + 4 + 0 + 16 + 16 = <strong>40</strong>
+        </p>
+        <p>Paso 5 - Varianza: 40 / 5 = <strong>8</strong></p>
+        <p>La varianza es <strong>8</strong>.</p>
+
+        <!-- ================================================== -->
+        <!-- CAJA CONSOLA: Como calcular la VARIANZA en JS       -->
+        <!-- ================================================== -->
+        <h3>¿Cómo se calcula en JavaScript?</h3>
+        <pre class="consola">
+// --- Calcular la VARIANZA en JavaScript ---
+
+// Paso 1: Crear un array con los datos
+var datos = [4, 8, 6, 2, 10];
+
+// Paso 2: Calcular la media (promedio)
+// Primero sumamos todos los valores
+var suma = 0;
+for (var i = 0; i &lt; datos.length; i++) {
+    suma = suma + datos[i];
+}
+var media = suma / datos.length;
+// media = 30 / 5 = 6
+
+// Paso 3: Calcular la suma de las diferencias al cuadrado
+// Para cada dato: restamos la media, y elevamos al cuadrado
+var sumaCuadrados = 0;
+
+for (var i = 0; i &lt; datos.length; i++) {
+    // Calculamos la diferencia entre el dato y la media
+    var diferencia = datos[i] - media;
+
+    // Elevamos al cuadrado multiplicando por si mismo
+    // Esto elimina los numeros negativos
+    var cuadrado = diferencia * diferencia;
+
+    // Acumulamos en la suma total
+    sumaCuadrados = sumaCuadrados + cuadrado;
+}
+
+// Paso 4: Dividir la suma de cuadrados entre la cantidad de datos
+var varianza = sumaCuadrados / datos.length;
+
+console.log("La varianza es: " + varianza);
+// Resultado: La varianza es: 8
+        </pre>
+    </section>
+
+    <!-- ================================================== -->
+    <!-- SECCION 9: DESVIACION ESTANDAR                     -->
+    <!-- ================================================== -->
+    <section id="desviacion" class="oculto">
+        <h2>Desviación Estándar</h2>
+        <img src="images/desv_estandar.jpeg" width="50%">
+
+        <h3>Definición</h3>
+        <p>
+            La desviación estándar es la raíz cuadrada de la varianza.
+            Nos indica, en las mismas unidades de los datos originales,
+            qué tanto se desvían los valores respecto a la media.
+        </p>
+        <p>
+            <strong>Fórmula:</strong>
+            Desviación Estándar = √Varianza
+        </p>
+        <p>
+            Una desviación estándar baja indica que los datos están
+            agrupados cerca del promedio. Una desviación alta indica
+            que están muy dispersos.
+        </p>
+
+        <h3>Ejemplo</h3>
+        <p>
+            Usando los datos del ejemplo anterior:
+            <strong>4, 8, 6, 2, 10</strong>
+        </p>
+        <p>Ya calculamos que la varianza es <strong>8</strong>.</p>
+        <p>
+            Desviación estándar = √8 = <strong>2.83</strong>
+            (aproximadamente)
+        </p>
+        <p>
+            Esto significa que, en promedio, los datos se desvían
+            2.83 unidades respecto a la media de 6.
+        </p>
+
+        <!-- ================================================== -->
+        <!-- CAJA CONSOLA: Como calcular DESV. ESTANDAR en JS    -->
+        <!-- ================================================== -->
+        <h3>¿Cómo se calcula en JavaScript?</h3>
+        <pre class="consola">
+// --- Calcular la DESVIACION ESTANDAR en JavaScript ---
+
+// Paso 1: Crear un array con los datos
+var datos = [4, 8, 6, 2, 10];
+
+// Paso 2: Calcular la media (promedio)
+var suma = 0;
+for (var i = 0; i &lt; datos.length; i++) {
+    suma = suma + datos[i];
+}
+var media = suma / datos.length;
+
+// Paso 3: Calcular la varianza
+// (suma de diferencias al cuadrado / cantidad de datos)
+var sumaCuadrados = 0;
+for (var i = 0; i &lt; datos.length; i++) {
+    var diferencia = datos[i] - media;
+    sumaCuadrados = sumaCuadrados + (diferencia * diferencia);
+}
+var varianza = sumaCuadrados / datos.length;
+// varianza = 40 / 5 = 8
+
+// Paso 4: La desviacion estandar es la raiz cuadrada de la varianza
+// Math.sqrt() es una funcion de JavaScript que calcula
+// la raiz cuadrada de un numero
+var desviacion = Math.sqrt(varianza);
+
+// Paso 5: Redondear a 2 decimales con toFixed(2)
+// toFixed(2) convierte el numero a texto con 2 decimales
+console.log("La desviacion estandar es: " + desviacion.toFixed(2));
+// Resultado: La desviacion estandar es: 2.83
+        </pre>
+    </section>
+
+    <script src="estadistica.js"></script>
+
+</body>
+</html>
