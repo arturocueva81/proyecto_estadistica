@@ -2,119 +2,160 @@
 /* body: es el contenedor principal de toda la pagina */
 body {
     font-family: Arial, sans-serif;
-    margin: 0; /* margin y padding en 0: elimina los espacios por defecto */
-    padding: 0;/* que el navegador agrega alrededor del body */
-    background-color: #FEF2F2; /* background-color: color de fondo de toda la pagina */
-    color: #333333;  /* color: color del texto por defecto (gris oscuro) */
+    margin: 0;
+    padding: 0;
+    background-color: #FEF2F2; 
+    color: #333333;
 }
 
-/* -------------------------------------------------- */
+
 /* MENU DE NAVEGACION (etiqueta <nav>)                */
-/* Es la barra superior con los botones               */
-/* -------------------------------------------------- */
-
-/* nav: la etiqueta HTML que contiene el menu */
 nav {
-    background-color: #B91C1C;/* background-color: color de fondo de la barra (rojo oscuro) */
-    padding: 10px;/* padding: espacio interno entre el borde y los botones */
-    text-align: center;/* text-align: center centra los botones horizontalmente */
-    position: sticky;/* position: sticky hace que el menu se quede fijo arriba al hacer scroll hacia abajo en la pagina */
-    top: 0;    /* top: 0 indica que se pega al borde superior */
+    background-color: #B91C1C;
+    padding: 10px;
+    text-align: center;
+    position: sticky;
+    top: 0; 
 }
 
-
-/* -------------------------------------------------- */
 /* BOTONES DEL MENU DE NAVEGACION                     */
-/* -------------------------------------------------- */
 nav button {
-    background-color: #DC2626;/* background-color: color de fondo del boton (rojo medio) */
-    color: white;/* color: color del texto del boton (blanco) */
-    border: none;/* border: none quita el borde por defecto del boton */
-    padding: 8px 14px;/* padding: espacio interno del boton (arriba/abajo 8px, izq/der 14px) */
-    margin: 4px; /* margin: espacio exterior entre cada boton */
-    cursor: pointer;/* cursor: pointer muestra la mano al pasar el mouse */
-    font-size: 14px;/* font-size: tamaño de la letra del boton */
+    background-color: #DC2626;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    margin: 4px; 
+    cursor: pointer;
+    font-size: 14px;
 }
 
-/* -------------------------------------------------- */
 /* BOTON AL PASAR EL MOUSE POR ENCIMA (hover)         */
-/* :hover es un pseudo-selector de CSS que se activa  */
-/* cuando el mouse esta encima del elemento            */
-/* -------------------------------------------------- */
 nav button:hover {
-    background-color: #991B1B; /* Cambia el color de fondo a un rojo mas oscuro */
+    background-color: #991B1B;
 }
 
-
-/* -------------------------------------------------- */
 /* SECCIONES DE CONTENIDO (etiqueta <section>)        */
-/* Cada seccion es un bloque blanco centrado           */
-/* que contiene la informacion de un tema              */
-/* -------------------------------------------------- */
 section {
-    max-width: 800px; /* max-width: ancho maximo de la seccion */
-    margin: 30px auto;/* margin: 30px auto centra la seccion horizontalmente */
-    padding: 30px;/* padding: espacio interno entre el borde y el contenido */
-    background-color: #FFFFFF;/* background-color: fondo blanco para cada seccion */
-    border: 1px solid #FECACA;/* border: linea roja clara alrededor de la seccion */
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 30px;
+    background-color: #FFFFFF;
+    border: 1px solid #FECACA;
 }
 
-
-/* -------------------------------------------------- */
 /* TITULOS                                            */
-/* -------------------------------------------------- */
 
 h1 {
-    color: #7F1D1D;/* Color rojo muy oscuro para el titulo principal */
+    color: #7F1D1D;
     text-align: center;
 }
 
 h2 {
-    color: #7F1D1D;/* Color rojo muy oscuro para los subtitulos */
-    border-bottom: 2px solid #DC2626;/* border-bottom: linea roja debajo del subtitulo */
+    color: #7F1D1D;
+    border-bottom: 2px solid #DC2626;
     padding-bottom: 8px;
 }
 
 h3 {
-    color: #EF4444;/* Color rojo medio para diferenciar del h2 */
+    color: #EF4444;
     margin-top: 20px;
 }
 
-
-/* -------------------------------------------------- */
 /* PARRAFOS (etiqueta <p>)                            */
-/* -------------------------------------------------- */
 p {
     line-height: 1.6;
     text-align: justify;
 }
 
-
-/* -------------------------------------------------- */
 /* LISTAS (etiquetas <ul> y <ol>)                     */
-/* -------------------------------------------------- */
 ul, ol {
     line-height: 1.8;
     padding-left: 30px;
 }
 
-
-/* -------------------------------------------------- */
 /* CLASE PARA OCULTAR SECCIONES                       */
-/* -------------------------------------------------- */
 .oculto {
-    display: none;/* display: none hace que el elemento desaparezca */
+    display: none;
 }
 
-/* -------------------------------------------------- */
 /* ESTILO CONSOLE                  */
-/* -------------------------------------------------- */
-
 .consola {
-    background-color: #1a1a1a;    /* fondo negro */
-    color: #00FF00;               /* texto verde */
+    background-color: #1a1a1a;   
+    color: #00FF00;             
     font-family: "Courier New", Courier, monospace;
     font-size: 11px;
     padding: 20px;
+    overflow-x: auto;
+}
+
+
+/* BOTON INTERACTIVO (ejemplos con datos precargados) */
+.btn-interactivo {
+    background-color: #DC2626;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 16px 0 10px 0;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.btn-interactivo:hover {
+    background-color: #991B1B;
+}
+
+/* CONTENEDOR DE RESULTADOS INTERACTIVOS              */
+
+#resultado-media {
+    margin-top: 16px;
+}
+
+/* Tabla de datos del ejemplo interactivo */
+.tabla-interactiva {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    font-size: 14px;
+}
+
+.tabla-interactiva th {
+    background-color: #B91C1C;
+    color: white;
+    padding: 8px 12px;
+    text-align: left;
+}
+
+.tabla-interactiva td {
+    padding: 6px 12px;
+    border-bottom: 1px solid #FECACA;
+}
+
+.tabla-interactiva tr:nth-child(even) {
+    background-color: #FEF2F2;
+}
+
+/* Caja de resultado final (media calculada) */
+.caja-resultado {
+    background-color: #FEF2F2;
+    border-left: 4px solid #DC2626;
+    padding: 14px 18px;
+    margin-top: 16px;
+    font-size: 15px;
+}
+
+.caja-resultado strong {
+    color: #7F1D1D;
+    font-size: 18px;
+}
+
+/* Detalle del paso a paso */
+.detalle-calculo {
+    background-color: #1a1a1a;
+    color: #00FF00;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 12px;
+    padding: 14px;
+    margin-top: 12px;
     overflow-x: auto;
 }

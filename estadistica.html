@@ -7,10 +7,7 @@
     <link rel="stylesheet" href="estadistica.css">
 </head>
 <body>
-
-    <!-- ================================================== -->
     <!-- MENU DE NAVEGACION (nav)                           -->
-    <!-- ================================================== -->
     <nav>
         <button onclick="mostrarSeccion('portada')">Portada</button>
         <button onclick="mostrarSeccion('que-es')">¿Qué es la Estadística?</button>
@@ -23,9 +20,7 @@
         <button onclick="mostrarSeccion('desviacion')">Desviación Estándar</button>
     </nav>
 
-    <!-- ================================================== -->
     <!-- SECCION 1: PORTADA                                 -->
-    <!-- ================================================== -->
     <section id="portada">
         <h1>Estadística Aplicada</h1>
         <h2>Proyecto de Matemática 1</h2>
@@ -41,9 +36,7 @@
         </p>
     </section>
 
-    <!-- ================================================== -->
     <!-- SECCION 2: QUE ES LA ESTADISTICA                   -->
-    <!-- ================================================== -->
     <section id="que-es" class="oculto">
         <h2>¿Qué es la Estadística?</h2>
 
@@ -71,7 +64,6 @@
             </li>
         </ul>
 
-        <!-- Subtitulo para el ejemplo -->
         <h3>Ejemplo</h3>
         <p>
             Un profesor registra las calificaciones de 5 estudiantes:
@@ -84,9 +76,7 @@
         </p>
     </section>
 
-    <!-- ================================================== -->
     <!-- SECCION 3: MEDIA (PROMEDIO)                        -->
-    <!-- ================================================== -->
     <section id="media" class="oculto">
         <h2>Media (Promedio)</h2>
         <img src="images/media.jpg" width="50%">
@@ -114,43 +104,57 @@
         </p>
         <p>La media de las edades es <strong>25 años</strong>.</p>
 
-        <!-- ================================================== -->
-        <!-- CAJA CONSOLA: Como calcular la MEDIA en JavaScript  -->
-        <!-- La clase "consola" le da fondo negro y texto verde   -->
-        <!-- La etiqueta <pre> conserva los espacios y saltos    -->
-        <!-- de linea tal como estan escritos en el codigo.      -->
-        <!-- ================================================== -->
+
+        <!-- CAJA CONSOLA  -->
+
         <h3>¿Cómo se calcula en JavaScript?</h3>
         <pre class="consola">
-// --- Calcular la MEDIA (Promedio) en JavaScript ---
+            // --- Calcular la MEDIA (Promedio) ---
 
-// Paso 1: Crear un array con los datos
-var datos = [20, 25, 30, 22, 28];
-
-// Paso 2: Crear una variable para acumular la suma
-// Empieza en 0 porque aun no hemos sumado nada
-var suma = 0;
-
-// Paso 3: Recorrer el array con un ciclo for
-// El for va desde la posicion 0 hasta la ultima posicion
-// datos.length nos dice cuantos elementos tiene el array
-for (var i = 0; i &lt; datos.length; i++) {
-    // En cada vuelta, sumamos el valor actual al acumulador
-    suma = suma + datos[i];
-}
-
-// Paso 4: Dividir la suma entre la cantidad de datos
-var media = suma / datos.length;
-
-// Paso 5: Mostrar el resultado en la consola del navegador
-console.log("La media es: " + media);
-// Resultado: La media es: 25
+            let datos = [20, 25, 30, 22, 28];
+            let suma = 0;
+                for (let i = 0; i &lt; datos.length; i++) {
+                    suma = suma + datos[i];
+                }
+            let media = suma / datos.length;
+            console.log("La media es: " + media);
         </pre>
+
+
+    <!-- EJEMPLO INTERACTIVO                                -->
+    <h3>Ejemplo interactivo</h3>
+    <p>
+        El siguiente ejemplo usa un arreglo de <strong>20 objetos</strong>
+        precargados, cada uno con el nombre de un estudiante y su
+        calificación. Al hacer clic en el botón, JavaScript recorre
+        el arreglo, suma todas las calificaciones y calcula la media.
+    </p>
+
+    <button onclick="toggleEjemploMedia()" class="btn-interactivo" id="btn-ejemplo-media">
+        ▶ Calcular Media
+    </button>
+
+    <!-- Resultado del ejemplo interactivo -->
+    <div id="resultado-media" class="oculto"></div>
+
+    <!-- GRAFICO DE BARRAS                                  -->
+    <h3>Gráfico de calificaciones</h3>
+    <p>
+        Haz clic en el botón para ver el gráfico de barras
+        con las calificaciones de los 20 estudiantes.
+    </p>
+
+    <button onclick="toggleGraficoMedia()" class="btn-interactivo" id="btn-grafico-media">
+        📊 Ver Gráfico de Barras
+    </button>
+
+    <div id="contenedor-grafico-media" class="oculto" style="margin-top:20px;">
+        <canvas id="graficaMedia"></canvas>
+    </div>
     </section>
 
-    <!-- ================================================== -->
     <!-- SECCION 4: MEDIANA                                 -->
-    <!-- ================================================== -->
+
     <section id="mediana" class="oculto">
         <h2>Mediana</h2>
         <img src="images/mediana.jpg" width="50%">
@@ -186,51 +190,63 @@ console.log("La media es: " + media);
         <p>Paso 3: Promediamos: (4 + 6) / 2 = <strong>5</strong></p>
         <p>La mediana es <strong>5</strong>.</p>
 
-        <!-- ================================================== -->
-        <!-- CAJA CONSOLA: Como calcular la MEDIANA en JavaScript -->
-        <!-- ================================================== -->
+
+        <!-- CAJA CONSOLA -->
+
         <h3>¿Cómo se calcula en JavaScript?</h3>
         <pre class="consola">
-// --- Calcular la MEDIANA en JavaScript ---
+            // --- Calcular la MEDIANA ---
 
-// Paso 1: Crear un array con los datos
-var datos = [3, 7, 1, 9, 5];
+            let datos = [3, 7, 1, 9, 5];
+            datos.sort(function(a, b) {
+                return a - b;
+            });
+            let centro = Math.floor(datos.length / 2);
 
-// Paso 2: Ordenar el array de menor a mayor
-// El metodo sort() ordena, pero necesita una funcion
-// que le diga como comparar numeros.
-// Si (a - b) es negativo, "a" va primero.
-// Si (a - b) es positivo, "b" va primero.
-datos.sort(function(a, b) {
-    return a - b;
-});
-// Ahora datos = [1, 3, 5, 7, 9]
+            if (datos.length % 2 === 0) {
+                mediana = (datos[centro - 1] + datos[centro]) / 2;
+            } else {
+                mediana = datos[centro];
+            }
 
-// Paso 3: Encontrar la posicion del centro
-// Math.floor() redondea hacia abajo (quita decimales)
-var centro = Math.floor(datos.length / 2);
-
-// Paso 4: Verificar si la cantidad de datos es par o impar
-// El operador % (modulo) nos da el residuo de la division
-// Si el residuo de dividir entre 2 es 0, el numero es par
-var mediana;
-
-if (datos.length % 2 === 0) {
-    // Si es PAR: promediamos los dos valores centrales
-    mediana = (datos[centro - 1] + datos[centro]) / 2;
-} else {
-    // Si es IMPAR: tomamos el valor del centro directamente
-    mediana = datos[centro];
-}
-
-console.log("La mediana es: " + mediana);
-// Resultado: La mediana es: 5
+            console.log("La mediana es: " + mediana);
         </pre>
+
+        <!-- EJEMPLO INTERACTIVO: MEDIANA                       -->
+        <h3>Ejemplo interactivo</h3>
+        <p>
+            El siguiente ejemplo usa un arreglo de <strong>20 objetos</strong>
+            precargados, cada uno con el nombre de un estudiante y su
+            calificación. Al hacer clic en el botón, JavaScript ordena
+            las calificaciones de menor a mayor y encuentra el valor central.
+        </p>
+
+        <button onclick="toggleEjemploMediana()" class="btn-interactivo" id="btn-ejemplo-mediana">
+            ▶ Calcular Mediana
+        </button>
+
+        <div id="resultado-mediana" class="oculto"></div>
+
+        <!-- GRAFICO DE BARRAS HORIZONTALES: Mediana            -->
+        <h3>Gráfico de calificaciones</h3>
+        <p>
+            Haz clic en el botón para ver el gráfico de barras
+            horizontales con las calificaciones ordenadas y la
+            línea de mediana como referencia.
+        </p>
+
+        <button onclick="toggleGraficoMediana()" class="btn-interactivo" id="btn-grafico-mediana">
+            📊 Ver Gráfico de Barras Horizontales
+        </button>
+
+        <div id="contenedor-grafico-mediana" class="oculto" style="margin-top:20px;">
+            <canvas id="graficaMediana"></canvas>
+        </div>
+
     </section>
 
-    <!-- ================================================== -->
+
     <!-- SECCION 5: MODA                                    -->
-    <!-- ================================================== -->
     <section id="moda" class="oculto">
         <h2>Moda</h2>
         <img src="images/moda.jpg" width="50%">
@@ -262,59 +278,78 @@ console.log("La mediana es: " + mediana);
             por lo tanto la moda es <strong>8</strong>.
         </p>
 
-        <!-- ================================================== -->
-        <!-- CAJA CONSOLA: Como calcular la MODA en JavaScript   -->
-        <!-- ================================================== -->
+
+        <!-- CAJA CONSOLA  -->
+
         <h3>¿Cómo se calcula en JavaScript?</h3>
         <pre class="consola">
-// --- Calcular la MODA en JavaScript ---
+            // --- Calcular la MODA en JavaScript ---
 
-// Paso 1: Crear un array con los datos
-var datos = [8, 7, 9, 8, 10, 8, 7];
+                let datos = [8, 7, 9, 8, 10, 8, 7];
+                let conteos = [];
 
-// Paso 2: Crear un array de objetos para contar repeticiones
-// Cada objeto tendra: { valor: numero, conteo: veces }
-var conteos = [];
+                for (let i = 0; i &lt; datos.length; i++) {
+                    let encontrado = false;
 
-// Paso 3: Recorrer cada dato y contar cuantas veces aparece
-for (var i = 0; i &lt; datos.length; i++) {
+                    for (let j = 0; j &lt; conteos.length; j++) {
+                        if (conteos[j].valor === datos[i]) {
+                            conteos[j].conteo = conteos[j].conteo + 1;
+                            encontrado = true;
+                        }
+                    }
 
-    // Buscamos si el valor ya existe en nuestro array de conteos
-    var encontrado = false;
+                if (encontrado === false) {
+                    conteos.push({ valor: datos[i], conteo: 1 });
+                }
+            }
 
-    for (var j = 0; j &lt; conteos.length; j++) {
-        // Si ya existe, aumentamos su conteo en 1
-        if (conteos[j].valor === datos[i]) {
-            conteos[j].conteo = conteos[j].conteo + 1;
-            encontrado = true;
-        }
-    }
+            let moda = conteos[0].valor;
+            let maxConteo = conteos[0].conteo;
 
-    // Si no lo encontramos, lo agregamos con conteo = 1
-    if (encontrado === false) {
-        conteos.push({ valor: datos[i], conteo: 1 });
-    }
-}
+            for (let k = 1; k &lt; conteos.length; k++) {
+                if (conteos[k].conteo > maxConteo) {
+                    maxConteo = conteos[k].conteo;
+                    moda = conteos[k].valor;
+                }
+            }
 
-// Paso 4: Buscar cual tiene el conteo mas alto
-var moda = conteos[0].valor;
-var maxConteo = conteos[0].conteo;
-
-for (var k = 1; k &lt; conteos.length; k++) {
-    if (conteos[k].conteo > maxConteo) {
-        maxConteo = conteos[k].conteo;
-        moda = conteos[k].valor;
-    }
-}
-
-console.log("La moda es: " + moda);
-// Resultado: La moda es: 8
+            console.log("La moda es: " + moda);
         </pre>
+
+        <!-- EJEMPLO INTERACTIVO: MODA                          -->
+
+        <h3>Ejemplo interactivo</h3>
+        <p>
+            El siguiente ejemplo usa un arreglo de <strong>20 objetos</strong>
+            precargados. Al hacer clic, JavaScript cuenta cuántas veces
+            se repite cada calificación y determina la moda.
+        </p>
+
+        <button onclick="toggleEjemploModa()" class="btn-interactivo" id="btn-ejemplo-moda">
+            ▶ Calcular Moda
+        </button>
+
+        <div id="resultado-moda" class="oculto"></div>
+
+        <!-- GRAFICO DE FRECUENCIAS: MODA                       -->
+        <h3>Gráfico de frecuencias</h3>
+        <p>
+            Haz clic en el botón para ver cuántas veces se repite
+            cada calificación. La barra más alta representa la moda.
+        </p>
+
+        <button onclick="toggleGraficoModa()" class="btn-interactivo" id="btn-grafico-moda">
+            📊 Ver Gráfico de Frecuencias
+        </button>
+
+        <div id="contenedor-grafico-moda" class="oculto" style="margin-top:20px;">
+            <canvas id="graficaModa"></canvas>
+        </div>
+
     </section>
 
-    <!-- ================================================== -->
+
     <!-- SECCION 6: VALOR MINIMO Y VALOR MAXIMO             -->
-    <!-- ================================================== -->
     <section id="min-max" class="oculto">
         <h2>Valor Mínimo y Valor Máximo</h2>
         <img src="images/val_min_max.jpeg" width="50%">
@@ -342,48 +377,67 @@ console.log("La moda es: " + moda);
         <p>Valor mínimo: <strong>15°C</strong></p>
         <p>Valor máximo: <strong>28°C</strong></p>
 
-        <!-- ================================================== -->
-        <!-- CAJA CONSOLA: Como calcular MIN y MAX en JavaScript  -->
-        <!-- ================================================== -->
+
+        <!-- CAJA CONSOLA -->
         <h3>¿Cómo se calcula en JavaScript?</h3>
         <pre class="consola">
-// --- Calcular el MINIMO y MAXIMO en JavaScript ---
+            // --- Calcular el MINIMO y MAXIMO en JavaScript ---
 
-// Paso 1: Crear un array con los datos
-var datos = [18, 22, 15, 28, 20, 25, 17];
+            let datos = [18, 22, 15, 28, 20, 25, 17];
+            let minimo = datos[0];
+            let maximo = datos[0];
 
-// Paso 2: Asumimos que el primer valor es el minimo y el maximo
-// Despues lo compararemos con los demas valores
-var minimo = datos[0];
-var maximo = datos[0];
+            for (let i = 1; i &lt; datos.length; i++) {
+                if (datos[i] &lt; minimo) {
+                    minimo = datos[i];
+                }
+                if (datos[i] > maximo) {
+                    maximo = datos[i];
+                }
+            }
 
-// Paso 3: Recorrer el array desde la posicion 1
-// (la posicion 0 ya la usamos arriba)
-for (var i = 1; i &lt; datos.length; i++) {
+            console.log("Valor minimo: " + minimo);
+            console.log("Valor maximo: " + maximo);
 
-    // Si el valor actual es menor que el minimo guardado,
-    // actualizamos el minimo
-    if (datos[i] &lt; minimo) {
-        minimo = datos[i];
-    }
-
-    // Si el valor actual es mayor que el maximo guardado,
-    // actualizamos el maximo
-    if (datos[i] > maximo) {
-        maximo = datos[i];
-    }
-}
-
-console.log("Valor minimo: " + minimo);
-console.log("Valor maximo: " + maximo);
-// Resultado: Valor minimo: 15
-// Resultado: Valor maximo: 28
         </pre>
+
+
+        <!-- EJEMPLO INTERACTIVO: MINIMO Y MAXIMO               -->
+        <h3>Ejemplo interactivo</h3>
+        <p>
+            Al hacer clic, JavaScript recorre el arreglo de 
+            <strong>20 estudiantes</strong> y encuentra la calificación
+            más baja y la más alta.
+        </p>
+
+        <button onclick="toggleEjemploMinMax()" class="btn-interactivo" id="btn-ejemplo-minmax">
+            ▶ Calcular Mínimo y Máximo
+        </button>
+
+        <div id="resultado-minmax" class="oculto"></div>
+
+        <!-- GRAFICO DE BARRAS VERTICALES: MINIMO Y MAXIMO      -->
+
+        <h3>Gráfico de calificaciones</h3>
+        <p>
+            Haz clic para ver el gráfico de barras verticales.
+            La barra <strong style="color:#ef4444;">roja</strong> es el mínimo
+            y la barra <strong style="color:#22c55e;">verde</strong> es el máximo.
+        </p>
+
+        <button onclick="toggleGraficoMinMax()" class="btn-interactivo" id="btn-grafico-minmax">
+            📊 Ver Gráfico de Barras Verticales
+        </button>
+
+        <div id="contenedor-grafico-minmax" class="oculto" style="margin-top:20px;">
+            <canvas id="graficaMinMax"></canvas>
+        </div>
+
     </section>
 
-    <!-- ================================================== -->
+
     <!-- SECCION 7: RANGO                                   -->
-    <!-- ================================================== -->
+
     <section id="rango" class="oculto">
         <h2>Rango</h2>
         <img src="images/rango.jpg" width="50%">
@@ -412,41 +466,67 @@ console.log("Valor maximo: " + maximo);
             durante la semana.
         </p>
 
-        <!-- ================================================== -->
-        <!-- CAJA CONSOLA: Como calcular el RANGO en JavaScript  -->
-        <!-- ================================================== -->
+
+        <!-- CAJA CONSOLA  -->
         <h3>¿Cómo se calcula en JavaScript?</h3>
         <pre class="consola">
-// --- Calcular el RANGO en JavaScript ---
+            // --- Calcular el RANGO en JavaScript ---
 
-// Paso 1: Crear un array con los datos
-var datos = [15, 17, 18, 20, 22, 25, 28];
+            let datos = [15, 17, 18, 20, 22, 25, 28];
+            let minimo = datos[0];
+            let maximo = datos[0];
 
-// Paso 2: Encontrar el minimo y el maximo
-// Reutilizamos la misma logica de la seccion anterior
-var minimo = datos[0];
-var maximo = datos[0];
+            for (let i = 1; i &lt; datos.length; i++) {
+                if (datos[i] &lt; minimo) {
+                    minimo = datos[i];
+                }
+                if (datos[i] > maximo) {
+                    maximo = datos[i];
+                }
+            }
 
-for (var i = 1; i &lt; datos.length; i++) {
-    if (datos[i] &lt; minimo) {
-        minimo = datos[i];
-    }
-    if (datos[i] > maximo) {
-        maximo = datos[i];
-    }
-}
+            let rango = maximo - minimo;
 
-// Paso 3: El rango es la resta del maximo menos el minimo
-var rango = maximo - minimo;
-
-console.log("El rango es: " + rango);
-// Resultado: El rango es: 13
+            console.log("El rango es: " + rango);
         </pre>
+
+
+        <!-- EJEMPLO INTERACTIVO: RANGO                         -->
+        <h3>Ejemplo interactivo</h3>
+        <p>
+            Al hacer clic, JavaScript calcula el rango restando
+            el valor mínimo al valor máximo del arreglo de
+            <strong>20 estudiantes</strong>.
+        </p>
+
+        <button onclick="toggleEjemploRango()" class="btn-interactivo" id="btn-ejemplo-rango">
+            ▶ Calcular Rango
+        </button>
+
+        <div id="resultado-rango" class="oculto"></div>
+
+
+        <!-- GRAFICO DE BARRAS VERTICALES: RANGO                -->
+        <h3>Gráfico de calificaciones</h3>
+        <p>
+            Haz clic para ver el gráfico. Las barras
+            <strong style="color:#ef4444;">roja</strong> y
+            <strong style="color:#22c55e;">verde</strong> marcan
+            el mínimo y el máximo, y la zona entre ellas representa
+            el rango.
+        </p>
+
+        <button onclick="toggleGraficoRango()" class="btn-interactivo" id="btn-grafico-rango">
+            📊 Ver Gráfico de Barras Verticales
+        </button>
+
+        <div id="contenedor-grafico-rango" class="oculto" style="margin-top:20px;">
+            <canvas id="graficaRango"></canvas>
+        </div>
     </section>
 
-    <!-- ================================================== -->
+
     <!-- SECCION 8: VARIANZA                                -->
-    <!-- ================================================== -->
     <section id="varianza" class="oculto">
         <h2>Varianza</h2>
         <img src="images/varianza.jpg" width="50%">
@@ -487,52 +567,35 @@ console.log("El rango es: " + rango);
         <p>Paso 5 - Varianza: 40 / 5 = <strong>8</strong></p>
         <p>La varianza es <strong>8</strong>.</p>
 
-        <!-- ================================================== -->
-        <!-- CAJA CONSOLA: Como calcular la VARIANZA en JS       -->
-        <!-- ================================================== -->
+
+        <!-- CAJA CONSOLA    -->
         <h3>¿Cómo se calcula en JavaScript?</h3>
         <pre class="consola">
 // --- Calcular la VARIANZA en JavaScript ---
 
-// Paso 1: Crear un array con los datos
-var datos = [4, 8, 6, 2, 10];
+            let datos = [4, 8, 6, 2, 10];
+            let suma = 0;
+            for (let i = 0; i &lt; datos.length; i++) {
+                suma = suma + datos[i];
+            }
+            let media = suma / datos.length;
+            let sumaCuadrados = 0;
 
-// Paso 2: Calcular la media (promedio)
-// Primero sumamos todos los valores
-var suma = 0;
-for (var i = 0; i &lt; datos.length; i++) {
-    suma = suma + datos[i];
-}
-var media = suma / datos.length;
-// media = 30 / 5 = 6
+            for (let i = 0; i &lt; datos.length; i++) {
+                let diferencia = datos[i] - media;
+                let cuadrado = diferencia * diferencia;
 
-// Paso 3: Calcular la suma de las diferencias al cuadrado
-// Para cada dato: restamos la media, y elevamos al cuadrado
-var sumaCuadrados = 0;
+                sumaCuadrados = sumaCuadrados + cuadrado;
+            }
 
-for (var i = 0; i &lt; datos.length; i++) {
-    // Calculamos la diferencia entre el dato y la media
-    var diferencia = datos[i] - media;
+            let varianza = sumaCuadrados / datos.length;
 
-    // Elevamos al cuadrado multiplicando por si mismo
-    // Esto elimina los numeros negativos
-    var cuadrado = diferencia * diferencia;
-
-    // Acumulamos en la suma total
-    sumaCuadrados = sumaCuadrados + cuadrado;
-}
-
-// Paso 4: Dividir la suma de cuadrados entre la cantidad de datos
-var varianza = sumaCuadrados / datos.length;
-
-console.log("La varianza es: " + varianza);
-// Resultado: La varianza es: 8
+            console.log("La varianza es: " + varianza);
         </pre>
     </section>
 
-    <!-- ================================================== -->
+
     <!-- SECCION 9: DESVIACION ESTANDAR                     -->
-    <!-- ================================================== -->
     <section id="desviacion" class="oculto">
         <h2>Desviación Estándar</h2>
         <img src="images/desv_estandar.jpeg" width="50%">
@@ -568,46 +631,35 @@ console.log("La varianza es: " + varianza);
             2.83 unidades respecto a la media de 6.
         </p>
 
-        <!-- ================================================== -->
-        <!-- CAJA CONSOLA: Como calcular DESV. ESTANDAR en JS    -->
-        <!-- ================================================== -->
+
+        <!-- CAJA CONSOLA   -->
+
         <h3>¿Cómo se calcula en JavaScript?</h3>
         <pre class="consola">
-// --- Calcular la DESVIACION ESTANDAR en JavaScript ---
+            // --- Calcular la DESVIACION ESTANDAR en JavaScript ---
 
-// Paso 1: Crear un array con los datos
-var datos = [4, 8, 6, 2, 10];
+            let datos = [4, 8, 6, 2, 10];
+            let suma = 0;
+            for (let i = 0; i &lt; datos.length; i++) {
+                suma = suma + datos[i];
+            }
+            let media = suma / datos.length;
+            let sumaCuadrados = 0;
+            for (let i = 0; i &lt; datos.length; i++) {
+                let diferencia = datos[i] - media;
+                sumaCuadrados = sumaCuadrados + (diferencia * diferencia);
+            }
+            let varianza = sumaCuadrados / datos.length;
+            let desviacion = Math.sqrt(varianza);
 
-// Paso 2: Calcular la media (promedio)
-var suma = 0;
-for (var i = 0; i &lt; datos.length; i++) {
-    suma = suma + datos[i];
-}
-var media = suma / datos.length;
+            console.log("La desviacion estandar es: " + desviacion.toFixed(2));
 
-// Paso 3: Calcular la varianza
-// (suma de diferencias al cuadrado / cantidad de datos)
-var sumaCuadrados = 0;
-for (var i = 0; i &lt; datos.length; i++) {
-    var diferencia = datos[i] - media;
-    sumaCuadrados = sumaCuadrados + (diferencia * diferencia);
-}
-var varianza = sumaCuadrados / datos.length;
-// varianza = 40 / 5 = 8
-
-// Paso 4: La desviacion estandar es la raiz cuadrada de la varianza
-// Math.sqrt() es una funcion de JavaScript que calcula
-// la raiz cuadrada de un numero
-var desviacion = Math.sqrt(varianza);
-
-// Paso 5: Redondear a 2 decimales con toFixed(2)
-// toFixed(2) convierte el numero a texto con 2 decimales
-console.log("La desviacion estandar es: " + desviacion.toFixed(2));
-// Resultado: La desviacion estandar es: 2.83
         </pre>
     </section>
 
-    <script src="estadistica.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="datos.js"></script>        <!-- fuente de datos -->
+    <script src="estadistica.js"></script> <!-- fuente de funciones de calculo y dibujado -->
 
 </body>
 </html>
