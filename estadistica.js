@@ -193,3 +193,194 @@ function dibujarGraficoMedia() {
         }
     });
 }
+
+// ============================================================
+// BLOQUE 5: FUNCIONES ESTADISTICAS - MEDIANA
+// ============================================================
+
+let graficoMedianaInstancia = null;
+
+// --- Calculo puro de la mediana ---
+function calcularMedianaDesdeArreglo(calificaciones) {
+
+    // Copiamos el arreglo para no modificar el original
+    let ordenadas = calificaciones.slice();
+
+    // Ordenamos de menor a mayor
+    ordenadas.sort(function(a, b) {
+        return a - b;
+    });
+
+    let centro = Math.floor(ordenadas.length / 2);
+    let mediana;
+    let esPar = ordenadas.length % 2 === 0;
+
+    if (esPar) {
+        mediana = (ordenadas[centro - 1] + ordenadas[centro]) / 2;
+    } else {
+        mediana = ordenadas[centro];
+    }
+
+    return {
+        ordenadas: ordenadas,
+        centro: centro,
+        esPar: esPar,
+        mediana: mediana
+    };
+}
+
+// --- Toggle del ejemplo interactivo ---
+function toggleEjemploMediana() {
+    let contenedor = document.getElementById('resultado-mediana');
+    let btn = document.getElementById('btn-ejemplo-mediana');
+
+    if (contenedor.classList.contains('oculto')) {
+        calcularMediana();
+        contenedor.classList.remove('oculto');
+        btn.textContent = '✖ Ocultar Ejemplo';
+    } else {
+        contenedor.classList.add('oculto');
+        btn.textContent = '▶ Calcular Mediana';
+    }
+}
+
+// --- Genera el HTML del ejemplo interactivo ---
+function calcularMediana() {
+    let estudiantes = cargarDatos();
+    let calificaciones = obtenerCalificaciones(estudiantes);
+    let resultado = calcularMedianaDesdeArreglo(calificaciones);
+
+    let html = '';
+
+    html += '<p><strong>Calificaciones ordenadas de menor a mayor:</strong></p>';
+    html += '<table class="tabla-interactiva">';
+    html += '<tr><th>Posición</th><th>Estudiante</th><th>Calificación</th><th>¿Centro?</th></tr>';
+
+    // Creamos una copia ordenada de estudiantes para mostrar nombres
+    let estudiantesOrdenados = estudiantes.slice();
+    estudiantesOrdenados.sort(function(a, b) {
+        return a.calificacion - b.calificacion;
+    });
+
+    for (let i = 0; i < estudiantesOrdenados.length; i++) {
+        let esCentro = '';
+
+        if (!resultado.esPar && i === resultado.centro) {
+            esCentro = '⬅ centro';
+        }
+        if (resultado.esPar && (i === resultado.centro - 1 || i === resultado.centro)) {
+            esCentro = '⬅ centro';
+        }
+
+        html += '<tr>';
+        html += '<td>' + (i + 1) + '</td>';
+        html += '<td>' + estudiantesOrdenados[i].nombre + '</td>';
+        html += '<td>' + estudiantesOrdenados[i].calificacion + '</td>';
+        html += '<td>' + esCentro + '</td>';
+        html += '</tr>';
+    }
+
+    html += '</table>';
+    html += '<div class="detalle-calculo">';
+    html += 'Total de datos: ' + calificaciones.length + '<br>';
+    html += 'Cantidad de datos: ' + (resultado.esPar ? 'par' : 'impar') + '<br>';
+
+    if (resultado.esPar) {
+        html += 'Valores centrales: ' + resultado.ordenadas[resultado.centro - 1] +
+                ' y ' + resultado.ordenadas[resultado.centro] + '<br>';
+        html += 'Fórmula: (' + resultado.ordenadas[resultado.centro - 1] +
+                ' + ' + resultado.ordenadas[resultado.centro] + ') / 2';
+    } else {
+        html += 'Posición central: ' + (resultado.centro + 1) + '<br>';
+        html += 'Valor en esa posición: ' + resultado.mediana;
+    }
+
+    html += '</div>';
+    html += '<div class="caja-resultado">';
+    html += '📗 La mediana es: <strong>' + resultado.mediana.toFixed(2) + '</strong>';
+    html += '</div>';
+
+    document.getElementById('resultado-mediana').innerHTML = html;
+}
+
+// --- Toggle del gráfico ---
+function toggleGraficoMediana() {
+    let contenedor = document.getElementById('contenedor-grafico-mediana');
+    let btn = document.getElementById('btn-grafico-mediana');
+
+    if (contenedor.classList.contains('oculto')) {
+        contenedor.classList.remove('oculto');
+        btn.textContent = '✖ Ocultar Gráfico';
+
+        // Reemplaza el canvas por uno nuevo limpio para evitar "Canvas already in use"
+        let canvasViejo = document.getElementById('graficaMediana');
+        let canvasNuevo = document.createElement('canvas');
+        canvasNuevo.id = 'graficaMediana';
+        canvasViejo.parentNode.replaceChild(canvasNuevo, canvasViejo);
+
+        graficoMedianaInstancia = dibujarGraficoMediana();
+
+    } else {
+        contenedor.classList.add('oculto');
+        btn.textContent = '📊 Ver Gráfico de Barras Horizontales';
+    }
+}
+
+// --- Dibuja el gráfico de barras horizontales ---
+function dibujarGraficoMediana() {
+    let estudiantes = cargarDatos();
+    let calificaciones = obtenerCalificaciones(estudiantes);
+    let resultado = calcularMedianaDesdeArreglo(calificaciones);
+
+    let estudiantesOrdenados = estudiantes.slice();
+    estudiantesOrdenados.sort(function(a, b) {
+        return a.calificacion - b.calificacion;
+    });
+
+    let nombres = [];
+    let valores = [];
+
+    for (let i = 0; i < estudiantesOrdenados.length; i++) {
+        nombres.push(estudiantesOrdenados[i].nombre);
+        valores.push(estudiantesOrdenados[i].calificacion);
+    }
+
+    let ctx = document.getElementById('graficaMediana').getContext('2d');
+
+    return new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: nombres,
+            datasets: [{
+                label: 'Calificación (ordenada)',
+                data: valores,
+                backgroundColor: 'rgba(34, 197, 94, 0.6)',
+                borderColor: 'rgba(34, 197, 94, 1)',
+                borderWidth: 1
+            }, {
+                label: 'Mediana (' + resultado.mediana.toFixed(2) + ')',
+                data: new Array(valores.length).fill(resultado.mediana),
+                type: 'line',
+                borderColor: 'rgba(239, 68, 68, 1)',
+                borderWidth: 2,
+                pointRadius: 0,
+                fill: false
+            }]
+        },
+        options: {
+            indexAxis: 'y',        // ← aquí va, solo en options
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                title: {
+                    display: true,
+                    text: 'Calificaciones ordenadas con línea de mediana'
+                }
+            },
+            scales: {
+                x: { beginAtZero: true, max: 20 }
+            }
+        }
+    });
+}
+

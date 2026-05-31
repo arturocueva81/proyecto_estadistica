@@ -150,7 +150,7 @@
             <div id="contenedor-grafico-media" class="oculto" style="margin-top:20px;">
                 <canvas id="graficaMedia"></canvas>
             </div>
-            
+
     </section>
 
     <!-- SECCION 4: MEDIANA                                 -->
@@ -211,6 +211,37 @@
 
             console.log("La mediana es: " + mediana);
         </pre>
+
+                <!-- EJEMPLO INTERACTIVO: MEDIANA                       -->
+        <h3>Ejemplo interactivo</h3>
+        <p>
+            El siguiente ejemplo usa un arreglo de <strong>20 objetos</strong>
+            precargados, cada uno con el nombre de un estudiante y su
+            calificación. Al hacer clic en el botón, JavaScript ordena
+            las calificaciones de menor a mayor y encuentra el valor central.
+        </p>
+
+        <button onclick="toggleEjemploMediana()" class="btn-interactivo" id="btn-ejemplo-mediana">
+            ▶ Calcular Mediana
+        </button>
+
+        <div id="resultado-mediana" class="oculto"></div>
+
+        <!-- GRAFICO DE BARRAS HORIZONTALES: Mediana            -->
+        <h3>Gráfico de calificaciones</h3>
+        <p>
+            Haz clic en el botón para ver el gráfico de barras
+            horizontales con las calificaciones ordenadas y la
+            línea de mediana como referencia.
+        </p>
+
+        <button onclick="toggleGraficoMediana()" class="btn-interactivo" id="btn-grafico-mediana">
+            📊 Ver Gráfico de Barras Horizontales
+        </button>
+
+        <div id="contenedor-grafico-mediana" class="oculto" style="margin-top:20px;">
+            <canvas id="graficaMediana"></canvas>
+        </div>
     </section>
 
 
