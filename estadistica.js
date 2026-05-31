@@ -1083,7 +1083,195 @@ function dibujarGraficoVarianza() {
 }
 
 // ============================================================
-// BLOQUE 10: TEST DE EVALUACION
+// BLOQUE 10: FUNCIONES ESTADISTICAS - DESVIACION ESTANDAR
+// ============================================================
+
+let graficoDesviacionInstancia = null;
+
+// --- Calculo puro de la desviacion estandar ---
+function calcularDesviacionDesdeArreglo(calificaciones) {
+
+    let resultadoVarianza = calcularVarianzaDesdeArreglo(calificaciones);
+
+    let desviacion = Math.sqrt(resultadoVarianza.varianza);
+
+    return {
+        media: resultadoVarianza.media,
+        sumaCuadrados: resultadoVarianza.sumaCuadrados,
+        cantidad: resultadoVarianza.cantidad,
+        varianza: resultadoVarianza.varianza,
+        desviacion: desviacion,
+        detalles: resultadoVarianza.detalles
+    };
+}
+
+
+// --- Toggle del ejemplo interactivo ---
+function toggleEjemploDesviacion() {
+    let contenedor = document.getElementById('resultado-desviacion');
+    let btn = document.getElementById('btn-ejemplo-desviacion');
+
+    if (contenedor.classList.contains('oculto')) {
+        calcularDesviacion();
+        contenedor.classList.remove('oculto');
+        btn.textContent = '✖ Ocultar Ejemplo';
+    } else {
+        contenedor.classList.add('oculto');
+        btn.textContent = '▶ Calcular Desviación Estándar';
+    }
+}
+
+
+// --- Genera el HTML del ejemplo interactivo ---
+function calcularDesviacion() {
+    let estudiantes = cargarDatos();
+    let calificaciones = obtenerCalificaciones(estudiantes);
+    let resultado = calcularDesviacionDesdeArreglo(calificaciones);
+
+    let html = "";
+
+    html = html + '<p><strong>Cálculo de desviación estándar usando las calificaciones de los estudiantes:</strong></p>';
+
+    html = html + '<table class="tabla-interactiva">';
+    html = html + '<tr>';
+    html = html + '<th>#</th>';
+    html = html + '<th>Estudiante</th>';
+    html = html + '<th>Calificación</th>';
+    html = html + '<th>Diferencia con la media</th>';
+    html = html + '<th>Diferencia al cuadrado</th>';
+    html = html + '</tr>';
+
+    for (let i = 0; i < estudiantes.length; i++) {
+        html = html + '<tr>';
+        html = html + '<td>' + (i + 1) + '</td>';
+        html = html + '<td>' + estudiantes[i].nombre + '</td>';
+        html = html + '<td>' + estudiantes[i].calificacion + '</td>';
+        html = html + '<td>' + resultado.detalles[i].diferencia.toFixed(2) + '</td>';
+        html = html + '<td>' + resultado.detalles[i].cuadrado.toFixed(2) + '</td>';
+        html = html + '</tr>';
+    }
+
+    html = html + '</table>';
+
+    html = html + '<div class="detalle-calculo">';
+    html = html + 'Media: <strong>' + resultado.media.toFixed(2) + '</strong><br>';
+    html = html + 'Suma de diferencias al cuadrado: <strong>' + resultado.sumaCuadrados.toFixed(2) + '</strong><br>';
+    html = html + 'Cantidad de datos: <strong>' + resultado.cantidad + '</strong><br>';
+    html = html + 'Varianza: <strong>' + resultado.varianza.toFixed(2) + '</strong><br>';
+    html = html + 'Fórmula: Desviación Estándar = √Varianza<br>';
+    html = html + 'Desviación Estándar = √' + resultado.varianza.toFixed(2);
+    html = html + '</div>';
+
+    html = html + '<div class="caja-resultado">';
+    html = html + '📈 La desviación estándar es: <strong>' + resultado.desviacion.toFixed(2) + '</strong>';
+    html = html + '</div>';
+
+    document.getElementById('resultado-desviacion').innerHTML = html;
+}
+
+
+// --- Toggle del gráfico ---
+function toggleGraficoDesviacion() {
+    let contenedor = document.getElementById('contenedor-grafico-desviacion');
+    let btn = document.getElementById('btn-grafico-desviacion');
+
+    if (contenedor.classList.contains('oculto')) {
+        contenedor.classList.remove('oculto');
+        btn.textContent = '✖ Ocultar Gráfico';
+
+        let canvasViejo = document.getElementById('graficaDesviacion');
+        let canvasNuevo = document.createElement('canvas');
+        canvasNuevo.id = 'graficaDesviacion';
+        canvasViejo.parentNode.replaceChild(canvasNuevo, canvasViejo);
+
+        graficoDesviacionInstancia = dibujarGraficoDesviacion();
+
+    } else {
+        contenedor.classList.add('oculto');
+        btn.textContent = '📊 Ver Gráfico de Desviación Estándar';
+    }
+}
+
+
+// --- Dibuja el gráfico de desviacion estandar ---
+function dibujarGraficoDesviacion() {
+    let estudiantes = cargarDatos();
+    let calificaciones = obtenerCalificaciones(estudiantes);
+    let resultado = calcularDesviacionDesdeArreglo(calificaciones);
+
+    let nombres = [];
+
+    for (let i = 0; i < estudiantes.length; i++) {
+        nombres.push(estudiantes[i].nombre);
+    }
+
+    let limiteSuperior = resultado.media + resultado.desviacion;
+    let limiteInferior = resultado.media - resultado.desviacion;
+
+    let ctx = document.getElementById('graficaDesviacion').getContext('2d');
+
+    return new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: nombres,
+            datasets: [
+                {
+                    label: 'Calificación',
+                    data: calificaciones,
+                    backgroundColor: 'rgba(99, 144, 241, 0.6)',
+                    borderColor: 'rgba(99, 144, 241, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Media (' + resultado.media.toFixed(2) + ')',
+                    data: new Array(calificaciones.length).fill(resultado.media),
+                    type: 'line',
+                    borderColor: 'rgba(239, 68, 68, 1)',
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    fill: false
+                },
+                {
+                    label: 'Media + Desviación (' + limiteSuperior.toFixed(2) + ')',
+                    data: new Array(calificaciones.length).fill(limiteSuperior),
+                    type: 'line',
+                    borderColor: 'rgba(34, 197, 94, 1)',
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    fill: false
+                },
+                {
+                    label: 'Media - Desviación (' + limiteInferior.toFixed(2) + ')',
+                    data: new Array(calificaciones.length).fill(limiteInferior),
+                    type: 'line',
+                    borderColor: 'rgba(251, 191, 36, 1)',
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    fill: false
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                title: {
+                    display: true,
+                    text: 'Desviación estándar: ' + resultado.desviacion.toFixed(2)
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 20
+                }
+            }
+        }
+    });
+}
+
+// ============================================================
+// BLOQUE 11: TEST DE EVALUACION
 // ============================================================
 
 function generarTest() {

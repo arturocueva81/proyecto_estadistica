@@ -683,6 +683,34 @@
             console.log("La desviacion estandar es: " + desviacion.toFixed(2));
 
         </pre>
+
+        <!-- EJEMPLO INTERACTIVO: DESVIACION ESTANDAR -->
+        <h3>Ejemplo interactivo</h3>
+        <p>
+            Al hacer clic, JavaScript calcula la desviación estándar usando las
+            calificaciones de los <strong>20 estudiantes</strong> cargados desde datos.js.
+        </p>
+
+        <button onclick="toggleEjemploDesviacion()" class="btn-interactivo" id="btn-ejemplo-desviacion">
+            ▶ Calcular Desviación Estándar
+        </button>
+
+        <div id="resultado-desviacion" class="oculto"></div>
+
+        <!-- GRAFICO DE DESVIACION ESTANDAR -->
+        <h3>Gráfico de desviación estándar</h3>
+        <p>
+            Haz clic para ver un gráfico donde se comparan las calificaciones
+            con la media y se muestra visualmente la dispersión de los datos.
+        </p>
+
+        <button onclick="toggleGraficoDesviacion()" class="btn-interactivo" id="btn-grafico-desviacion">
+            📊 Ver Gráfico de Desviación Estándar
+        </button>
+
+        <div id="contenedor-grafico-desviacion" class="oculto" style="margin-top:20px;">
+            <canvas id="graficaDesviacion"></canvas>
+        </div>
     </section>
 
     <!-- SECCION 10: TEST DE EVALUACION -->
