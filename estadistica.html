@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estadística Aplicada</title>
     <link rel="stylesheet" href="estadistica.css">
 </head>
+
 <body>
     <!-- MENU DE NAVEGACION (nav)                           -->
     <nav>
@@ -121,36 +123,36 @@
             console.log("La media es: " + media);
         </pre>
 
-            <!-- EJEMPLO INTERACTIVO                                -->
-            <h3>Ejemplo interactivo</h3>
-            <p>
-                El siguiente ejemplo usa un arreglo de <strong>20 objetos</strong>
-                precargados, cada uno con el nombre de un estudiante y su
-                calificación. Al hacer clic en el botón, JavaScript recorre
-                el arreglo, suma todas las calificaciones y calcula la media.
-            </p>
+        <!-- EJEMPLO INTERACTIVO                                -->
+        <h3>Ejemplo interactivo</h3>
+        <p>
+            El siguiente ejemplo usa un arreglo de <strong>20 objetos</strong>
+            precargados, cada uno con el nombre de un estudiante y su
+            calificación. Al hacer clic en el botón, JavaScript recorre
+            el arreglo, suma todas las calificaciones y calcula la media.
+        </p>
 
-            <button onclick="toggleEjemploMedia()" class="btn-interactivo" id="btn-ejemplo-media">
-                ▶ Calcular Media
-            </button>
+        <button onclick="toggleEjemploMedia()" class="btn-interactivo" id="btn-ejemplo-media">
+            ▶ Calcular Media
+        </button>
 
-            <!-- Resultado del ejemplo interactivo -->
-            <div id="resultado-media" class="oculto"></div>
+        <!-- Resultado del ejemplo interactivo -->
+        <div id="resultado-media" class="oculto"></div>
 
-            <!-- GRAFICO DE BARRAS                                  -->
-            <h3>Gráfico de calificaciones</h3>
-            <p>
-                Haz clic en el botón para ver el gráfico de barras
-                con las calificaciones de los 20 estudiantes.
-            </p>
+        <!-- GRAFICO DE BARRAS                                  -->
+        <h3>Gráfico de calificaciones</h3>
+        <p>
+            Haz clic en el botón para ver el gráfico de barras
+            con las calificaciones de los 20 estudiantes.
+        </p>
 
-            <button onclick="toggleGraficoMedia()" class="btn-interactivo" id="btn-grafico-media">
-                📊 Ver Gráfico de Barras
-            </button>
+        <button onclick="toggleGraficoMedia()" class="btn-interactivo" id="btn-grafico-media">
+            📊 Ver Gráfico de Barras
+        </button>
 
-            <div id="contenedor-grafico-media" class="oculto" style="margin-top:20px;">
-                <canvas id="graficaMedia"></canvas>
-            </div>
+        <div id="contenedor-grafico-media" class="oculto" style="margin-top:20px;">
+            <canvas id="graficaMedia"></canvas>
+        </div>
 
     </section>
 
@@ -213,7 +215,7 @@
             console.log("La mediana es: " + mediana);
         </pre>
 
-                <!-- EJEMPLO INTERACTIVO: MEDIANA                       -->
+        <!-- EJEMPLO INTERACTIVO: MEDIANA                       -->
         <h3>Ejemplo interactivo</h3>
         <p>
             El siguiente ejemplo usa un arreglo de <strong>20 objetos</strong>
@@ -316,7 +318,7 @@
             console.log("La moda es: " + moda);
         </pre>
 
-                    <!-- EJEMPLO INTERACTIVO: MODA                          -->
+        <!-- EJEMPLO INTERACTIVO: MODA                          -->
 
         <h3>Ejemplo interactivo</h3>
         <p>
@@ -400,10 +402,10 @@
 
         </pre>
 
-                    <!-- EJEMPLO INTERACTIVO: MINIMO Y MAXIMO               -->
+        <!-- EJEMPLO INTERACTIVO: MINIMO Y MAXIMO               -->
         <h3>Ejemplo interactivo</h3>
         <p>
-            Al hacer clic, JavaScript recorre el arreglo de 
+            Al hacer clic, JavaScript recorre el arreglo de
             <strong>20 estudiantes</strong> y encuentra la calificación
             más baja y la más alta.
         </p>
@@ -488,7 +490,7 @@
             console.log("El rango es: " + rango);
         </pre>
 
-                    <!-- EJEMPLO INTERACTIVO: RANGO                         -->
+        <!-- EJEMPLO INTERACTIVO: RANGO                         -->
         <h3>Ejemplo interactivo</h3>
         <p>
             Al hacer clic, JavaScript calcula el rango restando
@@ -589,6 +591,35 @@
 
             console.log("La varianza es: " + varianza);
         </pre>
+
+        <!-- EJEMPLO INTERACTIVO: VARIANZA -->
+        <h3>Ejemplo interactivo</h3>
+        <p>
+            Al hacer clic, JavaScript calcula la varianza usando las calificaciones
+            de los <strong>20 estudiantes</strong> cargados desde el archivo datos.js.
+        </p>
+
+        <button onclick="toggleEjemploVarianza()" class="btn-interactivo" id="btn-ejemplo-varianza">
+            ▶ Calcular Varianza
+        </button>
+
+        <div id="resultado-varianza" class="oculto"></div>
+
+        <!-- GRAFICO DE VARIANZA -->
+        <h3>Gráfico de desviaciones respecto a la media</h3>
+        <p>
+            Haz clic para ver un gráfico donde se comparan las calificaciones
+            con la media del grupo. Esto permite visualizar qué tan alejados
+            están los datos respecto al promedio.
+        </p>
+
+        <button onclick="toggleGraficoVarianza()" class="btn-interactivo" id="btn-grafico-varianza">
+            📊 Ver Gráfico de Varianza
+        </button>
+
+        <div id="contenedor-grafico-varianza" class="oculto" style="margin-top:20px;">
+            <canvas id="graficaVarianza"></canvas>
+        </div>
     </section>
 
 
@@ -653,7 +684,7 @@
 
         </pre>
     </section>
-    
+
     <!-- SECCION 10: TEST DE EVALUACION -->
     <section id="test" class="oculto">
         <h2>Test de Evaluación</h2>
@@ -677,8 +708,9 @@
     </section>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="datos.js"></script>        <!-- fuente de datos -->
+    <script src="datos.js"></script> <!-- fuente de datos -->
     <script src="estadistica.js"></script> <!-- fuente de funciones de calculo y dibujado -->
 
 </body>
+
 </html>

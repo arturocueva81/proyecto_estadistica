@@ -901,7 +901,189 @@ function dibujarGraficoRango() {
 }
 
 // ============================================================
-// BLOQUE 9: TEST DE EVALUACION
+// BLOQUE 9: FUNCIONES ESTADISTICAS - VARIANZA
+// ============================================================
+
+let graficoVarianzaInstancia = null;
+
+// --- Calculo puro de la varianza ---
+function calcularVarianzaDesdeArreglo(calificaciones) {
+
+    let resultadoMedia = calcularMediaDesdeArreglo(calificaciones);
+    let media = resultadoMedia.media;
+
+    let sumaCuadrados = 0;
+    let detalles = [];
+
+    for (let i = 0; i < calificaciones.length; i++) {
+        let diferencia = calificaciones[i] - media;
+        let cuadrado = diferencia * diferencia;
+
+        sumaCuadrados = sumaCuadrados + cuadrado;
+
+        detalles.push({
+            calificacion: calificaciones[i],
+            diferencia: diferencia,
+            cuadrado: cuadrado
+        });
+    }
+
+    let varianza = sumaCuadrados / calificaciones.length;
+
+    return {
+        media: media,
+        sumaCuadrados: sumaCuadrados,
+        cantidad: calificaciones.length,
+        varianza: varianza,
+        detalles: detalles
+    };
+}
+
+
+// --- Toggle del ejemplo interactivo ---
+function toggleEjemploVarianza() {
+    let contenedor = document.getElementById('resultado-varianza');
+    let btn = document.getElementById('btn-ejemplo-varianza');
+
+    if (contenedor.classList.contains('oculto')) {
+        calcularVarianza();
+        contenedor.classList.remove('oculto');
+        btn.textContent = '✖ Ocultar Ejemplo';
+    } else {
+        contenedor.classList.add('oculto');
+        btn.textContent = '▶ Calcular Varianza';
+    }
+}
+
+
+// --- Genera el HTML del ejemplo interactivo ---
+function calcularVarianza() {
+    let estudiantes = cargarDatos();
+    let calificaciones = obtenerCalificaciones(estudiantes);
+    let resultado = calcularVarianzaDesdeArreglo(calificaciones);
+
+    let html = "";
+
+    html = html + '<p><strong>Cálculo de varianza usando las calificaciones de los estudiantes:</strong></p>';
+
+    html = html + '<table class="tabla-interactiva">';
+    html = html + '<tr>';
+    html = html + '<th>#</th>';
+    html = html + '<th>Estudiante</th>';
+    html = html + '<th>Calificación</th>';
+    html = html + '<th>Diferencia con la media</th>';
+    html = html + '<th>Diferencia al cuadrado</th>';
+    html = html + '</tr>';
+
+    for (let i = 0; i < estudiantes.length; i++) {
+        html = html + '<tr>';
+        html = html + '<td>' + (i + 1) + '</td>';
+        html = html + '<td>' + estudiantes[i].nombre + '</td>';
+        html = html + '<td>' + estudiantes[i].calificacion + '</td>';
+        html = html + '<td>' + resultado.detalles[i].diferencia.toFixed(2) + '</td>';
+        html = html + '<td>' + resultado.detalles[i].cuadrado.toFixed(2) + '</td>';
+        html = html + '</tr>';
+    }
+
+    html = html + '</table>';
+
+    html = html + '<div class="detalle-calculo">';
+    html = html + 'Media: <strong>' + resultado.media.toFixed(2) + '</strong><br>';
+    html = html + 'Suma de diferencias al cuadrado: <strong>' + resultado.sumaCuadrados.toFixed(2) + '</strong><br>';
+    html = html + 'Cantidad de datos: <strong>' + resultado.cantidad + '</strong><br>';
+    html = html + 'Fórmula: Varianza = Suma de cuadrados / Cantidad de datos<br>';
+    html = html + 'Varianza = ' + resultado.sumaCuadrados.toFixed(2) + ' / ' + resultado.cantidad;
+    html = html + '</div>';
+
+    html = html + '<div class="caja-resultado">';
+    html = html + '📊 La varianza es: <strong>' + resultado.varianza.toFixed(2) + '</strong>';
+    html = html + '</div>';
+
+    document.getElementById('resultado-varianza').innerHTML = html;
+}
+
+
+// --- Toggle del gráfico ---
+function toggleGraficoVarianza() {
+    let contenedor = document.getElementById('contenedor-grafico-varianza');
+    let btn = document.getElementById('btn-grafico-varianza');
+
+    if (contenedor.classList.contains('oculto')) {
+        contenedor.classList.remove('oculto');
+        btn.textContent = '✖ Ocultar Gráfico';
+
+        let canvasViejo = document.getElementById('graficaVarianza');
+        let canvasNuevo = document.createElement('canvas');
+        canvasNuevo.id = 'graficaVarianza';
+        canvasViejo.parentNode.replaceChild(canvasNuevo, canvasViejo);
+
+        graficoVarianzaInstancia = dibujarGraficoVarianza();
+
+    } else {
+        contenedor.classList.add('oculto');
+        btn.textContent = '📊 Ver Gráfico de Varianza';
+    }
+}
+
+
+// --- Dibuja el gráfico de varianza ---
+function dibujarGraficoVarianza() {
+    let estudiantes = cargarDatos();
+    let calificaciones = obtenerCalificaciones(estudiantes);
+    let resultado = calcularVarianzaDesdeArreglo(calificaciones);
+
+    let nombres = [];
+
+    for (let i = 0; i < estudiantes.length; i++) {
+        nombres.push(estudiantes[i].nombre);
+    }
+
+    let ctx = document.getElementById('graficaVarianza').getContext('2d');
+
+    return new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: nombres,
+            datasets: [
+                {
+                    label: 'Calificación',
+                    data: calificaciones,
+                    backgroundColor: 'rgba(99, 144, 241, 0.6)',
+                    borderColor: 'rgba(99, 144, 241, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Media (' + resultado.media.toFixed(2) + ')',
+                    data: new Array(calificaciones.length).fill(resultado.media),
+                    type: 'line',
+                    borderColor: 'rgba(239, 68, 68, 1)',
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    fill: false
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                title: {
+                    display: true,
+                    text: 'Calificaciones comparadas con la media — Varianza: ' + resultado.varianza.toFixed(2)
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 20
+                }
+            }
+        }
+    });
+}
+
+// ============================================================
+// BLOQUE 10: TEST DE EVALUACION
 // ============================================================
 
 function generarTest() {
