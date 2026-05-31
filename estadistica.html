@@ -398,6 +398,38 @@
             console.log("Valor maximo: " + maximo);
 
         </pre>
+
+                    <!-- EJEMPLO INTERACTIVO: MINIMO Y MAXIMO               -->
+        <h3>Ejemplo interactivo</h3>
+        <p>
+            Al hacer clic, JavaScript recorre el arreglo de 
+            <strong>20 estudiantes</strong> y encuentra la calificación
+            más baja y la más alta.
+        </p>
+
+        <button onclick="toggleEjemploMinMax()" class="btn-interactivo" id="btn-ejemplo-minmax">
+            ▶ Calcular Mínimo y Máximo
+        </button>
+
+        <div id="resultado-minmax" class="oculto"></div>
+
+        <!-- GRAFICO DE BARRAS VERTICALES: MINIMO Y MAXIMO      -->
+
+        <h3>Gráfico de calificaciones</h3>
+        <p>
+            Haz clic para ver el gráfico de barras verticales.
+            La barra <strong style="color:#ef4444;">roja</strong> es el mínimo
+            y la barra <strong style="color:#22c55e;">verde</strong> es el máximo.
+        </p>
+
+        <button onclick="toggleGraficoMinMax()" class="btn-interactivo" id="btn-grafico-minmax">
+            📊 Ver Gráfico de Barras Verticales
+        </button>
+
+        <div id="contenedor-grafico-minmax" class="oculto" style="margin-top:20px;">
+            <canvas id="graficaMinMax"></canvas>
+        </div>
+        
     </section>
 
 

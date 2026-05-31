@@ -565,3 +565,171 @@ function dibujarGraficoModa() {
         }
     });
 }
+
+// ============================================================
+// BLOQUE 7: FUNCIONES ESTADISTICAS - MINIMO Y MAXIMO
+// ============================================================
+
+let graficoMinMaxInstancia = null;
+
+// --- Calculo puro de minimo y maximo ---
+function calcularMinMaxDesdeArreglo(calificaciones) {
+    let minimo = calificaciones[0];
+    let maximo = calificaciones[0];
+    let indiceMin = 0;
+    let indiceMax = 0;
+
+    for (let i = 1; i < calificaciones.length; i++) {
+        if (calificaciones[i] < minimo) {
+            minimo = calificaciones[i];
+            indiceMin = i;
+        }
+        if (calificaciones[i] > maximo) {
+            maximo = calificaciones[i];
+            indiceMax = i;
+        }
+    }
+
+    return {
+        minimo: minimo,
+        maximo: maximo,
+        indiceMin: indiceMin,
+        indiceMax: indiceMax
+    };
+}
+
+// --- Toggle del ejemplo interactivo ---
+function toggleEjemploMinMax() {
+    let contenedor = document.getElementById('resultado-minmax');
+    let btn = document.getElementById('btn-ejemplo-minmax');
+
+    if (contenedor.classList.contains('oculto')) {
+        calcularMinMax();
+        contenedor.classList.remove('oculto');
+        btn.textContent = '✖ Ocultar Ejemplo';
+    } else {
+        contenedor.classList.add('oculto');
+        btn.textContent = '▶ Calcular Mínimo y Máximo';
+    }
+}
+
+// --- Genera el HTML del ejemplo interactivo ---
+function calcularMinMax() {
+    let estudiantes = cargarDatos();
+    let calificaciones = obtenerCalificaciones(estudiantes);
+    let resultado = calcularMinMaxDesdeArreglo(calificaciones);
+
+    let html = '';
+
+    html += '<p><strong>Calificaciones de los 20 estudiantes:</strong></p>';
+    html += '<table class="tabla-interactiva">';
+    html += '<tr><th>#</th><th>Estudiante</th><th>Calificación</th><th>Destacado</th></tr>';
+
+    for (let i = 0; i < estudiantes.length; i++) {
+        let destacado = '';
+
+        if (i === resultado.indiceMin) {
+            destacado = '⬅ mínimo';
+        }
+        if (i === resultado.indiceMax) {
+            destacado = '⬅ máximo';
+        }
+
+        html += '<tr>';
+        html += '<td>' + (i + 1) + '</td>';
+        html += '<td>' + estudiantes[i].nombre + '</td>';
+        html += '<td>' + estudiantes[i].calificacion + '</td>';
+        html += '<td>' + destacado + '</td>';
+        html += '</tr>';
+    }
+
+    html += '</table>';
+    html += '<div class="detalle-calculo">';
+    html += 'Total de datos recorridos: ' + calificaciones.length + '<br>';
+    html += 'Estudiante con menor calificación: <strong>' + estudiantes[resultado.indiceMin].nombre + '</strong><br>';
+    html += 'Estudiante con mayor calificación: <strong>' + estudiantes[resultado.indiceMax].nombre + '</strong>';
+    html += '</div>';
+    html += '<div class="caja-resultado">';
+    html += '🔴 Valor mínimo: <strong>' + resultado.minimo + '</strong>';
+    html += '&nbsp;&nbsp;&nbsp;';
+    html += '🟢 Valor máximo: <strong>' + resultado.maximo + '</strong>';
+    html += '</div>';
+
+    document.getElementById('resultado-minmax').innerHTML = html;
+}
+
+// --- Toggle del gráfico ---
+function toggleGraficoMinMax() {
+    let contenedor = document.getElementById('contenedor-grafico-minmax');
+    let btn = document.getElementById('btn-grafico-minmax');
+
+    if (contenedor.classList.contains('oculto')) {
+        contenedor.classList.remove('oculto');
+        btn.textContent = '✖ Ocultar Gráfico';
+
+        // Reemplaza canvas para evitar "Canvas already in use"
+        let canvasViejo = document.getElementById('graficaMinMax');
+        let canvasNuevo = document.createElement('canvas');
+        canvasNuevo.id = 'graficaMinMax';
+        canvasViejo.parentNode.replaceChild(canvasNuevo, canvasViejo);
+
+        graficoMinMaxInstancia = dibujarGraficoMinMax();
+    } else {
+        contenedor.classList.add('oculto');
+        btn.textContent = '📊 Ver Gráfico de Barras Verticales';
+    }
+}
+
+// --- Dibuja el gráfico de barras verticales ---
+function dibujarGraficoMinMax() {
+    let estudiantes = cargarDatos();
+    let calificaciones = obtenerCalificaciones(estudiantes);
+    let resultado = calcularMinMaxDesdeArreglo(calificaciones);
+
+    let nombres = [];
+    let valores = [];
+    let colores = [];
+
+    for (let i = 0; i < estudiantes.length; i++) {
+        nombres.push(estudiantes[i].nombre);
+        valores.push(estudiantes[i].calificacion);
+
+        // Rojo para minimo, verde para maximo, azul para el resto
+        if (i === resultado.indiceMin) {
+            colores.push('rgba(239, 68, 68, 0.8)');    // rojo
+        } else if (i === resultado.indiceMax) {
+            colores.push('rgba(34, 197, 94, 0.8)');    // verde
+        } else {
+            colores.push('rgba(99, 144, 241, 0.5)');   // azul/indigo
+        }
+    }
+
+    let ctx = document.getElementById('graficaMinMax').getContext('2d');
+
+    return new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: nombres,
+            datasets: [{
+                label: 'Calificación',
+                data: valores,
+                backgroundColor: colores,
+                borderColor: colores,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                title: {
+                    display: true,
+                    text: 'Calificaciones — rojo: mínimo | verde: máximo'
+                }
+            },
+            scales: {
+                y: { beginAtZero: true, max: 20 }
+            }
+        }
+    });
+}
