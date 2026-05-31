@@ -120,37 +120,37 @@
             console.log("La media es: " + media);
         </pre>
 
+            <!-- EJEMPLO INTERACTIVO                                -->
+            <h3>Ejemplo interactivo</h3>
+            <p>
+                El siguiente ejemplo usa un arreglo de <strong>20 objetos</strong>
+                precargados, cada uno con el nombre de un estudiante y su
+                calificación. Al hacer clic en el botón, JavaScript recorre
+                el arreglo, suma todas las calificaciones y calcula la media.
+            </p>
 
-    <!-- EJEMPLO INTERACTIVO                                -->
-    <h3>Ejemplo interactivo</h3>
-    <p>
-        El siguiente ejemplo usa un arreglo de <strong>20 objetos</strong>
-        precargados, cada uno con el nombre de un estudiante y su
-        calificación. Al hacer clic en el botón, JavaScript recorre
-        el arreglo, suma todas las calificaciones y calcula la media.
-    </p>
+            <button onclick="toggleEjemploMedia()" class="btn-interactivo" id="btn-ejemplo-media">
+                ▶ Calcular Media
+            </button>
 
-    <button onclick="toggleEjemploMedia()" class="btn-interactivo" id="btn-ejemplo-media">
-        ▶ Calcular Media
-    </button>
+            <!-- Resultado del ejemplo interactivo -->
+            <div id="resultado-media" class="oculto"></div>
 
-    <!-- Resultado del ejemplo interactivo -->
-    <div id="resultado-media" class="oculto"></div>
+            <!-- GRAFICO DE BARRAS                                  -->
+            <h3>Gráfico de calificaciones</h3>
+            <p>
+                Haz clic en el botón para ver el gráfico de barras
+                con las calificaciones de los 20 estudiantes.
+            </p>
 
-    <!-- GRAFICO DE BARRAS                                  -->
-    <h3>Gráfico de calificaciones</h3>
-    <p>
-        Haz clic en el botón para ver el gráfico de barras
-        con las calificaciones de los 20 estudiantes.
-    </p>
+            <button onclick="toggleGraficoMedia()" class="btn-interactivo" id="btn-grafico-media">
+                📊 Ver Gráfico de Barras
+            </button>
 
-    <button onclick="toggleGraficoMedia()" class="btn-interactivo" id="btn-grafico-media">
-        📊 Ver Gráfico de Barras
-    </button>
-
-    <div id="contenedor-grafico-media" class="oculto" style="margin-top:20px;">
-        <canvas id="graficaMedia"></canvas>
-    </div>
+            <div id="contenedor-grafico-media" class="oculto" style="margin-top:20px;">
+                <canvas id="graficaMedia"></canvas>
+            </div>
+            
     </section>
 
     <!-- SECCION 4: MEDIANA                                 -->
@@ -211,38 +211,6 @@
 
             console.log("La mediana es: " + mediana);
         </pre>
-
-        <!-- EJEMPLO INTERACTIVO: MEDIANA                       -->
-        <h3>Ejemplo interactivo</h3>
-        <p>
-            El siguiente ejemplo usa un arreglo de <strong>20 objetos</strong>
-            precargados, cada uno con el nombre de un estudiante y su
-            calificación. Al hacer clic en el botón, JavaScript ordena
-            las calificaciones de menor a mayor y encuentra el valor central.
-        </p>
-
-        <button onclick="toggleEjemploMediana()" class="btn-interactivo" id="btn-ejemplo-mediana">
-            ▶ Calcular Mediana
-        </button>
-
-        <div id="resultado-mediana" class="oculto"></div>
-
-        <!-- GRAFICO DE BARRAS HORIZONTALES: Mediana            -->
-        <h3>Gráfico de calificaciones</h3>
-        <p>
-            Haz clic en el botón para ver el gráfico de barras
-            horizontales con las calificaciones ordenadas y la
-            línea de mediana como referencia.
-        </p>
-
-        <button onclick="toggleGraficoMediana()" class="btn-interactivo" id="btn-grafico-mediana">
-            📊 Ver Gráfico de Barras Horizontales
-        </button>
-
-        <div id="contenedor-grafico-mediana" class="oculto" style="margin-top:20px;">
-            <canvas id="graficaMediana"></canvas>
-        </div>
-
     </section>
 
 
@@ -315,37 +283,6 @@
 
             console.log("La moda es: " + moda);
         </pre>
-
-        <!-- EJEMPLO INTERACTIVO: MODA                          -->
-
-        <h3>Ejemplo interactivo</h3>
-        <p>
-            El siguiente ejemplo usa un arreglo de <strong>20 objetos</strong>
-            precargados. Al hacer clic, JavaScript cuenta cuántas veces
-            se repite cada calificación y determina la moda.
-        </p>
-
-        <button onclick="toggleEjemploModa()" class="btn-interactivo" id="btn-ejemplo-moda">
-            ▶ Calcular Moda
-        </button>
-
-        <div id="resultado-moda" class="oculto"></div>
-
-        <!-- GRAFICO DE FRECUENCIAS: MODA                       -->
-        <h3>Gráfico de frecuencias</h3>
-        <p>
-            Haz clic en el botón para ver cuántas veces se repite
-            cada calificación. La barra más alta representa la moda.
-        </p>
-
-        <button onclick="toggleGraficoModa()" class="btn-interactivo" id="btn-grafico-moda">
-            📊 Ver Gráfico de Frecuencias
-        </button>
-
-        <div id="contenedor-grafico-moda" class="oculto" style="margin-top:20px;">
-            <canvas id="graficaModa"></canvas>
-        </div>
-
     </section>
 
 
@@ -400,39 +337,6 @@
             console.log("Valor maximo: " + maximo);
 
         </pre>
-
-
-        <!-- EJEMPLO INTERACTIVO: MINIMO Y MAXIMO               -->
-        <h3>Ejemplo interactivo</h3>
-        <p>
-            Al hacer clic, JavaScript recorre el arreglo de 
-            <strong>20 estudiantes</strong> y encuentra la calificación
-            más baja y la más alta.
-        </p>
-
-        <button onclick="toggleEjemploMinMax()" class="btn-interactivo" id="btn-ejemplo-minmax">
-            ▶ Calcular Mínimo y Máximo
-        </button>
-
-        <div id="resultado-minmax" class="oculto"></div>
-
-        <!-- GRAFICO DE BARRAS VERTICALES: MINIMO Y MAXIMO      -->
-
-        <h3>Gráfico de calificaciones</h3>
-        <p>
-            Haz clic para ver el gráfico de barras verticales.
-            La barra <strong style="color:#ef4444;">roja</strong> es el mínimo
-            y la barra <strong style="color:#22c55e;">verde</strong> es el máximo.
-        </p>
-
-        <button onclick="toggleGraficoMinMax()" class="btn-interactivo" id="btn-grafico-minmax">
-            📊 Ver Gráfico de Barras Verticales
-        </button>
-
-        <div id="contenedor-grafico-minmax" class="oculto" style="margin-top:20px;">
-            <canvas id="graficaMinMax"></canvas>
-        </div>
-
     </section>
 
 
@@ -489,40 +393,6 @@
 
             console.log("El rango es: " + rango);
         </pre>
-
-
-        <!-- EJEMPLO INTERACTIVO: RANGO                         -->
-        <h3>Ejemplo interactivo</h3>
-        <p>
-            Al hacer clic, JavaScript calcula el rango restando
-            el valor mínimo al valor máximo del arreglo de
-            <strong>20 estudiantes</strong>.
-        </p>
-
-        <button onclick="toggleEjemploRango()" class="btn-interactivo" id="btn-ejemplo-rango">
-            ▶ Calcular Rango
-        </button>
-
-        <div id="resultado-rango" class="oculto"></div>
-
-
-        <!-- GRAFICO DE BARRAS VERTICALES: RANGO                -->
-        <h3>Gráfico de calificaciones</h3>
-        <p>
-            Haz clic para ver el gráfico. Las barras
-            <strong style="color:#ef4444;">roja</strong> y
-            <strong style="color:#22c55e;">verde</strong> marcan
-            el mínimo y el máximo, y la zona entre ellas representa
-            el rango.
-        </p>
-
-        <button onclick="toggleGraficoRango()" class="btn-interactivo" id="btn-grafico-rango">
-            📊 Ver Gráfico de Barras Verticales
-        </button>
-
-        <div id="contenedor-grafico-rango" class="oculto" style="margin-top:20px;">
-            <canvas id="graficaRango"></canvas>
-        </div>
     </section>
 
 
