@@ -207,7 +207,7 @@ function calcularMedianaDesdeArreglo(calificaciones) {
     let ordenadas = calificaciones.slice();
 
     // Ordenamos de menor a mayor
-    ordenadas.sort(function(a, b) {
+    ordenadas.sort(function (a, b) {
         return a - b;
     });
 
@@ -258,7 +258,7 @@ function calcularMediana() {
 
     // Creamos una copia ordenada de estudiantes para mostrar nombres
     let estudiantesOrdenados = estudiantes.slice();
-    estudiantesOrdenados.sort(function(a, b) {
+    estudiantesOrdenados.sort(function (a, b) {
         return a.calificacion - b.calificacion;
     });
 
@@ -287,9 +287,9 @@ function calcularMediana() {
 
     if (resultado.esPar) {
         html += 'Valores centrales: ' + resultado.ordenadas[resultado.centro - 1] +
-                ' y ' + resultado.ordenadas[resultado.centro] + '<br>';
+            ' y ' + resultado.ordenadas[resultado.centro] + '<br>';
         html += 'Fórmula: (' + resultado.ordenadas[resultado.centro - 1] +
-                ' + ' + resultado.ordenadas[resultado.centro] + ') / 2';
+            ' + ' + resultado.ordenadas[resultado.centro] + ') / 2';
     } else {
         html += 'Posición central: ' + (resultado.centro + 1) + '<br>';
         html += 'Valor en esa posición: ' + resultado.mediana;
@@ -333,7 +333,7 @@ function dibujarGraficoMediana() {
     let resultado = calcularMedianaDesdeArreglo(calificaciones);
 
     let estudiantesOrdenados = estudiantes.slice();
-    estudiantesOrdenados.sort(function(a, b) {
+    estudiantesOrdenados.sort(function (a, b) {
         return a.calificacion - b.calificacion;
     });
 
@@ -410,7 +410,7 @@ function calcularModaDesdeArreglo(calificaciones) {
     }
 
     // Ordenamos conteos por valor para que el grafico quede ordenado
-    conteos.sort(function(a, b) {
+    conteos.sort(function (a, b) {
         return a.valor - b.valor;
     });
 
@@ -775,7 +775,7 @@ function calcularRango() {
 
     // Ordenamos de mayor a menor para la tabla
     let estudiantesOrdenados = estudiantes.slice();
-    estudiantesOrdenados.sort(function(a, b) {
+    estudiantesOrdenados.sort(function (a, b) {
         return b.calificacion - a.calificacion;
     });
 
@@ -848,7 +848,7 @@ function dibujarGraficoRango() {
 
     // Ordenamos de mayor a menor
     let estudiantesOrdenados = estudiantes.slice();
-    estudiantesOrdenados.sort(function(a, b) {
+    estudiantesOrdenados.sort(function (a, b) {
         return b.calificacion - a.calificacion;
     });
 
@@ -898,4 +898,82 @@ function dibujarGraficoRango() {
             }
         }
     });
+}
+
+// ============================================================
+// BLOQUE 9: TEST DE EVALUACION
+// ============================================================
+
+function generarTest() {
+    let contenedorTest = document.getElementById("contenedor-test");
+    let contenido = "";
+
+    for (let i = 0; i < PREGUNTASTEST.length; i++) {
+        contenido = contenido + '<div class="pregunta">';
+        contenido = contenido + '<p><strong>' + (i + 1) + '. ' + PREGUNTASTEST[i].pregunta + '</strong></p>';
+
+        for (let j = 0; j < PREGUNTASTEST[i].opciones.length; j++) {
+            contenido = contenido + '<label>';
+            contenido = contenido + '<input type="radio" name="pregunta' + i + '" value="' + j + '"> ';
+            contenido = contenido + PREGUNTASTEST[i].opciones[j];
+            contenido = contenido + '</label><br>';
+        }
+        contenido = contenido + '</div>';
+    }
+    contenedorTest.innerHTML = contenido;
+}
+generarTest();
+
+function calificarTest() {
+    let puntaje = 0;
+    let preguntasRespondidas = 0;
+
+    for (let i = 0; i < PREGUNTASTEST.length; i++) {
+        let respuestaSeleccionada = document.querySelector('input[name="pregunta' + i + '"]:checked');
+        if (respuestaSeleccionada != null) {
+            preguntasRespondidas++;
+
+            let respuestaUsuario = Number(respuestaSeleccionada.value);
+            if (respuestaUsuario === PREGUNTASTEST[i].correcta) {
+                puntaje++;
+            }
+        }
+    }
+
+    let resultado = document.getElementById("resultado-test");
+    if (preguntasRespondidas < PREGUNTASTEST.length) {
+        resultado.innerHTML = "Por favor, responde todas las preguntas antes de calificar.";
+        resultado.className = "resultado-alerta";
+        return;
+    }
+    if (preguntasRespondidas < PREGUNTASTEST.length) {
+        resultado.innerHTML = "Por favor, responde todas las preguntas antes de calificar.";
+        resultado.className = "resultado-alerta";
+        return;
+    }
+
+    let nota = puntaje * 2;
+    if (puntaje >= 4) {
+        resultado.innerHTML = "¡Excelente! Obtuviste " + puntaje + " de 5 respuestas correctas. Tu nota es " + nota + "/10.";
+        resultado.className = "resultado-aprobado";
+    } else if (puntaje === 3) {
+        resultado.innerHTML = "Buen intento. Obtuviste " + puntaje + " de 5 respuestas correctas. Tu nota es " + nota + "/10.";
+        resultado.className = "resultado-medio";
+    } else {
+        resultado.innerHTML = "Necesitas repasar un poco más. Obtuviste " + puntaje + " de 5 respuestas correctas. Tu nota es " + nota + "/10.";
+        resultado.className = "resultado-reprobado";
+    }
+}
+
+function reiniciarTest() {
+
+    let opciones = document.querySelectorAll('#contenedor-test input[type="radio"]');
+
+    for (let i = 0; i < opciones.length; i++) {
+        opciones[i].checked = false;
+    }
+
+    let resultado = document.getElementById("resultado-test");
+    resultado.innerHTML = "";
+    resultado.className = "";
 }

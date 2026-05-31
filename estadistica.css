@@ -159,3 +159,63 @@ ul, ol {
     margin-top: 12px;
     overflow-x: auto;
 }
+
+/* -------------------------------------------------- */
+/* ESTILO PARA LAS PREGUNTAS DEL TEST                 */
+/* -------------------------------------------------- */
+
+.pregunta {
+    background-color: #FEF2F2;
+    border: 1px solid #FECACA;
+    padding: 15px;
+    margin-bottom: 18px;
+}
+
+.pregunta p {
+    text-align: left;
+}
+
+.pregunta label {
+    line-height: 1.8;
+    cursor: pointer;
+}
+
+/* -------------------------------------------------- */
+/* RESULTADO DEL TEST                                 */
+/* -------------------------------------------------- */
+
+#resultado-test {
+    margin-top: 20px;
+    padding: 15px;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 8px;
+}
+
+/* Cuando falta responder preguntas */
+.resultado-alerta {
+    background-color: #FFEDD5;
+    color: #9A3412;
+    border: 1px solid #FDBA74;
+}
+
+/* Cuando obtiene buen puntaje */
+.resultado-aprobado {
+    background-color: #DCFCE7;
+    color: #166534;
+    border: 1px solid #86EFAC;
+}
+
+/* Cuando obtiene puntaje medio */
+.resultado-medio {
+    background-color: #FEF9C3;
+    color: #854D0E;
+    border: 1px solid #FACC15;
+}
+
+/* Cuando obtiene bajo puntaje */
+.resultado-reprobado {
+    background-color: #FEE2E2;
+    color: #991B1B;
+    border: 1px solid #FCA5A5;
+}

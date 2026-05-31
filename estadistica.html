@@ -18,6 +18,7 @@
         <button onclick="mostrarSeccion('rango')">Rango</button>
         <button onclick="mostrarSeccion('varianza')">Varianza</button>
         <button onclick="mostrarSeccion('desviacion')">Desviación Estándar</button>
+        <button onclick="mostrarSeccion('test')">Test</button>
     </nav>
 
     <!-- SECCION 1: PORTADA                                 -->
@@ -651,6 +652,28 @@
             console.log("La desviacion estandar es: " + desviacion.toFixed(2));
 
         </pre>
+    </section>
+    
+    <!-- SECCION 10: TEST DE EVALUACION -->
+    <section id="test" class="oculto">
+        <h2>Test de Evaluación</h2>
+
+        <p>
+            Responde las siguientes preguntas sobre estadística descriptiva.
+            Al finalizar, presiona el botón para conocer tu calificación.
+        </p>
+
+        <div id="contenedor-test"></div>
+
+        <button onclick="calificarTest()" class="btn-interactivo">
+            Calificar Test
+        </button>
+
+        <button onclick="reiniciarTest()" class="btn-interactivo">
+            Reiniciar Test
+        </button>
+
+        <div id="resultado-test"></div>
     </section>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
