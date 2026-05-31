@@ -384,3 +384,184 @@ function dibujarGraficoMediana() {
     });
 }
 
+// ============================================================
+// BLOQUE 6: FUNCIONES ESTADISTICAS - MODA
+// ============================================================
+
+let graficoModaInstancia = null;
+
+// --- Calculo puro de la moda ---
+function calcularModaDesdeArreglo(calificaciones) {
+    let conteos = [];
+
+    for (let i = 0; i < calificaciones.length; i++) {
+        let encontrado = false;
+
+        for (let j = 0; j < conteos.length; j++) {
+            if (conteos[j].valor === calificaciones[i]) {
+                conteos[j].conteo = conteos[j].conteo + 1;
+                encontrado = true;
+            }
+        }
+
+        if (encontrado === false) {
+            conteos.push({ valor: calificaciones[i], conteo: 1 });
+        }
+    }
+
+    // Ordenamos conteos por valor para que el grafico quede ordenado
+    conteos.sort(function(a, b) {
+        return a.valor - b.valor;
+    });
+
+    // Encontramos el maximo conteo
+    let maxConteo = 0;
+    for (let k = 0; k < conteos.length; k++) {
+        if (conteos[k].conteo > maxConteo) {
+            maxConteo = conteos[k].conteo;
+        }
+    }
+
+    // Recopilamos todos los valores que tienen el maximo conteo
+    // (puede haber mas de una moda)
+    let modas = [];
+    for (let k = 0; k < conteos.length; k++) {
+        if (conteos[k].conteo === maxConteo) {
+            modas.push(conteos[k].valor);
+        }
+    }
+
+    return {
+        conteos: conteos,
+        modas: modas,
+        maxConteo: maxConteo
+    };
+}
+
+// --- Toggle del ejemplo interactivo ---
+function toggleEjemploModa() {
+    let contenedor = document.getElementById('resultado-moda');
+    let btn = document.getElementById('btn-ejemplo-moda');
+
+    if (contenedor.classList.contains('oculto')) {
+        calcularModa();
+        contenedor.classList.remove('oculto');
+        btn.textContent = '✖ Ocultar Ejemplo';
+    } else {
+        contenedor.classList.add('oculto');
+        btn.textContent = '▶ Calcular Moda';
+    }
+}
+
+// --- Genera el HTML del ejemplo interactivo ---
+function calcularModa() {
+    let estudiantes = cargarDatos();
+    let calificaciones = obtenerCalificaciones(estudiantes);
+    let resultado = calcularModaDesdeArreglo(calificaciones);
+
+    let html = '';
+
+    html += '<p><strong>Frecuencia de cada calificación:</strong></p>';
+    html += '<table class="tabla-interactiva">';
+    html += '<tr><th>Calificación</th><th>Veces que aparece</th><th>¿Es la moda?</th></tr>';
+
+    for (let i = 0; i < resultado.conteos.length; i++) {
+        let esModa = resultado.conteos[i].conteo === resultado.maxConteo ? '⬅ moda' : '';
+        html += '<tr>';
+        html += '<td>' + resultado.conteos[i].valor + '</td>';
+        html += '<td>' + resultado.conteos[i].conteo + '</td>';
+        html += '<td>' + esModa + '</td>';
+        html += '</tr>';
+    }
+
+    html += '</table>';
+    html += '<div class="detalle-calculo">';
+    html += 'Total de datos: ' + calificaciones.length + '<br>';
+    html += 'Valor(es) que más se repite(n): <strong>' + resultado.modas.join(', ') + '</strong><br>';
+    html += 'Número de veces: ' + resultado.maxConteo;
+    html += '</div>';
+    html += '<div class="caja-resultado">';
+
+    if (resultado.modas.length === 1) {
+        html += '📙 La moda es: <strong>' + resultado.modas[0] + '</strong>';
+    } else {
+        html += '📙 Las modas son: <strong>' + resultado.modas.join(', ') + '</strong> (conjunto multimodal)';
+    }
+
+    html += '</div>';
+
+    document.getElementById('resultado-moda').innerHTML = html;
+}
+
+// --- Toggle del gráfico ---
+function toggleGraficoModa() {
+    let contenedor = document.getElementById('contenedor-grafico-moda');
+    let btn = document.getElementById('btn-grafico-moda');
+
+    if (contenedor.classList.contains('oculto')) {
+        contenedor.classList.remove('oculto');
+        btn.textContent = '✖ Ocultar Gráfico';
+
+        if (graficoModaInstancia === null) {
+            graficoModaInstancia = dibujarGraficoModa();
+        }
+    } else {
+        contenedor.classList.add('oculto');
+        btn.textContent = '📊 Ver Gráfico de Frecuencias';
+    }
+}
+
+// --- Dibuja el gráfico de frecuencias ---
+function dibujarGraficoModa() {
+    let estudiantes = cargarDatos();
+    let calificaciones = obtenerCalificaciones(estudiantes);
+    let resultado = calcularModaDesdeArreglo(calificaciones);
+
+    let etiquetas = [];
+    let frecuencias = [];
+    let colores = [];
+
+    for (let i = 0; i < resultado.conteos.length; i++) {
+        etiquetas.push('Calif. ' + resultado.conteos[i].valor);
+        frecuencias.push(resultado.conteos[i].conteo);
+
+        // La barra de la moda se pinta de color diferente
+        if (resultado.conteos[i].conteo === resultado.maxConteo) {
+            colores.push('rgba(22, 151, 249, 0.8)');   // naranja = moda
+        } else {
+            colores.push('rgba(247, 85, 85, 0.52)');   // morado = resto
+        }
+    }
+
+    let ctx = document.getElementById('graficaModa').getContext('2d');
+
+    return new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: etiquetas,
+            datasets: [{
+                label: 'Frecuencia (veces que aparece)',
+                data: frecuencias,
+                backgroundColor: colores,
+                borderColor: colores,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                title: {
+                    display: true,
+                    text: 'Frecuencia de calificaciones (la barra naranja es la moda)'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: { stepSize: 1 }
+                }
+            }
+        }
+    });
+}

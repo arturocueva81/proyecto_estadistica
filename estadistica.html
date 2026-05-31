@@ -314,6 +314,36 @@
 
             console.log("La moda es: " + moda);
         </pre>
+
+                    <!-- EJEMPLO INTERACTIVO: MODA                          -->
+
+        <h3>Ejemplo interactivo</h3>
+        <p>
+            El siguiente ejemplo usa un arreglo de <strong>20 objetos</strong>
+            precargados. Al hacer clic, JavaScript cuenta cuántas veces
+            se repite cada calificación y determina la moda.
+        </p>
+
+        <button onclick="toggleEjemploModa()" class="btn-interactivo" id="btn-ejemplo-moda">
+            ▶ Calcular Moda
+        </button>
+
+        <div id="resultado-moda" class="oculto"></div>
+
+        <!-- GRAFICO DE FRECUENCIAS: MODA                       -->
+        <h3>Gráfico de frecuencias</h3>
+        <p>
+            Haz clic en el botón para ver cuántas veces se repite
+            cada calificación. La barra más alta representa la moda.
+        </p>
+
+        <button onclick="toggleGraficoModa()" class="btn-interactivo" id="btn-grafico-moda">
+            📊 Ver Gráfico de Frecuencias
+        </button>
+
+        <div id="contenedor-grafico-moda" class="oculto" style="margin-top:20px;">
+            <canvas id="graficaModa"></canvas>
+        </div>
     </section>
 
 
