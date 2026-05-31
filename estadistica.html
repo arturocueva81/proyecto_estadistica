@@ -429,7 +429,7 @@
         <div id="contenedor-grafico-minmax" class="oculto" style="margin-top:20px;">
             <canvas id="graficaMinMax"></canvas>
         </div>
-        
+
     </section>
 
 
@@ -486,6 +486,39 @@
 
             console.log("El rango es: " + rango);
         </pre>
+
+                    <!-- EJEMPLO INTERACTIVO: RANGO                         -->
+        <h3>Ejemplo interactivo</h3>
+        <p>
+            Al hacer clic, JavaScript calcula el rango restando
+            el valor mínimo al valor máximo del arreglo de
+            <strong>20 estudiantes</strong>.
+        </p>
+
+        <button onclick="toggleEjemploRango()" class="btn-interactivo" id="btn-ejemplo-rango">
+            ▶ Calcular Rango
+        </button>
+
+        <div id="resultado-rango" class="oculto"></div>
+
+
+        <!-- GRAFICO DE BARRAS VERTICALES: RANGO                -->
+        <h3>Gráfico de calificaciones</h3>
+        <p>
+            Haz clic para ver el gráfico. Las barras
+            <strong style="color:#ef4444;">roja</strong> y
+            <strong style="color:#22c55e;">verde</strong> marcan
+            el mínimo y el máximo, y la zona entre ellas representa
+            el rango.
+        </p>
+
+        <button onclick="toggleGraficoRango()" class="btn-interactivo" id="btn-grafico-rango">
+            📊 Ver Gráfico de Barras Verticales
+        </button>
+
+        <div id="contenedor-grafico-rango" class="oculto" style="margin-top:20px;">
+            <canvas id="graficaRango"></canvas>
+        </div>
     </section>
 
 

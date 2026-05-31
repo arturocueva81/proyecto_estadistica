@@ -733,3 +733,169 @@ function dibujarGraficoMinMax() {
         }
     });
 }
+
+// ============================================================
+// BLOQUE 8: FUNCIONES ESTADISTICAS - RANGO
+// ============================================================
+
+let graficoRangoInstancia = null;
+
+// --- Calculo puro del rango ---
+function calcularRangoDesdeArreglo(calificaciones) {
+    let resultado = calcularMinMaxDesdeArreglo(calificaciones);
+    let rango = resultado.maximo - resultado.minimo;
+
+    return {
+        minimo: resultado.minimo,
+        maximo: resultado.maximo,
+        rango: rango
+    };
+}
+
+// --- Toggle del ejemplo interactivo ---
+function toggleEjemploRango() {
+    let contenedor = document.getElementById('resultado-rango');
+    let btn = document.getElementById('btn-ejemplo-rango');
+
+    if (contenedor.classList.contains('oculto')) {
+        calcularRango();
+        contenedor.classList.remove('oculto');
+        btn.textContent = '✖ Ocultar Ejemplo';
+    } else {
+        contenedor.classList.add('oculto');
+        btn.textContent = '▶ Calcular Rango';
+    }
+}
+
+// --- Genera el HTML del ejemplo interactivo ---
+function calcularRango() {
+    let estudiantes = cargarDatos();
+    let calificaciones = obtenerCalificaciones(estudiantes);
+    let resultado = calcularRangoDesdeArreglo(calificaciones);
+
+    // Ordenamos de mayor a menor para la tabla
+    let estudiantesOrdenados = estudiantes.slice();
+    estudiantesOrdenados.sort(function(a, b) {
+        return b.calificacion - a.calificacion;
+    });
+
+    let html = '';
+
+    html += '<p><strong>Calificaciones ordenadas de mayor a menor:</strong></p>';
+    html += '<table class="tabla-interactiva">';
+    html += '<tr><th>Posición</th><th>Estudiante</th><th>Calificación</th><th>Destacado</th></tr>';
+
+    for (let i = 0; i < estudiantesOrdenados.length; i++) {
+        let destacado = '';
+
+        if (estudiantesOrdenados[i].calificacion === resultado.maximo && i === 0) {
+            destacado = '⬅ máximo';
+        }
+        if (estudiantesOrdenados[i].calificacion === resultado.minimo &&
+            i === estudiantesOrdenados.length - 1) {
+            destacado = '⬅ mínimo';
+        }
+
+        html += '<tr>';
+        html += '<td>' + (i + 1) + '</td>';
+        html += '<td>' + estudiantesOrdenados[i].nombre + '</td>';
+        html += '<td>' + estudiantesOrdenados[i].calificacion + '</td>';
+        html += '<td>' + destacado + '</td>';
+        html += '</tr>';
+    }
+
+    html += '</table>';
+    html += '<div class="detalle-calculo">';
+    html += 'Valor máximo: <strong>' + resultado.maximo + '</strong><br>';
+    html += 'Valor mínimo: <strong>' + resultado.minimo + '</strong><br>';
+    html += 'Fórmula: Rango = Máximo - Mínimo<br>';
+    html += 'Rango = ' + resultado.maximo + ' - ' + resultado.minimo;
+    html += '</div>';
+    html += '<div class="caja-resultado">';
+    html += '📏 El rango es: <strong>' + resultado.rango + '</strong>';
+    html += '</div>';
+
+    document.getElementById('resultado-rango').innerHTML = html;
+}
+
+// --- Toggle del gráfico ---
+function toggleGraficoRango() {
+    let contenedor = document.getElementById('contenedor-grafico-rango');
+    let btn = document.getElementById('btn-grafico-rango');
+
+    if (contenedor.classList.contains('oculto')) {
+        contenedor.classList.remove('oculto');
+        btn.textContent = '✖ Ocultar Gráfico';
+
+        // Reemplaza canvas para evitar "Canvas already in use"
+        let canvasViejo = document.getElementById('graficaRango');
+        let canvasNuevo = document.createElement('canvas');
+        canvasNuevo.id = 'graficaRango';
+        canvasViejo.parentNode.replaceChild(canvasNuevo, canvasViejo);
+
+        graficoRangoInstancia = dibujarGraficoRango();
+    } else {
+        contenedor.classList.add('oculto');
+        btn.textContent = '📊 Ver Gráfico de Barras';
+    }
+}
+
+// --- Dibuja el gráfico ordenado de mayor a menor ---
+function dibujarGraficoRango() {
+    let estudiantes = cargarDatos();
+    let calificaciones = obtenerCalificaciones(estudiantes);
+    let resultado = calcularRangoDesdeArreglo(calificaciones);
+
+    // Ordenamos de mayor a menor
+    let estudiantesOrdenados = estudiantes.slice();
+    estudiantesOrdenados.sort(function(a, b) {
+        return b.calificacion - a.calificacion;
+    });
+
+    let nombres = [];
+    let valores = [];
+    let colores = [];
+
+    for (let i = 0; i < estudiantesOrdenados.length; i++) {
+        nombres.push(estudiantesOrdenados[i].nombre);
+        valores.push(estudiantesOrdenados[i].calificacion);
+
+        // Verde para el maximo (primera barra), rojo para el minimo (ultima barra)
+        if (i === 0) {
+            colores.push('rgba(34, 197, 94, 0.8)');    // verde = maximo
+        } else if (i === estudiantesOrdenados.length - 1) {
+            colores.push('rgba(239, 68, 68, 0.8)');    // rojo = minimo
+        } else {
+            colores.push('rgba(251, 191, 36, 0.6)');   // amarillo = resto
+        }
+    }
+
+    let ctx = document.getElementById('graficaRango').getContext('2d');
+
+    return new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: nombres,
+            datasets: [{
+                label: 'Calificación (mayor a menor)',
+                data: valores,
+                backgroundColor: colores,
+                borderColor: colores,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                title: {
+                    display: true,
+                    text: 'Calificaciones ordenadas — verde: máximo | rojo: mínimo | rango = ' + resultado.rango
+                }
+            },
+            scales: {
+                y: { beginAtZero: true, max: 20 }
+            }
+        }
+    });
+}
