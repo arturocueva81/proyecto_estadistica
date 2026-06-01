@@ -1307,6 +1307,26 @@ function calificarTest() {
             if (respuestaUsuario === PREGUNTASTEST[i].correcta) {
                 puntaje++;
             }
+
+            // --- VALIDACION VISUAL: X roja y Check verde ---
+            let labels = document.querySelectorAll('input[name="pregunta' + i + '"]');
+            for (let j = 0; j < labels.length; j++) {
+                let icono = document.createElement('span');
+                icono.className = 'icono-validacion';
+                if (j === PREGUNTASTEST[i].correcta) {
+                    icono.textContent = ' ✔';
+                    icono.style.color = '#16a34a';
+                    icono.style.fontWeight = 'bold';
+                } else if (j === respuestaUsuario) {
+                    icono.textContent = ' ✘';
+                    icono.style.color = '#dc2626';
+                    icono.style.fontWeight = 'bold';
+                }
+                if (icono.textContent !== '') {
+                    labels[j].parentNode.appendChild(icono);
+                }
+            }
+            // --- FIN VALIDACION VISUAL ---
         }
     }
 
@@ -1344,6 +1364,13 @@ function reiniciarTest() {
     }
 
     let resultado = document.getElementById("resultado-test");
+
+    // --- LIMPIAR íconos de validación al reiniciar ---
+    let iconos = document.querySelectorAll('#contenedor-test .icono-validacion');
+    for (let k = 0; k < iconos.length; k++) {
+        iconos[k].remove();
+    }
+    // --- FIN LIMPIEZA ---
     resultado.innerHTML = "";
     resultado.className = "";
 }
