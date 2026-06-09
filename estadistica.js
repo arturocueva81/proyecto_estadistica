@@ -50,20 +50,26 @@ function obtenerCalificaciones(estudiantes) {
 // BLOQUE 4: FUNCIONES ESTADISTICAS
 // ============================================================
 
+
 // --- MEDIA ---
+// El cálculo puro lo hace media.js → calcularMediaDesdeArreglo(arregloObjetos, propiedad)
 
-function calcularMediaDesdeArreglo(calificaciones) {
-    let suma = 0;
-
-    for (let i = 0; i < calificaciones.length; i++) {
-        suma = suma + calificaciones[i];
+function obtenerResultadoMedia(estudiantes) {
+    // Si la función calcularMedia (de media.js) está disponible, úsala
+    if (typeof calcularMedia === 'function') {
+        // pasar null como idContenedor para que no escriba HTML aquí
+        return calcularMedia(estudiantes, 'calificacion', null, null);
     }
 
-    let media = suma / calificaciones.length;
-
+    // Si no existe calcularMedia, usar el antiguo cálculo simple (fallback)
+    let media = calcularMediaDesdeArreglo(estudiantes, 'calificacion');
+    let suma = 0;
+    for (let i = 0; i < estudiantes.length; i++) {
+        suma = suma + estudiantes[i].calificacion;
+    }
     return {
         suma: suma,
-        cantidad: calificaciones.length,
+        cantidad: estudiantes.length,
         media: media
     };
 }
@@ -78,9 +84,46 @@ function toggleEjemploMedia() {
     let contenedor = document.getElementById('resultado-media');
     let btn = document.getElementById('btn-ejemplo-media');
 
+    if (!contenedor || !btn) return;
+
     if (contenedor.classList.contains('oculto')) {
-        // Si está oculto: calcular y mostrar
-        calcularMedia();
+        // Si está oculto: calcular y mostrar usando media.js
+        let estudiantes = cargarDatos();
+
+        if (typeof calcularMedia === 'function') {
+            // calcularMedia rellenará la tabla en el elemento 'resultado-media'
+            calcularMedia(estudiantes, 'calificacion', 'resultado-media', 'nombre');
+        } else {
+            // fallback sencillo: generar tabla aquí (igual que antes)
+            let resultado = obtenerResultadoMedia(estudiantes);
+
+            let html = '';
+            html += '<p><strong>Datos cargados desde datos.js:</strong></p>';
+            html += '<table class="tabla-interactiva">';
+            html += '<tr><th>#</th><th>Estudiante</th><th>Calificación</th></tr>';
+
+            for (let i = 0; i < estudiantes.length; i++) {
+                html += '<tr>';
+                html += '<td>' + (i + 1) + '</td>';
+                html += '<td>' + estudiantes[i].nombre + '</td>';
+                html += '<td>' + estudiantes[i].calificacion + '</td>';
+                html += '</tr>';
+            }
+
+            html += '</table>';
+            html += '<div class="detalle-calculo">';
+            html += 'Suma total: ' + resultado.suma + '<br>';
+            html += 'Número de datos: ' + resultado.cantidad + '<br>';
+            html += 'Fórmula: Media = Suma / Cantidad<br>';
+            html += 'Media = ' + resultado.suma + ' / ' + resultado.cantidad;
+            html += '</div>';
+            html += '<div class="caja-resultado">';
+            html += '📘 La media aritmética es: <strong>' + resultado.media.toFixed(2) + '</strong>';
+            html += '</div>';
+
+            contenedor.innerHTML = html;
+        }
+
         contenedor.classList.remove('oculto');
         btn.textContent = '✖ Ocultar Ejemplo';
     } else {
@@ -88,39 +131,6 @@ function toggleEjemploMedia() {
         contenedor.classList.add('oculto');
         btn.textContent = '▶ Calcular Media';
     }
-}
-
-function calcularMedia() {
-    let estudiantes = cargarDatos();
-    let calificaciones = obtenerCalificaciones(estudiantes);
-    let resultado = calcularMediaDesdeArreglo(calificaciones);
-
-    let html = '';
-
-    html += '<p><strong>Datos cargados desde datos.js:</strong></p>';
-    html += '<table class="tabla-interactiva">';
-    html += '<tr><th>#</th><th>Estudiante</th><th>Calificación</th></tr>';
-
-    for (let i = 0; i < estudiantes.length; i++) {
-        html += '<tr>';
-        html += '<td>' + (i + 1) + '</td>';
-        html += '<td>' + estudiantes[i].nombre + '</td>';
-        html += '<td>' + estudiantes[i].calificacion + '</td>';
-        html += '</tr>';
-    }
-
-    html += '</table>';
-    html += '<div class="detalle-calculo">';
-    html += 'Suma total: ' + resultado.suma + '<br>';
-    html += 'Número de datos: ' + resultado.cantidad + '<br>';
-    html += 'Fórmula: Media = Suma / Cantidad<br>';
-    html += 'Media = ' + resultado.suma + ' / ' + resultado.cantidad;
-    html += '</div>';
-    html += '<div class="caja-resultado">';
-    html += '📘 La media aritmética es: <strong>' + resultado.media.toFixed(2) + '</strong>';
-    html += '</div>';
-
-    document.getElementById('resultado-media').innerHTML = html;
 }
 
 
@@ -132,66 +142,91 @@ function toggleGraficoMedia() {
     let contenedor = document.getElementById('contenedor-grafico-media');
     let btn = document.getElementById('btn-grafico-media');
 
+    if (!contenedor || !btn) return;
+
     if (contenedor.classList.contains('oculto')) {
         contenedor.classList.remove('oculto');
         btn.textContent = '✖ Ocultar Gráfico';
 
-        // Solo dibuja el grafico si no existe todavia
+        // Solo dibuja el grafico si no existe todavía
         if (graficoMediaInstancia === null) {
-            graficoMediaInstancia = dibujarGraficoMedia();
+            let estudiantes = cargarDatos();
+
+            if (typeof dibujarGraficoMedia === 'function') {
+                // Llamamos a la función de media.js que dibuja el gráfico
+                graficoMediaInstancia = dibujarGraficoMedia(
+                    estudiantes,
+                    'calificacion',
+                    'nombre',
+                    'graficaMedia',
+                    'Calificaciones de estudiantes con línea de media'
+                );
+            } else {
+                // Fallback: dibujar aquí el gráfico simple (manteniendo compatibilidad)
+                // Reemplazamos el canvas por uno nuevo para evitar errores
+                let canvasViejo = document.getElementById('graficaMedia');
+                let canvasNuevo = document.createElement('canvas');
+                canvasNuevo.id = 'graficaMedia';
+                canvasViejo.parentNode.replaceChild(canvasNuevo, canvasViejo);
+
+                // Crear el gráfico localmente (copia de la lógica anterior)
+                let resultado = obtenerResultadoMedia(estudiantes);
+                let calificaciones = obtenerCalificaciones(estudiantes);
+                let nombres = [];
+                for (let i = 0; i < estudiantes.length; i++) {
+                    nombres.push(estudiantes[i].nombre);
+                }
+                let ctx = document.getElementById('graficaMedia').getContext('2d');
+                graficoMediaInstancia = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: nombres,
+                        datasets: [{
+                            label: 'Calificación',
+                            data: calificaciones,
+                            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }, {
+                            label: 'Media (' + resultado.media.toFixed(2) + ')',
+                            data: new Array(calificaciones.length).fill(resultado.media),
+                            type: 'line',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 2,
+                            pointRadius: 0,
+                            fill: false
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { position: 'top' },
+                            title: {
+                                display: true,
+                                text: 'Calificaciones de estudiantes con línea de media'
+                            }
+                        },
+                        scales: {
+                            y: { beginAtZero: true, max: 20 }
+                        }
+                    }
+                });
+            }
         }
     } else {
         contenedor.classList.add('oculto');
         btn.textContent = '📊 Ver Gráfico de Barras';
-    }
-}
 
-function dibujarGraficoMedia() {
-    let estudiantes = cargarDatos();
-    let calificaciones = obtenerCalificaciones(estudiantes);
-    let resultado = calcularMediaDesdeArreglo(calificaciones);
-
-    let nombres = [];
-    for (let i = 0; i < estudiantes.length; i++) {
-        nombres.push(estudiantes[i].nombre);
-    }
-
-    let ctx = document.getElementById('graficaMedia').getContext('2d');
-
-    return new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: nombres,
-            datasets: [{
-                label: 'Calificación',
-                data: calificaciones,
-                backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
-            }, {
-                label: 'Media (' + resultado.media.toFixed(2) + ')',
-                data: new Array(calificaciones.length).fill(resultado.media),
-                type: 'line',
-                borderColor: 'rgba(255, 99, 132, 1)',
-                borderWidth: 2,
-                pointRadius: 0,
-                fill: false
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { position: 'top' },
-                title: {
-                    display: true,
-                    text: 'Calificaciones de estudiantes con línea de media'
-                }
-            },
-            scales: {
-                y: { beginAtZero: true, max: 20 }
+        // Mantener limpieza: destruir el gráfico si existe
+        if (graficoMediaInstancia) {
+            try {
+                graficoMediaInstancia.destroy();
+            } catch (e) {
+                // ignorar errores al destruir
             }
+            graficoMediaInstancia = null;
         }
-    });
+    }
 }
 
 // ============================================================
@@ -909,8 +944,11 @@ let graficoVarianzaInstancia = null;
 // --- Calculo puro de la varianza ---
 function calcularVarianzaDesdeArreglo(calificaciones) {
 
-    let resultadoMedia = calcularMediaDesdeArreglo(calificaciones);
-    let media = resultadoMedia.media;
+    let suma = 0;
+    for (let i = 0; i < calificaciones.length; i++) {
+        suma = suma + calificaciones[i];
+    }
+    let media = suma / calificaciones.length;
 
     let sumaCuadrados = 0;
     let detalles = [];
@@ -1373,4 +1411,244 @@ function reiniciarTest() {
     // --- FIN LIMPIEZA ---
     resultado.innerHTML = "";
     resultado.className = "";
+}
+
+
+// ============================================================
+// BLOQUE 12: EJERCICIO PRACTICO - SOCIAL MEDIA (INTEGRADO con media.js)
+// ============================================================
+
+let graficoEjercicioInstancia = null;
+
+// Nombre de la columna numérica en social_media_200.js que vamos a usar
+const COLUMNA_CALCULO_EJ = 'Daily_Minutes_Spent'; // cambiar si tu columna tiene otro nombre
+// Nombre de la propiedad que identifica cada registro (etiqueta)
+const NOMBRE_ETIQUETA_EJ = 'App';
+
+/**
+ * Devuelve los datos desde social_media_200.js (seguro)
+ */
+function cargarDatosSocial() {
+    if (typeof SOCIAL_MEDIA_USAGE === 'undefined' || !SOCIAL_MEDIA_USAGE.datos_redes) {
+        return [];
+    }
+    return SOCIAL_MEDIA_USAGE.datos_redes;
+}
+
+/**
+ * Agrupa los registros por App y devuelve un arreglo
+ * donde cada elemento es { App: 'Facebook', valor: <media> }
+ * Usa calcularMedia (de media.js) para el cálculo por App cuando esté disponible.
+ */
+function agruparMediaPorApp() {
+    let datos = cargarDatosSocial();
+
+    // mapa: App -> lista de objetos que pertenecen a esa app
+    let mapa = {};
+    for (let i = 0; i < datos.length; i++) {
+        let fila = datos[i];
+        let app = fila[NOMBRE_ETIQUETA_EJ] || 'SinNombre';
+
+        if (!mapa[app]) {
+            mapa[app] = [];
+        }
+        mapa[app].push(fila);
+    }
+
+    // convertir a arreglo de objetos con la media por app
+    let arregloApps = [];
+    // obtener nombres y ordenarlos para consistencia
+    let nombres = [];
+    for (let k in mapa) {
+        nombres.push(k);
+    }
+    nombres.sort();
+
+    for (let j = 0; j < nombres.length; j++) {
+        let nombre = nombres[j];
+        let filasApp = mapa[nombre];
+
+        // calcular media usando la función de media.js si existe
+        let mediaApp = 0;
+        if (typeof calcularMedia === 'function') {
+            // pasar null como idContenedor para que no escriba tabla aquí
+            let res = calcularMedia(filasApp, COLUMNA_CALCULO_EJ, null, null);
+            mediaApp = res.media;
+        } else {
+            // fallback simple: sumar y dividir
+            let s = 0;
+            let c = 0;
+            for (let t = 0; t < filasApp.length; t++) {
+                let v = Number(filasApp[t][COLUMNA_CALCULO_EJ]);
+                if (!isNaN(v)) {
+                    s = s + v;
+                    c = c + 1;
+                }
+            }
+            mediaApp = c > 0 ? (s / c) : 0;
+            mediaApp = parseFloat(mediaApp.toFixed(2));
+        }
+
+        arregloApps.push({
+            App: nombre,
+            valor: mediaApp
+        });
+    }
+
+    return arregloApps;
+}
+
+/**
+ * Muestra la tabla con la media por App en el elemento 'resultado-ejercicio'.
+ * Aprovecha calcularMedia de media.js: le pasamos el arreglo generado y la propiedad 'valor'.
+ */
+function mostrarTablaMediaApps() {
+    let arregloApps = agruparMediaPorApp();
+
+    // Si media.js está disponible, usar calcularMedia para generar la tabla automáticamente
+    if (typeof calcularMedia === 'function') {
+        // calcularMedia(arregloObjetos, propiedad, idContenedor, nombrePropMostrar)
+        calcularMedia(arregloApps, 'valor', 'resultado-ejercicio', 'App');
+        return;
+    }
+
+    // Fallback: generar tabla manualmente (muy simple)
+    let html = '';
+    html += '<p><strong>Media por App (columna: ' + COLUMNA_CALCULO_EJ + ')</strong></p>';
+    html += '<table class="tabla-interactiva">';
+    html += '<tr><th>#</th><th>Red Social</th><th>Media</th></tr>';
+
+    for (let i = 0; i < arregloApps.length; i++) {
+        html += '<tr>';
+        html += '<td>' + (i + 1) + '</td>';
+        html += '<td>' + arregloApps[i].App + '</td>';
+        html += '<td>' + arregloApps[i].valor.toFixed(2) + '</td>';
+        html += '</tr>';
+    }
+
+    html += '</table>';
+    document.getElementById('resultado-ejercicio').innerHTML = html;
+}
+
+/**
+ * Toggle (mostrar/ocultar) la tabla del ejercicio práctico.
+ * Usa la clase 'oculto' igual que el resto del proyecto.
+ */
+function toggleEjercicioPractico() {
+    let cont = document.getElementById('resultado-ejercicio');
+    let btn = document.getElementById('btn-ejercicio-practico');
+
+    if (!cont || !btn) return;
+
+    if (cont.classList.contains('oculto')) {
+        mostrarTablaMediaApps();
+        cont.classList.remove('oculto');
+        btn.textContent = '✖ Ocultar Tabla';
+    } else {
+        cont.classList.add('oculto');
+        btn.textContent = '▶ Calcular Media por App';
+    }
+}
+
+/**
+ * Toggle del gráfico: muestra u oculta el contenedor y dibuja el gráfico
+ * usando dibujarGraficoMedia de media.js (si está disponible).
+ */
+function toggleGraficoEjercicio() {
+    let cont = document.getElementById('contenedor-grafico-ejercicio');
+    let btn = document.getElementById('btn-grafico-ejercicio');
+
+    if (!cont || !btn) return;
+
+    if (cont.classList.contains('oculto')) {
+        cont.classList.remove('oculto');
+        btn.textContent = '✖ Ocultar Gráfico';
+
+        // Si ya hay un gráfico, destruirlo antes de crear uno nuevo
+        if (graficoEjercicioInstancia) {
+            graficoEjercicioInstancia.destroy();
+            graficoEjercicioInstancia = null;
+        }
+
+        // preparar canvas: si no existe, crearlo
+        let canvas = document.getElementById('graficaEjercicio');
+        if (!canvas) {
+            let nuevo = document.createElement('canvas');
+            nuevo.id = 'graficaEjercicio';
+            cont.appendChild(nuevo);
+            canvas = nuevo;
+        }
+
+        // crear datos agrupados (cada objeto: { App, valor })
+        let arregloApps = agruparMediaPorApp();
+
+        if (typeof dibujarGraficoMedia === 'function') {
+            // dibujarGraficoMedia(arregloObjetos, propiedad, nombrePropMostrar, canvasId, titulo)
+            graficoEjercicioInstancia = dibujarGraficoMedia(
+                arregloApps,
+                'valor',
+                'App',
+                'graficaEjercicio',
+                'Media por App (' + COLUMNA_CALCULO_EJ + ')'
+            );
+        } else {
+            // Fallback sencillo: dibujar barras con Chart.js aquí
+            let etiquetas = [];
+            let valores = [];
+            for (let i = 0; i < arregloApps.length; i++) {
+                etiquetas.push(arregloApps[i].App);
+                valores.push(arregloApps[i].valor);
+            }
+
+            let ctx = document.getElementById('graficaEjercicio').getContext('2d');
+            graficoEjercicioInstancia = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: etiquetas,
+                    datasets: [{
+                        label: 'Media (' + COLUMNA_CALCULO_EJ + ')',
+                        data: valores,
+                        backgroundColor: 'rgba(99, 102, 241, 0.7)',
+                        borderColor: 'rgba(99, 102, 241, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'top' },
+                        title: {
+                            display: true,
+                            text: 'Media por App (' + COLUMNA_CALCULO_EJ + ')'
+                        },
+                        tooltip: {
+                            enabled: true,
+                            displayColors: false,
+                            callbacks: {
+                                title: function() { return ''; },
+                                label: function(context) {
+                                    let nombre = context.label || '';
+                                    let valor = (context.parsed && context.parsed.y !== undefined) ? context.parsed.y : context.parsed;
+                                    return nombre + ' ' + Number(valor).toFixed(2);
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+    } else {
+        // ocultar y destruir grafico si existe
+        cont.classList.add('oculto');
+        btn.textContent = '📊 Ver Gráfico Comparativo';
+
+        if (graficoEjercicioInstancia) {
+            graficoEjercicioInstancia.destroy();
+            graficoEjercicioInstancia = null;
+        }
+    }
 }

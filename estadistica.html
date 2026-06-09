@@ -21,6 +21,7 @@
         <button onclick="mostrarSeccion('varianza')">Varianza</button>
         <button onclick="mostrarSeccion('desviacion')">Desviación Estándar</button>
         <button onclick="mostrarSeccion('test')">Test</button>
+        <button onclick="mostrarSeccion('ejercicio-practico')">Ejercicio Práctico</button>
     </nav>
 
     <!-- SECCION 1: PORTADA                                 -->
@@ -735,9 +736,72 @@
         <div id="resultado-test"></div>
     </section>
 
+    <!-- EJERCICIO PRACTICO-->
+
+    <section id="ejercicio-practico" class="oculto">
+        <h2>Ejercicio Práctico</h2>
+        <img src="images/social_media.jpeg" width="50%">
+
+        <h3>Contexto del dataset</h3>
+        <p>
+            Este ejercicio utiliza una muestra de <strong>200 registros</strong>
+            tomados aleatoriamente de un dataset original de 1.000 usuarios de
+            redes sociales, publicado en
+            <a href="https://www.kaggle.com/datasets/bhadramohit/social-media-usage-datasetapplications"
+            target="_blank">Kaggle</a>.
+        </p>
+        <p>
+            Cada registro representa el comportamiento diario de un usuario en
+            una red social específica en USA en el año 2024 . Las variables registradas son:
+        </p>
+        <ul>
+            <li><strong>App:</strong> red social utilizada (Instagram, TikTok, Facebook, etc.)</li>
+            <li><strong>Daily_Minutes_Spent:</strong> minutos diarios que el usuario pasa en la app</li>
+            <li><strong>Posts_Per_Day:</strong> publicaciones realizadas por día</li>
+            <li><strong>Likes_Per_Day:</strong> likes dados por día</li>
+            <li><strong>Follows_Per_Day:</strong> cuentas seguidas por día</li>
+        </ul>
+        <p>
+            El objetivo de este ejercicio es buscar algunas métricas a traves de la estadistica</strong>
+            para compararlas en cada red social.
+        </p>
+
+        <!-- TABLA DE MEDIAS POR APP -->
+        <h3>Media de usuarios por red social</h3>
+        <p>
+            Al hacer clic, JavaScript recorre los 200 registros, los agrupa por
+            <strong>App</strong> y calcula la media de <strong>Redes sociales mas utilizadas al dia</strong>
+            usando la función <code>calcularMediaDesdeArreglo()</code>.
+        </p>
+
+        <button onclick="toggleEjercicioPractico()" class="btn-interactivo" id="btn-ejercicio-practico">
+            ▶ Calcular Media por App
+        </button>
+
+        <div id="resultado-ejercicio" class="oculto"></div>
+
+        <!-- GRAFICO DE BARRAS -->
+        <h3>Gráfico comparativo</h3>
+        <p>
+            Haz clic para ver el gráfico de barras con la media de minutos
+            diarios por red social.
+        </p>
+
+        <button onclick="toggleGraficoEjercicio()" class="btn-interactivo" id="btn-grafico-ejercicio">
+            📊 Ver Gráfico Comparativo
+        </button>
+
+        <div id="contenedor-grafico-ejercicio" class="oculto" style="margin-top:20px;">
+            <canvas id="graficaEjercicio"></canvas>
+        </div>
+    </section>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="datos.js"></script> <!-- fuente de datos -->
-    <script src="estadistica.js"></script> <!-- fuente de funciones de calculo y dibujado -->
+    <script src="datos.js"></script> <!-- fuente de datos de ejemplo -->
+    <script src="social_media_200.js"></script> <!-- fuente de datos para Ejercicio practico -->
+    <script src="funciones_estadisticas/media.js"></script> <!-- funcion de calculo de media -->
+
+    <script src="estadistica.js"></script> <!-- llama a funciones de calculo y procesa el dibujado en la pagina -->
 
 </body>
 
