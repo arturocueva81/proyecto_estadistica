@@ -24,66 +24,125 @@
         <button onclick="mostrarSeccion('ejercicio-practico')">Ejercicio Práctico</button>
     </nav>
 
-    <!-- SECCION 1: PORTADA                                 -->
-    <section id="portada">
-        <h1>Estadística Aplicada</h1>
-        <h2>Proyecto de Matemática 1</h2>
-        <img src="images/portada.png" width="100%">
+    <!-- SECCION 1: PORTADA   --> 
+                                
+    <section id="portada" class="dos-columnas">
+        
+        <div class="columna-teoria">
+            <h1>Estadística Aplicada</h1> 
+            <h2>Proyecto de Matemática 1</h2>
+            <img src="images/portada01.png" width="100%">
+        </div>
+
+        <div class="columna-ejercicios">
+        <p>
+            Bienvenido a este espacio dedicado a la <strong>Estadística Descriptiva</strong>, una disciplina fundamental 
+            que nos permite transformar datos brutos en información con significado. En el mundo actual, la capacidad de 
+            organizar, resumir y visualizar datos es esencial para comprender tendencias, realizar diagnósticos precisos 
+            y tomar decisiones fundamentadas en la evidencia.
+        </p>
 
         <p>
-            Este sitio web presenta los conceptos fundamentales de la
-            estadística descriptiva, con definiciones claras y ejemplos
-            prácticos para facilitar su comprensión.
+            A través de este sitio, exploraremos las medidas de tendencia central y de dispersión, herramientas 
+            matemáticas que nos permiten describir el comportamiento de un conjunto de datos mediante un solo valor 
+            o identificar qué tan variados son entre sí. Cada sección combina una sólida base teórica con 
+            <strong>simulaciones interactivas en JavaScript</strong> y visualizaciones dinámicas de datos.
         </p>
+
         <p>
-            Usa el menú de navegación superior para explorar cada tema.
+            Te invitamos a utilizar el menú de navegación superior para recorrer los diferentes conceptos y finalizar 
+            con nuestro <strong>ejercicio práctico</strong>, donde aplicaremos todo lo aprendido en un dataset real 
+            sobre el comportamiento de usuarios en redes sociales.
         </p>
+                <div>
+                <h6>Realizado por: <br>
+                    Jonathan Luna <br>
+                    Arturo Cueva
+                </h6>
+        </div>
+
+        </div>
+
     </section>
 
     <!-- SECCION 2: QUE ES LA ESTADISTICA                   -->
-    <section id="que-es" class="oculto">
+    <section id="que-es" class="oculto dos-columnas">
+
+        <div class="columna-teoria">
         <h2>¿Qué es la Estadística?</h2>
 
         <img src="images/estadistica.png" width="100%">
 
         <h3>Definición</h3>
         <p>
-            La estadística es una rama de las matemáticas que se encarga de
-            recopilar, organizar, analizar e interpretar datos numéricos.
-            Su objetivo es obtener conclusiones útiles a partir de la
-            información recopilada.
+            La <strong>estadística</strong> es una rama de las matemáticas que se dedica
+            a la recopilación, organización, análisis e interpretación de datos con el
+            propósito de transformar la información en conocimiento útil. Gracias a la
+            estadística es posible identificar patrones, comparar resultados, comprender
+            fenómenos y tomar decisiones fundamentadas en evidencia objetiva.
         </p>
-        <p>Existen dos tipos principales:</p>
 
-        <!-- Lista desordenada (ul) con los tipos de estadistica -->
-        <!-- Cada elemento de la lista es un <li> -->
+        <p>
+            En la actualidad, la estadística tiene aplicaciones en múltiples áreas como
+            la educación, la medicina, la economía, la investigación científica, el
+            marketing digital y las redes sociales. Cada vez que se analizan ventas,
+            calificaciones, encuestas, audiencias o interacciones en plataformas como
+            Instagram o TikTok, se están utilizando herramientas estadísticas para obtener
+            conclusiones relevantes.
+        </p>
+        </div>
+        
+        <div class="columna-ejercicios">
+        <p>
+            De manera general, la estadística se divide en dos grandes ramas:
+        </p>
+
         <ul>
             <li>
-                <strong>Estadística descriptiva:</strong> resume y describe
-                las características de un conjunto de datos.
+                <strong>Estadística descriptiva:</strong> se encarga de recopilar,
+                organizar y resumir los datos mediante tablas, gráficos y medidas
+                estadísticas como la media, la mediana o la moda, facilitando la
+                comprensión de la información.
             </li>
             <li>
-                <strong>Estadística inferencial:</strong> permite hacer
-                predicciones o generalizaciones a partir de una muestra.
+                <strong>Estadística inferencial:</strong> utiliza muestras de datos
+                para realizar estimaciones, predicciones o generalizaciones sobre una
+                población más amplia, apoyando la toma de decisiones bajo condiciones
+                de incertidumbre.
             </li>
         </ul>
+       
 
-        <h3>Ejemplo</h3>
+        
+
+        <h3>Ejemplo práctico</h3>
+
         <p>
-            Un profesor registra las calificaciones de 5 estudiantes:
-            <strong>7, 8, 6, 9, 10</strong>.
+            Supongamos que un profesor registra las calificaciones de cinco estudiantes:
+            <strong>7, 8, 6, 9 y 10</strong>.
         </p>
+
         <p>
-            Con estadística descriptiva podemos calcular el promedio,
-            la mediana, el valor más alto y el más bajo de esas
-            calificaciones para entender mejor el rendimiento del grupo.
+            Mediante la estadística descriptiva puede calcular el promedio del grupo,
+            determinar cuál es la calificación central, identificar la nota más alta y
+            la más baja, y analizar la distribución general de los resultados. Esta
+            información permite evaluar el rendimiento académico de los estudiantes de
+            forma objetiva y fundamentada.
         </p>
+
+        <p>
+            De manera similar, en las redes sociales se pueden analizar métricas como
+            visualizaciones, "me gusta" o comentarios para conocer el desempeño de una
+            publicación y comprender el comportamiento de los usuarios.
+        </p>
+        </di>
     </section>
 
     <!-- SECCION 3: MEDIA (PROMEDIO)                        -->
-    <section id="media" class="oculto">
-        <h2>Media (Promedio)</h2>
-        <img src="images/media.jpg" width="50%">
+    <section id="media" class="oculto dos-columnas">
+        <div class="columna-teoria">
+            <h2>Media (Promedio)</h2>
+            <img src="images/media.jpg" width="100%">
 
         <h3>Definición</h3>
         <p>
@@ -124,7 +183,9 @@
             console.log("La media es: " + media);
         </pre>
 
-        <!-- EJEMPLO INTERACTIVO                                -->
+        </div><!-- fin columna-teoria -->
+        
+        <div class="columna-ejercicios">
         <h3>Ejemplo interactivo</h3>
         <p>
             El siguiente ejemplo usa un arreglo de <strong>20 objetos</strong>
@@ -153,15 +214,17 @@
 
         <div id="contenedor-grafico-media" class="oculto" style="margin-top:20px;">
             <canvas id="graficaMedia"></canvas>
-        </div>
+            </div>
 
+        </div><!-- fin columna-ejercicios -->
     </section>
 
-    <!-- SECCION 4: MEDIANA                                 -->
+    <!-- SECCION 4: MEDIANA                                -->
 
-    <section id="mediana" class="oculto">
+    <section id="mediana" class="oculto dos-columnas">
+        <div class="columna-teoria">
         <h2>Mediana</h2>
-        <img src="images/mediana.jpg" width="50%">
+        <img src="images/mediana.jpg" width="100%">
 
         <h3>Definición</h3>
         <p>
@@ -216,7 +279,9 @@
             console.log("La mediana es: " + mediana);
         </pre>
 
-        <!-- EJEMPLO INTERACTIVO: MEDIANA                       -->
+        </div><!-- fin columna-teoria -->
+        
+        <div class="columna-ejercicios">
         <h3>Ejemplo interactivo</h3>
         <p>
             El siguiente ejemplo usa un arreglo de <strong>20 objetos</strong>
@@ -246,13 +311,18 @@
         <div id="contenedor-grafico-mediana" class="oculto" style="margin-top:20px;">
             <canvas id="graficaMediana"></canvas>
         </div>
-    </section>
+    </div><!-- fin columna-ejercicios -->
+</section>
+
+
+    <!-- SECCION 5: MODA
 
 
     <!-- SECCION 5: MODA                                    -->
-    <section id="moda" class="oculto">
+<section id="moda" class="oculto dos-columnas">
+    <div class="columna-teoria">
         <h2>Moda</h2>
-        <img src="images/moda.jpg" width="50%">
+        <img src="images/moda.jpg" width="100%">
 
         <h3>Definición</h3>
         <p>
@@ -319,8 +389,9 @@
             console.log("La moda es: " + moda);
         </pre>
 
-        <!-- EJEMPLO INTERACTIVO: MODA                          -->
-
+    </div><!-- fin columna-teoria -->
+    
+    <div class="columna-ejercicios">
         <h3>Ejemplo interactivo</h3>
         <p>
             El siguiente ejemplo usa un arreglo de <strong>20 objetos</strong>
@@ -348,13 +419,15 @@
         <div id="contenedor-grafico-moda" class="oculto" style="margin-top:20px;">
             <canvas id="graficaModa"></canvas>
         </div>
+    </div><!-- fin columna-ejercicios -->
     </section>
 
 
-    <!-- SECCION 6: VALOR MINIMO Y VALOR MAXIMO             -->
-    <section id="min-max" class="oculto">
+    <!-- SECCION 6: VALOR MINIMO /MAXIMO -->
+<section id="min-max" class="oculto dos-columnas">
+    <div class="columna-teoria">
         <h2>Valor Mínimo y Valor Máximo</h2>
-        <img src="images/val_min_max.jpeg" width="50%">
+        <img src="images/val_min_max.jpeg" width="100%">
 
         <h3>Definición</h3>
         <p>
@@ -403,7 +476,9 @@
 
         </pre>
 
-        <!-- EJEMPLO INTERACTIVO: MINIMO Y MAXIMO               -->
+    </div><!-- fin columna-teoria -->
+
+    <div class="columna-ejercicios">
         <h3>Ejemplo interactivo</h3>
         <p>
             Al hacer clic, JavaScript recorre el arreglo de
@@ -434,12 +509,14 @@
             <canvas id="graficaMinMax"></canvas>
         </div>
 
+    </div><!-- fin columna-ejercicios -->
     </section>
 
 
     <!-- SECCION 7: RANGO                                   -->
 
-    <section id="rango" class="oculto">
+<section id="rango" class="oculto dos-columnas">
+    <div class="columna-teoria">
         <h2>Rango</h2>
         <img src="images/rango.jpg" width="50%">
 
@@ -491,7 +568,8 @@
             console.log("El rango es: " + rango);
         </pre>
 
-        <!-- EJEMPLO INTERACTIVO: RANGO                         -->
+</div><!-- fin columna-teoria -->
+    <div class="columna-ejercicios">
         <h3>Ejemplo interactivo</h3>
         <p>
             Al hacer clic, JavaScript calcula el rango restando
@@ -523,13 +601,18 @@
         <div id="contenedor-grafico-rango" class="oculto" style="margin-top:20px;">
             <canvas id="graficaRango"></canvas>
         </div>
+    </div><!-- fin columna-ejercicios -->
     </section>
 
 
+    <!-- SECCION 8: VARIANZA
+
+
     <!-- SECCION 8: VARIANZA                                -->
-    <section id="varianza" class="oculto">
+<section id="varianza" class="oculto dos-columnas">
+    <div class="columna-teoria">
         <h2>Varianza</h2>
-        <img src="images/varianza.jpg" width="50%">
+        <img src="images/varianza.jpg" width="100%">
 
         <h3>Definición</h3>
         <p>
@@ -593,7 +676,11 @@
             console.log("La varianza es: " + varianza);
         </pre>
 
-        <!-- EJEMPLO INTERACTIVO: VARIANZA -->
+
+    </div><!-- fin columna-teoria -->
+
+            <!-- EJEMPLO INTERACTIVO: VARIANZA -->
+    <div class="columna-ejercicios">
         <h3>Ejemplo interactivo</h3>
         <p>
             Al hacer clic, JavaScript calcula la varianza usando las calificaciones
@@ -620,14 +707,19 @@
 
         <div id="contenedor-grafico-varianza" class="oculto" style="margin-top:20px;">
             <canvas id="graficaVarianza"></canvas>
-        </div>
+</div>
+    </div><!-- fin columna-ejercicios -->
     </section>
 
 
+    <!-- SECCION 9: DESVIACION
+
+
     <!-- SECCION 9: DESVIACION ESTANDAR                     -->
-    <section id="desviacion" class="oculto">
+<section id="desviacion" class="oculto dos-columnas">
+    <div class="columna-teoria">
         <h2>Desviación Estándar</h2>
-        <img src="images/desv_estandar.jpeg" width="50%">
+        <img src="images/desv_estandar.jpeg" width="100%">
 
         <h3>Definición</h3>
         <p>
@@ -685,7 +777,8 @@
 
         </pre>
 
-        <!-- EJEMPLO INTERACTIVO: DESVIACION ESTANDAR -->
+</div><!-- fin columna-teoria -->
+    <div class="columna-ejercicios">
         <h3>Ejemplo interactivo</h3>
         <p>
             Al hacer clic, JavaScript calcula la desviación estándar usando las
@@ -711,8 +804,11 @@
 
         <div id="contenedor-grafico-desviacion" class="oculto" style="margin-top:20px;">
             <canvas id="graficaDesviacion"></canvas>
-        </div>
+</div>
+    </div><!-- fin columna-ejercicios -->
     </section>
+
+    <!-- SECCION 10: TEST
 
     <!-- SECCION 10: TEST DE EVALUACION -->
     <section id="test" class="oculto">
@@ -738,7 +834,9 @@
 
     <!-- EJERCICIO PRACTICO-->
 
-    <section id="ejercicio-practico" class="oculto">
+    <section id="ejercicio-practico" class="oculto dos-columnas">
+
+        <div class = "columna-teoria">
         <h2>Ejercicio Práctico</h2>
         <img src="images/social_media.jpeg" width="50%">
 
@@ -765,7 +863,10 @@
             El objetivo de este ejercicio es buscar algunas métricas a traves de la estadistica</strong>
             para compararlas en cada red social.
         </p>
+        </div>
 
+
+        <div class="columna-ejercicios">
         <!-- TABLA DE MEDIAS POR APP -->
         <h3>Media de usuarios por red social</h3>
         <p>
@@ -794,12 +895,18 @@
         <div id="contenedor-grafico-ejercicio" class="oculto" style="margin-top:20px;">
             <canvas id="graficaEjercicio"></canvas>
         </div>
+
+        </div>
     </section>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="datos.js"></script> <!-- fuente de datos de ejemplo -->
     <script src="social_media_200.js"></script> <!-- fuente de datos para Ejercicio practico -->
     <script src="funciones_estadisticas/media.js"></script> <!-- funcion de calculo de media -->
+    <script src="funciones_estadisticas/mediana.js"></script> <!-- funcion de calculo de mediana -->
+    <script src="funciones_estadisticas/moda.js"></script> <!-- funcion de calculo de moda -->
+    <script src="funciones_estadisticas/minMax.js"></script> <!-- funcion de calculo de minimo y maximo de una lista -->
+    <script src="funciones_estadisticas/rango.js"></script> <!-- funcion de calculo deñl rango de una lista  -->
 
     <script src="estadistica.js"></script> <!-- llama a funciones de calculo y procesa el dibujado en la pagina -->
 

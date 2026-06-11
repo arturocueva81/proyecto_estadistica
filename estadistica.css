@@ -1,147 +1,362 @@
+/* ================================================== */
+/* ESTADISTICA.CSS - Versión Mejorada                 */
+/* ================================================== */
 
-/* body: es el contenedor principal de toda la pagina */
+
+/* -------------------------------------------------- */
+/* CONFIGURACIÓN GENERAL                              */
+/* -------------------------------------------------- */
+* {
+    box-sizing: border-box;
+}
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #FEF2F2; 
-    color: #333333;
+
+    background: #f5f7fa;
+    color: #333;
+
+    line-height: 1.7;
 }
 
 
-/* MENU DE NAVEGACION (etiqueta <nav>)                */
+/* -------------------------------------------------- */
+/* IMÁGENES                                           */
+/* -------------------------------------------------- */
+section img {
+    display: block;
+    margin: 25px auto;
+
+    border-radius: 15px;
+
+    box-shadow:
+        0 10px 25px rgba(0,0,0,0.15);
+
+    transition: all 0.3s ease;
+}
+
+section img:hover {
+    transform: scale(1.02);
+}
+
+
+/* -------------------------------------------------- */
+/* MENÚ SUPERIOR                                      */
+/* -------------------------------------------------- */
 nav {
-    background-color: #B91C1C;
+    background: #B91C1C;
+
     padding: 10px;
+
     text-align: center;
+
     position: sticky;
-    top: 0; 
+    top: 0;
+
+    z-index: 1000;
+
+    box-shadow:
+        0 3px 10px rgba(0,0,0,0.2);
 }
 
-/* BOTONES DEL MENU DE NAVEGACION                     */
 nav button {
-    background-color: #DC2626;
+    background: #DC2626;
+
     color: white;
+
     border: none;
-    padding: 8px 14px;
-    margin: 4px; 
+
+    padding: 10px 18px;
+
+    margin: 4px;
+
     cursor: pointer;
+
+    border-radius: 8px;
+
     font-size: 14px;
+
+    transition: all 0.3s ease;
 }
 
-/* BOTON AL PASAR EL MOUSE POR ENCIMA (hover)         */
 nav button:hover {
-    background-color: #991B1B;
+    background: #991B1B;
+    transform: translateY(-2px);
 }
 
-/* SECCIONES DE CONTENIDO (etiqueta <section>)        */
+
+/* -------------------------------------------------- */
+/* SECCIONES                                          */
+/* -------------------------------------------------- */
 section {
-    max-width: 800px;
+    background: white;
+
+    width: 95%;
+    max-width: 1400px;
+
     margin: 30px auto;
-    padding: 30px;
-    background-color: #FFFFFF;
-    border: 1px solid #FECACA;
+
+    padding: 35px;
+
+    border-radius: 15px;
+
+    box-shadow:
+        0 5px 20px rgba(0,0,0,0.08);
 }
 
-/* TITULOS                                            */
 
-h1 {
-    color: #7F1D1D;
-    text-align: center;
-}
-
-h2 {
-    color: #7F1D1D;
-    border-bottom: 2px solid #DC2626;
-    padding-bottom: 8px;
-}
-
-h3 {
-    color: #EF4444;
-    margin-top: 20px;
-}
-
-/* PARRAFOS (etiqueta <p>)                            */
-p {
-    line-height: 1.6;
-    text-align: justify;
-}
-
-/* LISTAS (etiquetas <ul> y <ol>)                     */
-ul, ol {
-    line-height: 1.8;
-    padding-left: 30px;
-}
-
-/* CLASE PARA OCULTAR SECCIONES                       */
+/* -------------------------------------------------- */
+/* OCULTAR                                            */
+/* -------------------------------------------------- */
 .oculto {
     display: none;
 }
 
-/* ESTILO CONSOLE                  */
+
+/* -------------------------------------------------- */
+/* DOS COLUMNAS                                       */
+/* -------------------------------------------------- */
+section.dos-columnas:not(.oculto) {
+    display: flex;
+
+    gap: 25px;
+
+    align-items: stretch;
+
+    background: transparent;
+
+    box-shadow: none;
+
+    padding: 0;
+}
+
+
+/* -------------------------------------------------- */
+/* COLUMNA TEORÍA                                     */
+/* -------------------------------------------------- */
+.columna-teoria {
+    flex: 1;
+
+    background: white;
+
+    padding: 35px;
+
+    border-radius: 15px;
+
+    box-shadow:
+        0 5px 20px rgba(0,0,0,0.08);
+}
+
+
+/* -------------------------------------------------- */
+/* COLUMNA EJERCICIOS                                 */
+/* -------------------------------------------------- */
+.columna-ejercicios {
+    flex: 1;
+
+    background: white;
+
+    padding: 35px;
+
+    border-radius: 15px;
+
+    box-shadow:
+        0 5px 20px rgba(0,0,0,0.08);
+}
+
+
+/* -------------------------------------------------- */
+/* TÍTULOS                                            */
+/* -------------------------------------------------- */
+h1 {
+    color: #7F1D1D;
+
+    text-align: center;
+
+    font-size: 42px;
+
+    margin-bottom: 10px;
+}
+
+h2 {
+    color: #991B1B;
+
+    text-align: center;
+
+    font-size: 34px;
+
+    margin-bottom: 25px;
+
+    position: relative;
+}
+
+h2::after {
+    content: "";
+
+    display: block;
+
+    width: 80px;
+    height: 4px;
+
+    background: #DC2626;
+
+    margin: 10px auto 0;
+
+    border-radius: 10px;
+}
+
+h3 {
+    color: #EF4444;
+
+    border-left: 5px solid #EF4444;
+
+    padding-left: 12px;
+
+    margin-top: 25px;
+}
+
+
+/* -------------------------------------------------- */
+/* TEXTO                                              */
+/* -------------------------------------------------- */
+p {
+    text-align: justify;
+
+    margin-bottom: 18px;
+
+    font-size: 16px;
+}
+
+
+/* -------------------------------------------------- */
+/* LISTAS                                             */
+/* -------------------------------------------------- */
+ul,
+ol {
+    line-height: 2;
+    padding-left: 30px;
+}
+
+
+/* -------------------------------------------------- */
+/* CONSOLA                                            */
+/* -------------------------------------------------- */
 .consola {
-    background-color: #1a1a1a;   
-    color: #00FF00;             
-    font-family: "Courier New", Courier, monospace;
-    font-size: 11px;
+    background: #111827;
+
+    color: #4ADE80;
+
+    font-family: Consolas, monospace;
+
+    font-size: 12px;
+
     padding: 20px;
+
+    border-radius: 10px;
+
     overflow-x: auto;
 }
 
 
-/* BOTON INTERACTIVO (ejemplos con datos precargados) */
+/* -------------------------------------------------- */
+/* BOTONES                                            */
+/* -------------------------------------------------- */
 .btn-interactivo {
-    background-color: #DC2626;
+    background: #DC2626;
+
     color: white;
+
     border: none;
-    padding: 10px 20px;
-    margin: 16px 0 10px 0;
+
+    padding: 12px 22px;
+
+    margin-top: 15px;
+
     cursor: pointer;
+
+    border-radius: 10px;
+
     font-size: 15px;
-    font-weight: bold;
+
+    font-weight: 600;
+
+    transition: all 0.3s ease;
 }
 
 .btn-interactivo:hover {
-    background-color: #991B1B;
+    background: #991B1B;
+
+    transform: translateY(-2px);
 }
 
-/* CONTENEDOR DE RESULTADOS INTERACTIVOS              */
 
+/* -------------------------------------------------- */
+/* RESULTADOS                                         */
+/* -------------------------------------------------- */
 #resultado-media {
-    margin-top: 16px;
+    margin-top: 20px;
 }
 
-/* Tabla de datos del ejemplo interactivo */
+
+/* -------------------------------------------------- */
+/* TABLAS                                             */
+/* -------------------------------------------------- */
 .tabla-interactiva {
     width: 100%;
+
     border-collapse: collapse;
-    margin-top: 12px;
-    font-size: 14px;
+
+    margin-top: 15px;
+
+    overflow: hidden;
+
+    border-radius: 10px;
+
+    box-shadow:
+        0 3px 10px rgba(0,0,0,0.08);
 }
 
 .tabla-interactiva th {
-    background-color: #B91C1C;
+    background: #B91C1C;
+
     color: white;
-    padding: 8px 12px;
+
+    padding: 12px;
+
     text-align: left;
 }
 
 .tabla-interactiva td {
-    padding: 6px 12px;
-    border-bottom: 1px solid #FECACA;
+    padding: 12px;
 }
 
 .tabla-interactiva tr:nth-child(even) {
-    background-color: #FEF2F2;
+    background: #FFF5F5;
 }
 
-/* Caja de resultado final (media calculada) */
+.tabla-interactiva tr:hover {
+    background: #FEE2E2;
+}
+
+
+/* -------------------------------------------------- */
+/* CAJA RESULTADO                                     */
+/* -------------------------------------------------- */
 .caja-resultado {
-    background-color: #FEF2F2;
-    border-left: 4px solid #DC2626;
-    padding: 14px 18px;
-    margin-top: 16px;
-    font-size: 15px;
+    background: #FFF5F5;
+
+    border-left: 6px solid #DC2626;
+
+    padding: 18px;
+
+    margin-top: 18px;
+
+    border-radius: 10px;
+
+    box-shadow:
+        0 3px 10px rgba(0,0,0,0.05);
 }
 
 .caja-resultado strong {
@@ -149,26 +364,45 @@ ul, ol {
     font-size: 18px;
 }
 
-/* Detalle del paso a paso */
+
+/* -------------------------------------------------- */
+/* DETALLE DE CÁLCULO                                 */
+/* -------------------------------------------------- */
 .detalle-calculo {
-    background-color: #1a1a1a;
-    color: #00FF00;
-    font-family: "Courier New", Courier, monospace;
+    background: #111827;
+
+    color: #4ADE80;
+
+    font-family: Consolas, monospace;
+
     font-size: 12px;
-    padding: 14px;
+
+    padding: 15px;
+
     margin-top: 12px;
+
+    border-radius: 10px;
+
     overflow-x: auto;
 }
 
-/* -------------------------------------------------- */
-/* ESTILO PARA LAS PREGUNTAS DEL TEST                 */
-/* -------------------------------------------------- */
 
+/* -------------------------------------------------- */
+/* TEST                                               */
+/* -------------------------------------------------- */
 .pregunta {
-    background-color: #FEF2F2;
-    border: 1px solid #FECACA;
-    padding: 15px;
-    margin-bottom: 18px;
+    background: white;
+
+    border: 1px solid #E5E7EB;
+
+    border-radius: 12px;
+
+    padding: 20px;
+
+    margin-bottom: 20px;
+
+    box-shadow:
+        0 3px 10px rgba(0,0,0,0.05);
 }
 
 .pregunta p {
@@ -176,46 +410,73 @@ ul, ol {
 }
 
 .pregunta label {
-    line-height: 1.8;
+    display: block;
+
+    margin-top: 8px;
+
     cursor: pointer;
 }
 
-/* -------------------------------------------------- */
-/* RESULTADO DEL TEST                                 */
-/* -------------------------------------------------- */
 
+/* -------------------------------------------------- */
+/* RESULTADO TEST                                     */
+/* -------------------------------------------------- */
 #resultado-test {
-    margin-top: 20px;
-    padding: 15px;
-    font-weight: bold;
+    margin-top: 25px;
+
+    padding: 18px;
+
     text-align: center;
-    border-radius: 8px;
+
+    font-weight: bold;
+
+    border-radius: 10px;
 }
 
-/* Cuando falta responder preguntas */
 .resultado-alerta {
-    background-color: #FFEDD5;
+    background: #FFF7ED;
     color: #9A3412;
     border: 1px solid #FDBA74;
 }
 
-/* Cuando obtiene buen puntaje */
 .resultado-aprobado {
-    background-color: #DCFCE7;
+    background: #DCFCE7;
     color: #166534;
     border: 1px solid #86EFAC;
 }
 
-/* Cuando obtiene puntaje medio */
 .resultado-medio {
-    background-color: #FEF9C3;
+    background: #FEF9C3;
     color: #854D0E;
     border: 1px solid #FACC15;
 }
 
-/* Cuando obtiene bajo puntaje */
 .resultado-reprobado {
-    background-color: #FEE2E2;
+    background: #FEE2E2;
     color: #991B1B;
     border: 1px solid #FCA5A5;
+}
+
+
+/* -------------------------------------------------- */
+/* RESPONSIVE                                         */
+/* -------------------------------------------------- */
+@media (max-width: 900px) {
+
+    section.dos-columnas:not(.oculto) {
+        flex-direction: column;
+    }
+
+    h1 {
+        font-size: 32px;
+    }
+
+    h2 {
+        font-size: 26px;
+    }
+
+    section {
+        width: 98%;
+        padding: 20px;
+    }
 }
