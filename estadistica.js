@@ -857,12 +857,12 @@ function calificarTest() {
 
     let resultado = document.getElementById("resultado-test");
     if (preguntasRespondidas < PREGUNTASTEST.length) {
-        resultado.innerHTML = "Por favor, responde todas las preguntas antes de calificar.";
+        resultado.innerHTML = "Incorrecto - Por favor, responde todas las preguntas antes de calificar.";
         resultado.className = "resultado-alerta";
         return;
     }
     if (preguntasRespondidas < PREGUNTASTEST.length) {
-        resultado.innerHTML = "Por favor, responde todas las preguntas antes de calificar.";
+        resultado.innerHTML = "Incorrecto - Por favor, responde todas las preguntas antes de calificar.";
         resultado.className = "resultado-alerta";
         return;
     }
