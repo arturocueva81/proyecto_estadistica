@@ -1,482 +1,556 @@
-/* ================================================== */
-/* ESTADISTICA.CSS - Versión Mejorada                 */
-/* ================================================== */
-
-
-/* -------------------------------------------------- */
-/* CONFIGURACIÓN GENERAL                              */
-/* -------------------------------------------------- */
-* {
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 0;
-
-    background: #f5f7fa;
-    color: #333;
-
-    line-height: 1.7;
-}
-
-
-/* -------------------------------------------------- */
-/* IMÁGENES                                           */
-/* -------------------------------------------------- */
-section img {
-    display: block;
-    margin: 25px auto;
-
-    border-radius: 15px;
-
-    box-shadow:
-        0 10px 25px rgba(0,0,0,0.15);
-
-    transition: all 0.3s ease;
-}
-
-section img:hover {
-    transform: scale(1.02);
-}
-
-
-/* -------------------------------------------------- */
-/* MENÚ SUPERIOR                                      */
-/* -------------------------------------------------- */
-nav {
-    background: #B91C1C;
-
-    padding: 10px;
-
-    text-align: center;
-
-    position: sticky;
-    top: 0;
-
-    z-index: 1000;
-
-    box-shadow:
-        0 3px 10px rgba(0,0,0,0.2);
-}
-
-nav button {
-    background: #DC2626;
-
-    color: white;
-
-    border: none;
-
-    padding: 10px 18px;
-
-    margin: 4px;
-
-    cursor: pointer;
-
-    border-radius: 8px;
-
-    font-size: 14px;
-
-    transition: all 0.3s ease;
-}
-
-nav button:hover {
-    background: #991B1B;
-    transform: translateY(-2px);
-}
-
-
-/* -------------------------------------------------- */
-/* SECCIONES                                          */
-/* -------------------------------------------------- */
-section {
-    background: white;
-
-    width: 95%;
-    max-width: 1400px;
-
-    margin: 30px auto;
-
-    padding: 35px;
-
-    border-radius: 15px;
-
-    box-shadow:
-        0 5px 20px rgba(0,0,0,0.08);
-}
-
-
-/* -------------------------------------------------- */
-/* OCULTAR                                            */
-/* -------------------------------------------------- */
-.oculto {
-    display: none;
-}
-
-
-/* -------------------------------------------------- */
-/* DOS COLUMNAS                                       */
-/* -------------------------------------------------- */
-section.dos-columnas:not(.oculto) {
-    display: flex;
-
-    gap: 25px;
-
-    align-items: stretch;
-
-    background: transparent;
-
-    box-shadow: none;
-
-    padding: 0;
-}
-
-
-/* -------------------------------------------------- */
-/* COLUMNA TEORÍA                                     */
-/* -------------------------------------------------- */
-.columna-teoria {
-    flex: 1;
-
-    background: white;
-
-    padding: 35px;
-
-    border-radius: 15px;
-
-    box-shadow:
-        0 5px 20px rgba(0,0,0,0.08);
-}
-
-
-/* -------------------------------------------------- */
-/* COLUMNA EJERCICIOS                                 */
-/* -------------------------------------------------- */
-.columna-ejercicios {
-    flex: 1;
-
-    background: white;
-
-    padding: 35px;
-
-    border-radius: 15px;
-
-    box-shadow:
-        0 5px 20px rgba(0,0,0,0.08);
-}
-
-
-/* -------------------------------------------------- */
-/* TÍTULOS                                            */
-/* -------------------------------------------------- */
-h1 {
-    color: #7F1D1D;
-
-    text-align: center;
-
-    font-size: 42px;
-
-    margin-bottom: 10px;
-}
-
-h2 {
-    color: #991B1B;
-
-    text-align: center;
-
-    font-size: 34px;
-
-    margin-bottom: 25px;
-
-    position: relative;
-}
-
-h2::after {
-    content: "";
-
-    display: block;
-
-    width: 80px;
-    height: 4px;
-
-    background: #DC2626;
-
-    margin: 10px auto 0;
-
-    border-radius: 10px;
-}
-
-h3 {
-    color: #EF4444;
-
-    border-left: 5px solid #EF4444;
-
-    padding-left: 12px;
-
-    margin-top: 25px;
-}
-
-
-/* -------------------------------------------------- */
-/* TEXTO                                              */
-/* -------------------------------------------------- */
-p {
-    text-align: justify;
-
-    margin-bottom: 18px;
-
-    font-size: 16px;
-}
-
-
-/* -------------------------------------------------- */
-/* LISTAS                                             */
-/* -------------------------------------------------- */
-ul,
-ol {
-    line-height: 2;
-    padding-left: 30px;
-}
-
-
-/* -------------------------------------------------- */
-/* CONSOLA                                            */
-/* -------------------------------------------------- */
-.consola {
-    background: #111827;
-
-    color: #4ADE80;
-
-    font-family: Consolas, monospace;
-
-    font-size: 12px;
-
-    padding: 20px;
-
-    border-radius: 10px;
-
-    overflow-x: auto;
-}
-
-
-/* -------------------------------------------------- */
-/* BOTONES                                            */
-/* -------------------------------------------------- */
-.btn-interactivo {
-    background: #DC2626;
-
-    color: white;
-
-    border: none;
-
-    padding: 12px 22px;
-
-    margin-top: 15px;
-
-    cursor: pointer;
-
-    border-radius: 10px;
-
-    font-size: 15px;
-
-    font-weight: 600;
-
-    transition: all 0.3s ease;
-}
-
-.btn-interactivo:hover {
-    background: #991B1B;
-
-    transform: translateY(-2px);
-}
-
-
-/* -------------------------------------------------- */
-/* RESULTADOS                                         */
-/* -------------------------------------------------- */
-#resultado-media {
-    margin-top: 20px;
-}
-
-
-/* -------------------------------------------------- */
-/* TABLAS                                             */
-/* -------------------------------------------------- */
-.tabla-interactiva {
-    width: 100%;
-
-    border-collapse: collapse;
-
-    margin-top: 15px;
-
-    overflow: hidden;
-
-    border-radius: 10px;
-
-    box-shadow:
-        0 3px 10px rgba(0,0,0,0.08);
-}
-
-.tabla-interactiva th {
-    background: #B91C1C;
-
-    color: white;
-
-    padding: 12px;
-
-    text-align: left;
-}
-
-.tabla-interactiva td {
-    padding: 12px;
-}
-
-.tabla-interactiva tr:nth-child(even) {
-    background: #FFF5F5;
-}
-
-.tabla-interactiva tr:hover {
-    background: #FEE2E2;
-}
-
-
-/* -------------------------------------------------- */
-/* CAJA RESULTADO                                     */
-/* -------------------------------------------------- */
-.caja-resultado {
-    background: #FFF5F5;
-
-    border-left: 6px solid #DC2626;
-
-    padding: 18px;
-
-    margin-top: 18px;
-
-    border-radius: 10px;
-
-    box-shadow:
-        0 3px 10px rgba(0,0,0,0.05);
-}
-
-.caja-resultado strong {
-    color: #7F1D1D;
-    font-size: 18px;
-}
-
-
-/* -------------------------------------------------- */
-/* DETALLE DE CÁLCULO                                 */
-/* -------------------------------------------------- */
-.detalle-calculo {
-    background: #111827;
-
-    color: #4ADE80;
-
-    font-family: Consolas, monospace;
-
-    font-size: 12px;
-
-    padding: 15px;
-
-    margin-top: 12px;
-
-    border-radius: 10px;
-
-    overflow-x: auto;
-}
-
-
-/* -------------------------------------------------- */
-/* TEST                                               */
-/* -------------------------------------------------- */
-.pregunta {
-    background: white;
-
-    border: 1px solid #E5E7EB;
-
-    border-radius: 12px;
-
-    padding: 20px;
-
-    margin-bottom: 20px;
-
-    box-shadow:
-        0 3px 10px rgba(0,0,0,0.05);
-}
-
-.pregunta p {
-    text-align: left;
-}
-
-.pregunta label {
-    display: block;
-
-    margin-top: 8px;
-
-    cursor: pointer;
-}
-
-
-/* -------------------------------------------------- */
-/* RESULTADO TEST                                     */
-/* -------------------------------------------------- */
-#resultado-test {
-    margin-top: 25px;
-
-    padding: 18px;
-
-    text-align: center;
-
-    font-weight: bold;
-
-    border-radius: 10px;
-}
-
-.resultado-alerta {
-    background: #FFF7ED;
-    color: #9A3412;
-    border: 1px solid #FDBA74;
-}
-
-.resultado-aprobado {
-    background: #DCFCE7;
-    color: #166534;
-    border: 1px solid #86EFAC;
-}
-
-.resultado-medio {
-    background: #FEF9C3;
-    color: #854D0E;
-    border: 1px solid #FACC15;
-}
-
-.resultado-reprobado {
-    background: #FEE2E2;
-    color: #991B1B;
-    border: 1px solid #FCA5A5;
-}
-
-
-/* -------------------------------------------------- */
-/* RESPONSIVE                                         */
-/* -------------------------------------------------- */
-@media (max-width: 900px) {
-
-    section.dos-columnas:not(.oculto) {
-        flex-direction: column;
+    /* -------------------------------------------------- */
+    /* CONFIGURACIÓN GENERAL                              */
+    /* -------------------------------------------------- */
+    * {
+        box-sizing: border-box;
     }
 
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: #f5f7fa;
+        color: #333;
+        line-height: 1.7;
+    }
+
+
+    /* -------------------------------------------------- */
+    /* IMÁGENES                                           */
+    /* -------------------------------------------------- */
+    section img {
+        display: block;
+        margin: 25px auto;
+        border-radius: 15px;
+        box-shadow:0 10px 25px rgba(0,0,0,0.15);
+        transition: all 0.3s ease;
+    }
+
+    section img:hover {
+        transform: scale(1.02);
+    }
+
+
+    /* -------------------------------------------------- */
+    /* MENÚ SUPERIOR                                      */
+    /* -------------------------------------------------- */
+    nav {
+        background: #B91C1C;
+        padding: 10px;
+        text-align: center;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow:0 3px 10px rgba(0,0,0,0.2);
+    }
+
+    nav button {
+        background: #DC2626;
+        color: white;
+        border: none;
+        padding: 10px 18px;
+        margin: 4px;
+        cursor: pointer;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+
+    nav button:hover {
+        background: #991B1B;
+        transform: translateY(-2px);
+    }
+
+
+    /* -------------------------------------------------- */
+    /* SECCIONES                                          */
+    /* -------------------------------------------------- */
+    section {
+        background: white;
+        width: 95%;
+        max-width: 1400px;
+        margin: 30px auto;
+        padding: 35px;
+        border-radius: 15px;
+        box-shadow:0 5px 20px rgba(0,0,0,0.08);
+    }
+
+
+    /* -------------------------------------------------- */
+    /* OCULTAR                                            */
+    /* -------------------------------------------------- */
+    .oculto {
+        display: none;
+    }
+
+
+    /* -------------------------------------------------- */
+    /* DOS COLUMNAS                                       */
+    /* -------------------------------------------------- */
+    section.dos-columnas:not(.oculto) {
+        display: flex;
+        gap: 25px;
+        align-items: stretch;
+        background: transparent;
+        box-shadow: none;
+        padding: 0;
+    }
+
+
+    /* -------------------------------------------------- */
+    /* COLUMNA TEORÍA                                     */
+    /* -------------------------------------------------- */
+    .columna-teoria {
+        flex: 1;
+        background: white;
+        padding: 35px;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+
+
+    /* -------------------------------------------------- */
+    /* COLUMNA EJERCICIOS                                 */
+    /* -------------------------------------------------- */
+    .columna-ejercicios {
+        flex: 1;
+        background: white;
+        padding: 35px;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+
+
+    /* -------------------------------------------------- */
+    /* TÍTULOS                                            */
+    /* -------------------------------------------------- */
     h1 {
-        font-size: 32px;
+        color: #7F1D1D;
+        text-align: center;
+        font-size: 42px;
+        margin-bottom: 10px;
     }
 
     h2 {
-        font-size: 26px;
+        color: #991B1B;
+        text-align: center;
+        font-size: 34px;
+        margin-bottom: 25px;
+        position: relative;
     }
 
-    section {
-        width: 98%;
-        padding: 20px;
+    h2::after {
+        content: "";
+        display: block;
+        width: 80px;
+        height: 4px;
+        background: #DC2626;
+        margin: 10px auto 0;
+        border-radius: 10px;
     }
+
+    h3 {
+        color: #EF4444;
+        border-left: 5px solid #EF4444;
+        padding-left: 12px;
+        margin-top: 25px;
+    }
+
+
+    /* -------------------------------------------------- */
+    /* TEXTO                                              */
+    /* -------------------------------------------------- */
+    p {
+        text-align: justify;
+        margin-bottom: 18px;
+        font-size: 16px;
+    }
+
+
+    /* -------------------------------------------------- */
+    /* LISTAS                                             */
+    /* -------------------------------------------------- */
+    ul,
+    ol {
+        line-height: 2;
+        padding-left: 30px;
+    }
+
+
+    /* -------------------------------------------------- */
+    /* CONSOLA                                            */
+    /* -------------------------------------------------- */
+    .consola {
+        background: #111827;
+        color: #4ADE80;
+        font-family: Consolas, monospace;
+        font-size: 12px;
+        padding: 20px;
+        border-radius: 10px;
+        overflow-x: auto;
+    }
+
+
+    /* -------------------------------------------------- */
+    /* BOTONES                                            */
+    /* -------------------------------------------------- */
+    .btn-interactivo {
+        background: #DC2626;
+        color: white;
+        border: none;
+        padding: 12px 22px;
+        margin-top: 15px;
+        cursor: pointer;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-interactivo:hover {
+        background: #991B1B;
+        transform: translateY(-2px);
+    }
+
+
+    /* -------------------------------------------------- */
+    /* RESULTADOS                                         */
+    /* -------------------------------------------------- */
+    #resultado-media {
+        margin-top: 20px;
+    }
+
+
+    /* -------------------------------------------------- */
+    /* TABLAS                                             */
+    /* -------------------------------------------------- */
+    .tabla-interactiva {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+        overflow: hidden;
+        border-radius: 10px;
+        box-shadow:0 3px 10px rgba(0,0,0,0.08);
+    }
+
+    .tabla-interactiva th {
+        background: #B91C1C;
+        color: white;
+        padding: 12px;
+        text-align: left;
+    }
+
+    .tabla-interactiva td {
+        padding: 12px;
+    }
+
+    .tabla-interactiva tr:nth-child(even) {
+        background: #FFF5F5;
+    }
+
+    .tabla-interactiva tr:hover {
+        background: #FEE2E2;
+    }
+
+
+    /* -------------------------------------------------- */
+    /* CAJA RESULTADO                                     */
+    /* -------------------------------------------------- */
+    .caja-resultado {
+        background: #FFF5F5;
+        border-left: 6px solid #DC2626;
+        padding: 18px;
+        margin-top: 18px;
+        border-radius: 10px;
+        box-shadow:0 3px 10px rgba(0,0,0,0.05);
+    }
+
+    .caja-resultado strong {
+        color: #7F1D1D;
+        font-size: 18px;
+    }
+
+
+    /* -------------------------------------------------- */
+    /* DETALLE DE CÁLCULO                                 */
+    /* -------------------------------------------------- */
+    .detalle-calculo {
+        background: #111827;
+        color: #4ADE80;
+        font-family: Consolas, monospace;
+        font-size: 12px;
+        padding: 15px;
+        margin-top: 12px;
+        border-radius: 10px;
+        overflow-x: auto;
+    }
+
+
+    /* -------------------------------------------------- */
+    /* TEST                                               */
+    /* -------------------------------------------------- */
+    .pregunta {
+        background: white;
+        border: 1px solid #E5E7EB;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow:0 3px 10px rgba(0,0,0,0.05);
+    }
+
+    .pregunta p {
+        text-align: left;
+    }
+
+    .pregunta label {
+        display: block;
+        margin-top: 8px;
+        cursor: pointer;
+    }
+
+
+    /* -------------------------------------------------- */
+    /* RESULTADO TEST                                     */
+    /* -------------------------------------------------- */
+    #resultado-test {
+        margin-top: 25px;
+        padding: 18px;
+        text-align: center;
+        font-weight: bold;
+        border-radius: 10px;
+    }
+
+    .resultado-alerta {
+        background: #FFF7ED;
+        color: #9A3412;
+        border: 1px solid #FDBA74;
+    }
+
+    .resultado-aprobado {
+        background: #DCFCE7;
+        color: #166534;
+        border: 1px solid #86EFAC;
+    }
+
+    .resultado-medio {
+        background: #FEF9C3;
+        color: #854D0E;
+        border: 1px solid #FACC15;
+    }
+
+    .resultado-reprobado {
+        background: #FEE2E2;
+        color: #991B1B;
+        border: 1px solid #FCA5A5;
+    }
+
+
+    /* -------------------------------------------------- */
+    /* RESPONSIVE                                         */
+    /* -------------------------------------------------- */
+    @media (max-width: 900px) {
+
+        section.dos-columnas:not(.oculto) {
+            flex-direction: column;
+        }
+
+        h1 {
+            font-size: 32px;
+        }
+
+        h2 {
+            font-size: 26px;
+        }
+
+        section {
+            width: 98%;
+            padding: 20px;
+        }
+    }
+
+    /* ============================================================
+    LAYOUT DE DOS COLUMNAS (secciones con teoría + ejercicios)
+    ============================================================ */
+
+    /* Sección que usa layout de dos columnas */
+    section.dos-columnas {
+        max-width: 1400px;          /* más ancho que las secciones normales */
+        display: flex;
+        flex-direction: row;
+        gap: 30px;
+        align-items: flex-start;
+    }
+
+    /* Columna izquierda: teoría */
+    .columna-teoria {
+        flex: 0 0 50%;              /* exactamente 50%, no crece ni encoge */
+        max-width: 50%;
+        min-width: 0;               /* permite que flex comprima si es necesario */
+        box-sizing: border-box;
+    }
+
+    /* Columna derecha: ejercicios / gráficos */
+    .columna-ejercicios {
+        flex: 0 0 50%;
+        max-width: 50%;
+        min-width: 0;
+        box-sizing: border-box;
+    }
+
+    /* ============================================================
+    TABLA PREVIEW DEL DATASET - versión compacta
+    ============================================================ */
+
+    #contenedor-tabla-preview {
+        width: 100%;
+        overflow-x: auto;
+        margin-top: 10px;
+    }
+
+    #tabla-preview-dataset {
+        width: 100%;
+        font-size: 11px;
+        border-collapse: collapse;
+        table-layout: auto;         /* deja que el navegador calcule anchos */
+    }
+
+    #tabla-preview-dataset th {
+        background-color: #B91C1C;
+        color: white;
+        padding: 5px 4px;
+        text-align: center;
+        white-space: normal;        /* permite que el encabezado haga wrap */
+        word-break: break-word;
+        line-height: 1.2;
+        font-size: 10px;
+    }
+
+    #tabla-preview-dataset td {
+        padding: 4px 4px;
+        border-bottom: 1px solid #FECACA;
+        text-align: center;
+        font-size: 11px;
+        white-space: nowrap;
+    }
+
+    #tabla-preview-dataset tr:nth-child(even) {
+        background-color: #FEF2F2;
+    }
+    /* ============================================================
+    RESPONSIVE: en pantallas pequeñas las columnas se apilan
+    ============================================================ */
+    @media (max-width: 900px) {
+        section.dos-columnas {
+            flex-direction: column;
+        }
+
+        .columna-teoria,
+        .columna-ejercicios {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+    }
+
+    /* -------------------------------------------------- */
+    /* FIX: .oculto siempre gana, sin importar otras      */
+    /* clases o especificidad                             */
+    /* -------------------------------------------------- */
+    .oculto {
+        display: none !important;
+    }
+
+    /* ── Subsecciones internas del ejercicio práctico ── */
+    .subseccion-interactiva {
+        border-left: 4px solid #e11d48;
+        background: #fff5f7;
+        border-radius: 0 8px 8px 0;
+        padding: 16px 20px;
+        margin-bottom: 0;
+        border-bottom: 2px solid #fecdd3;
+        padding-bottom: 24px;
+    }
+
+    /* Última subsección sin línea inferior */
+    .subseccion-interactiva:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+    }
+
+    /* Espacio superior entre subsecciones */
+    .subseccion-interactiva + .subseccion-interactiva {
+        margin-top: 0;
+        padding-top: 24px;
+    }
+
+    .subseccion-interactiva h4 {
+        color: #be123c;
+        font-size: 1rem;
+        margin: 0 0 8px 0;
+        font-weight: 700;
+    }
+
+    .subseccion-interactiva p {
+        font-size: 0.9rem;
+        color: #374151;
+        margin-bottom: 10px;
+    }
+
+    /* Contenedor principal del pie */
+.portada-footer {
+    margin-top: 60px;
+    padding: 30px;
+    border-top: 3px solid #e11d48;
+    background-color: #ffffff;
+    text-align: center;
+}
+
+.portada-footer h6 {
+    color: #9ca3af; /* Gris claro para el subtítulo */
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    font-size: 0.75rem;
+}
+
+/* Contenedor de los dos autores */
+.autores-contenedor {
+    display: flex;
+    justify-content: center;
+    gap: 40px; /* Espacio entre los dos autores */
+    flex-wrap: wrap;
+}
+
+.autor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.autor-nombre {
+    color: #1e293b; /* Color oscuro profesional */
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+}
+
+/* Estilo del enlace de GitHub */
+.github-link {
+    color: #64748b;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Espacio entre el icono y el texto */
+}
+
+.github-link i {
+    font-size: 1.1rem;
+    color: #1e293b;
+}
+
+/* Efecto al pasar el mouse */
+.github-link:hover {
+    color: #e11d48; /* Cambia a rojo al pasar el mouse */
+    transform: translateY(-2px);
 }

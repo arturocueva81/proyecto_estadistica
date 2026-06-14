@@ -47,193 +47,76 @@ function obtenerCalificaciones(estudiantes) {
 
 
 // ============================================================
-// BLOQUE 4: FUNCIONES ESTADISTICAS
+// BLOQUE 4: FUNCIONES ESTADISTICAS - MEDIA
 // ============================================================
 
+let graficoMediaInstancia = null;
 
-// --- MEDIA ---
-// El cálculo puro lo hace media.js → calcularMediaDesdeArreglo(arregloObjetos, propiedad)
-
+// --- Calcula la media sin generar tabla (para uso interno) ---
 function obtenerResultadoMedia(estudiantes) {
-    // Si la función calcularMedia (de media.js) está disponible, úsala
-    if (typeof calcularMedia === 'function') {
-        // pasar null como idContenedor para que no escriba HTML aquí
-        return calcularMedia(estudiantes, 'calificacion', null, null);
-    }
-
-    // Si no existe calcularMedia, usar el antiguo cálculo simple (fallback)
-    let media = calcularMediaDesdeArreglo(estudiantes, 'calificacion');
-    let suma = 0;
-    for (let i = 0; i < estudiantes.length; i++) {
-        suma = suma + estudiantes[i].calificacion;
-    }
-    return {
-        suma: suma,
-        cantidad: estudiantes.length,
-        media: media
-    };
+    return calcularMedia(estudiantes, 'calificacion', null, null);
 }
 
-// ============================================================
-// MEDIA: toggle del ejemplo interactivo
-// ============================================================
-
-let graficoMediaInstancia = null; // evita crear el grafico dos veces
-
+// --- Toggle del ejemplo interactivo ---
 function toggleEjemploMedia() {
     let contenedor = document.getElementById('resultado-media');
     let btn = document.getElementById('btn-ejemplo-media');
 
-    if (!contenedor || !btn) return;
+    if (!contenedor || !btn) { return; }
 
     if (contenedor.classList.contains('oculto')) {
-        // Si está oculto: calcular y mostrar usando media.js
-        let estudiantes = cargarDatos();
-
-        if (typeof calcularMedia === 'function') {
-            // calcularMedia rellenará la tabla en el elemento 'resultado-media'
-            calcularMedia(estudiantes, 'calificacion', 'resultado-media', 'nombre');
-        } else {
-            // fallback sencillo: generar tabla aquí (igual que antes)
-            let resultado = obtenerResultadoMedia(estudiantes);
-
-            let html = '';
-            html += '<p><strong>Datos cargados desde datos.js:</strong></p>';
-            html += '<table class="tabla-interactiva">';
-            html += '<tr><th>#</th><th>Estudiante</th><th>Calificación</th></tr>';
-
-            for (let i = 0; i < estudiantes.length; i++) {
-                html += '<tr>';
-                html += '<td>' + (i + 1) + '</td>';
-                html += '<td>' + estudiantes[i].nombre + '</td>';
-                html += '<td>' + estudiantes[i].calificacion + '</td>';
-                html += '</tr>';
-            }
-
-            html += '</table>';
-            html += '<div class="detalle-calculo">';
-            html += 'Suma total: ' + resultado.suma + '<br>';
-            html += 'Número de datos: ' + resultado.cantidad + '<br>';
-            html += 'Fórmula: Media = Suma / Cantidad<br>';
-            html += 'Media = ' + resultado.suma + ' / ' + resultado.cantidad;
-            html += '</div>';
-            html += '<div class="caja-resultado">';
-            html += '📘 La media aritmética es: <strong>' + resultado.media.toFixed(2) + '</strong>';
-            html += '</div>';
-
-            contenedor.innerHTML = html;
-        }
-
+        calcularMedia(cargarDatos(), 'calificacion', 'resultado-media', 'nombre');
         contenedor.classList.remove('oculto');
         btn.textContent = '✖ Ocultar Ejemplo';
     } else {
-        // Si está visible: ocultar
         contenedor.classList.add('oculto');
         btn.textContent = '▶ Calcular Media';
     }
 }
 
-
-// ============================================================
-// MEDIA: toggle del gráfico
-// ============================================================
-
+// --- Toggle del gráfico ---
 function toggleGraficoMedia() {
     let contenedor = document.getElementById('contenedor-grafico-media');
     let btn = document.getElementById('btn-grafico-media');
 
-    if (!contenedor || !btn) return;
+    if (!contenedor || !btn) { return; }
 
-    if (contenedor.classList.contains('oculto')) {
-        contenedor.classList.remove('oculto');
-        btn.textContent = '✖ Ocultar Gráfico';
-
-        // Solo dibuja el grafico si no existe todavía
-        if (graficoMediaInstancia === null) {
-            let estudiantes = cargarDatos();
-
-            if (typeof dibujarGraficoMedia === 'function') {
-                // Llamamos a la función de media.js que dibuja el gráfico
-                graficoMediaInstancia = dibujarGraficoMedia(
-                    estudiantes,
-                    'calificacion',
-                    'nombre',
-                    'graficaMedia',
-                    'Calificaciones de estudiantes con línea de media'
-                );
-            } else {
-                // Fallback: dibujar aquí el gráfico simple (manteniendo compatibilidad)
-                // Reemplazamos el canvas por uno nuevo para evitar errores
-                let canvasViejo = document.getElementById('graficaMedia');
-                let canvasNuevo = document.createElement('canvas');
-                canvasNuevo.id = 'graficaMedia';
-                canvasViejo.parentNode.replaceChild(canvasNuevo, canvasViejo);
-
-                // Crear el gráfico localmente (copia de la lógica anterior)
-                let resultado = obtenerResultadoMedia(estudiantes);
-                let calificaciones = obtenerCalificaciones(estudiantes);
-                let nombres = [];
-                for (let i = 0; i < estudiantes.length; i++) {
-                    nombres.push(estudiantes[i].nombre);
-                }
-                let ctx = document.getElementById('graficaMedia').getContext('2d');
-                graficoMediaInstancia = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: nombres,
-                        datasets: [{
-                            label: 'Calificación',
-                            data: calificaciones,
-                            backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                            borderColor: 'rgba(54, 162, 235, 1)',
-                            borderWidth: 1
-                        }, {
-                            label: 'Media (' + resultado.media.toFixed(2) + ')',
-                            data: new Array(calificaciones.length).fill(resultado.media),
-                            type: 'line',
-                            borderColor: 'rgba(255, 99, 132, 1)',
-                            borderWidth: 2,
-                            pointRadius: 0,
-                            fill: false
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: { position: 'top' },
-                            title: {
-                                display: true,
-                                text: 'Calificaciones de estudiantes con línea de media'
-                            }
-                        },
-                        scales: {
-                            y: { beginAtZero: true, max: 20 }
-                        }
-                    }
-                });
-            }
-        }
-    } else {
+    // --- OCULTAR ---
+    if (!contenedor.classList.contains('oculto')) {
         contenedor.classList.add('oculto');
         btn.textContent = '📊 Ver Gráfico de Barras';
 
-        // Mantener limpieza: destruir el gráfico si existe
-        if (graficoMediaInstancia) {
-            try {
-                graficoMediaInstancia.destroy();
-            } catch (e) {
-                // ignorar errores al destruir
-            }
+        if (graficoMediaInstancia !== null) {
+            try { graficoMediaInstancia.destroy(); } catch (e) {}
             graficoMediaInstancia = null;
         }
+        return;
     }
+
+    // --- MOSTRAR ---
+    contenedor.classList.remove('oculto');
+    btn.textContent = '✖ Ocultar Gráfico';
+
+    // Reemplaza el canvas para evitar "Canvas already in use"
+    let canvasViejo = document.getElementById('graficaMedia');
+    if (!canvasViejo) { return; }
+    let canvasNuevo = document.createElement('canvas');
+    canvasNuevo.id = 'graficaMedia';
+    canvasViejo.parentNode.replaceChild(canvasNuevo, canvasViejo);
+
+    setTimeout(function () {
+        graficoMediaInstancia = dibujarGraficoMedia(
+            cargarDatos(),
+            'calificacion',
+            'graficaMedia',
+            'Calificaciones de estudiantes con media'
+        );
+    }, 50);
 }
 
 // ============================================================
 // BLOQUE 5: FUNCIONES ESTADISTICAS - MEDIANA
 // ============================================================
-
-let graficoMedianaInstancia = null;
 
 // --- Toggle del ejemplo interactivo ---
 function toggleEjemploMediana() {
@@ -256,28 +139,39 @@ function toggleGraficoMediana() {
     let contenedor = document.getElementById('contenedor-grafico-mediana');
     let btn = document.getElementById('btn-grafico-mediana');
 
-    if (contenedor.classList.contains('oculto')) {
-        contenedor.classList.remove('oculto');
-        btn.textContent = '✖ Ocultar Gráfico';
+    if (!contenedor || !btn) { return; }
 
-        // Reemplaza el canvas para evitar "Canvas already in use"
-        let canvasViejo = document.getElementById('graficaMediana');
+    // --- OCULTAR ---
+    if (!contenedor.classList.contains('oculto')) {
+        contenedor.classList.add('oculto');
+        btn.textContent = '📊 Ver Gráfico de Barras Horizontales';
+        return;
+    }
+
+    // --- MOSTRAR ---
+    contenedor.classList.remove('oculto');
+    btn.textContent = '✖ Ocultar Gráfico';
+
+    // Reemplaza el canvas para evitar "Canvas already in use"
+    let canvasViejo = document.getElementById('graficaMediana');
+    if (canvasViejo && canvasViejo.parentNode) {
         let canvasNuevo = document.createElement('canvas');
         canvasNuevo.id = 'graficaMediana';
         canvasViejo.parentNode.replaceChild(canvasNuevo, canvasViejo);
+    }
 
-        // dibujarGraficoMediana (de mediana.js) dibuja el gráfico
-        graficoMedianaInstancia = dibujarGraficoMediana(
+    // setTimeout: da tiempo al DOM para que el canvas nuevo tenga tamaño real
+    // antes de que Chart.js intente renderizar. Esto es obligatorio cuando se
+    // reemplaza un canvas justo después de quitar la clase 'oculto'.
+    setTimeout(function () {
+        dibujarGraficoMediana(
             cargarDatos(),
             'calificacion',
-            'nombre',
             'graficaMediana',
-            'Calificaciones ordenadas con línea de mediana'
+            'Calificaciones ordenadas con línea de mediana',
+            'nombre'
         );
-    } else {
-        contenedor.classList.add('oculto');
-        btn.textContent = '📊 Ver Gráfico de Barras Horizontales';
-    }
+    }, 50);
 }
 
 // ============================================================
@@ -306,22 +200,40 @@ function toggleGraficoModa() {
     let contenedor = document.getElementById('contenedor-grafico-moda');
     let btn = document.getElementById('btn-grafico-moda');
 
-    if (contenedor.classList.contains('oculto')) {
-        contenedor.classList.remove('oculto');
-        btn.textContent = '✖ Ocultar Gráfico';
+    if (!contenedor || !btn) { return; }
 
-        if (graficoModaInstancia === null) {
-            graficoModaInstancia = dibujarGraficoModa(
-                cargarDatos(),
-                'calificacion',
-                'graficaModa',
-                'Frecuencia de calificaciones (barra azul = moda)'
-            );
-        }
-    } else {
+    // --- OCULTAR ---
+    if (!contenedor.classList.contains('oculto')) {
         contenedor.classList.add('oculto');
         btn.textContent = '📊 Ver Gráfico de Frecuencias';
+
+        if (graficoModaInstancia) {
+            try { graficoModaInstancia.destroy(); } catch (e) {}
+            graficoModaInstancia = null;
+        }
+        return;
     }
+
+    // --- MOSTRAR ---
+    contenedor.classList.remove('oculto');
+    btn.textContent = '✖ Ocultar Gráfico';
+
+    // Reemplazar canvas para evitar "Canvas already in use"
+    let canvasViejo = document.getElementById('graficaModa');
+    if (!canvasViejo) { return; }
+    let canvasNuevo = document.createElement('canvas');
+    canvasNuevo.id = 'graficaModa';
+    canvasViejo.parentNode.replaceChild(canvasNuevo, canvasViejo);
+
+    // setTimeout obligatorio: el canvas nuevo necesita tiempo para tener tamaño real
+    setTimeout(function () {
+        graficoModaInstancia = dibujarGraficoModa(
+            cargarDatos(),
+            'calificacion',
+            'graficaModa',
+            'Frecuencia de calificaciones (barra azul = moda)'
+        );
+    }, 50);
 }
 
 // ============================================================
@@ -330,12 +242,16 @@ function toggleGraficoModa() {
 
 let graficoMinMaxInstancia = null;
 
-// --- Toggle del ejemplo interactivo ---
+// --- Toggle del ejemplo interactivo (datos de estudiantes) ---
 function toggleEjemploMinMax() {
     let contenedor = document.getElementById('resultado-minmax');
     let btn = document.getElementById('btn-ejemplo-minmax');
 
+    // Validación: si no existen los elementos en el HTML, salimos
+    if (!contenedor || !btn) { return; }
+
     if (contenedor.classList.contains('oculto')) {
+        // calcularMinMax viene de minMax.js
         calcularMinMax(cargarDatos(), 'calificacion', 'resultado-minmax', 'nombre');
         contenedor.classList.remove('oculto');
         btn.textContent = '✖ Ocultar Ejemplo';
@@ -345,39 +261,62 @@ function toggleEjemploMinMax() {
     }
 }
 
-// --- Toggle del gráfico ---
+// --- Toggle del gráfico (datos de estudiantes) ---
 function toggleGraficoMinMax() {
     let contenedor = document.getElementById('contenedor-grafico-minmax');
     let btn = document.getElementById('btn-grafico-minmax');
 
-    if (contenedor.classList.contains('oculto')) {
-        contenedor.classList.remove('oculto');
-        btn.textContent = '✖ Ocultar Gráfico';
+    // Validación: si no existen los elementos en el HTML, salimos
+    if (!contenedor || !btn) { return; }
 
-        // Reemplazar canvas para evitar "Canvas already in use"
-        let canvasViejo = document.getElementById('graficaMinMax');
-        let canvasNuevo = document.createElement('canvas');
-        canvasNuevo.id = 'graficaMinMax';
-        canvasViejo.parentNode.replaceChild(canvasNuevo, canvasViejo);
+    // --- OCULTAR ---
+    if (!contenedor.classList.contains('oculto')) {
+        contenedor.classList.add('oculto');
+        btn.textContent = '📊 Ver Gráfico de Barras';
 
+        // Destruir gráfico anterior para liberar memoria
+        if (graficoMinMaxInstancia) {
+            try { graficoMinMaxInstancia.destroy(); } catch (e) {}
+            graficoMinMaxInstancia = null;
+        }
+        return;
+    }
+
+    // --- MOSTRAR ---
+    contenedor.classList.remove('oculto');
+    btn.textContent = '✖ Ocultar Gráfico';
+
+    // Destruir instancia previa si existe
+    if (graficoMinMaxInstancia) {
+        try { graficoMinMaxInstancia.destroy(); } catch (e) {}
+        graficoMinMaxInstancia = null;
+    }
+
+    // Reemplazar canvas para evitar el error "Canvas already in use"
+    let canvasViejo = document.getElementById('graficaMinMax');
+    if (!canvasViejo) { return; }
+    let canvasNuevo = document.createElement('canvas');
+    canvasNuevo.id = 'graficaMinMax';
+    canvasViejo.parentNode.replaceChild(canvasNuevo, canvasViejo);
+
+    // setTimeout: da tiempo al DOM para que el canvas nuevo tenga tamaño real
+    // antes de que Chart.js intente dibujar. Esto es obligatorio.
+        setTimeout(function () {
+        // dibujarGraficoMinMax viene de minMax.js
+        // Orden: arreglo, campoNumerico, canvasId, titulo
+        // (el campoLabel ya no se pasa: minMax.js lo detecta automáticamente)
         graficoMinMaxInstancia = dibujarGraficoMinMax(
             cargarDatos(),
             'calificacion',
-            'nombre',
             'graficaMinMax',
             'Calificaciones — azul: mínimo | rojo: máximo'
         );
-    } else {
-        contenedor.classList.add('oculto');
-        btn.textContent = '📊 Ver Gráfico de Barras';
-    }
+    }, 50);
 }
 
 // ============================================================
 // BLOQUE 8: FUNCIONES ESTADISTICAS - RANGO
 // ============================================================
-
-let graficoRangoInstancia = null;
 
 // --- Toggle del ejemplo interactivo ---
 function toggleEjemploRango() {
@@ -399,27 +338,41 @@ function toggleGraficoRango() {
     let contenedor = document.getElementById('contenedor-grafico-rango');
     let btn = document.getElementById('btn-grafico-rango');
 
-    if (contenedor.classList.contains('oculto')) {
-        contenedor.classList.remove('oculto');
-        btn.textContent = '✖ Ocultar Gráfico';
+    if (!contenedor || !btn) { return; }
 
-        // Reemplazar canvas para evitar "Canvas already in use"
-        let canvasViejo = document.getElementById('graficaRango');
-        let canvasNuevo = document.createElement('canvas');
-        canvasNuevo.id = 'graficaRango';
-        canvasViejo.parentNode.replaceChild(canvasNuevo, canvasViejo);
+    // --- OCULTAR ---
+    if (!contenedor.classList.contains('oculto')) {
+        contenedor.classList.add('oculto');
+        btn.textContent = '📊 Ver Gráfico de Barras Verticales';
 
-        graficoRangoInstancia = dibujarGraficoRango(
+        if (instanciaGraficoRango !== null) {
+            try { instanciaGraficoRango.destroy(); } catch (e) {}
+            instanciaGraficoRango = null;
+        }
+        return;
+    }
+
+    // --- MOSTRAR ---
+    contenedor.classList.remove('oculto');
+    btn.textContent = '✖ Ocultar Gráfico';
+
+    // Reemplazar canvas para evitar "Canvas already in use"
+    let canvasViejo = document.getElementById('graficaRango');
+    if (!canvasViejo) { return; }
+    let canvasNuevo = document.createElement('canvas');
+    canvasNuevo.id = 'graficaRango';
+    canvasViejo.parentNode.replaceChild(canvasNuevo, canvasViejo);
+
+    // setTimeout obligatorio: el canvas nuevo necesita tiempo para tener tamaño real
+    setTimeout(function () {
+        instanciaGraficoRango = dibujarGraficoRango(
             cargarDatos(),
             'calificacion',
             'nombre',
             'graficaRango',
             'Rango de calificaciones — rojo: mínimo | verde: máximo'
         );
-    } else {
-        contenedor.classList.add('oculto');
-        btn.textContent = '📊 Ver Gráfico de Rango';
-    }
+    }, 50);
 }
 
 // ============================================================
@@ -1043,99 +996,442 @@ function toggleEjercicioPractico() {
  */
 function toggleGraficoEjercicio() {
     let cont = document.getElementById('contenedor-grafico-ejercicio');
-    let btn = document.getElementById('btn-grafico-ejercicio');
+    let btn  = document.getElementById('btn-grafico-ejercicio');
 
-    if (!cont || !btn) return;
+    if (!cont || !btn) { return; }
 
-    if (cont.classList.contains('oculto')) {
-        cont.classList.remove('oculto');
-        btn.textContent = '✖ Ocultar Gráfico';
-
-        // Si ya hay un gráfico, destruirlo antes de crear uno nuevo
-        if (graficoEjercicioInstancia) {
-            graficoEjercicioInstancia.destroy();
-            graficoEjercicioInstancia = null;
-        }
-
-        // preparar canvas: si no existe, crearlo
-        let canvas = document.getElementById('graficaEjercicio');
-        if (!canvas) {
-            let nuevo = document.createElement('canvas');
-            nuevo.id = 'graficaEjercicio';
-            cont.appendChild(nuevo);
-            canvas = nuevo;
-        }
-
-        // crear datos agrupados (cada objeto: { App, valor })
-        let arregloApps = agruparMediaPorApp();
-
-        if (typeof dibujarGraficoMedia === 'function') {
-            // dibujarGraficoMedia(arregloObjetos, propiedad, nombrePropMostrar, canvasId, titulo)
-            graficoEjercicioInstancia = dibujarGraficoMedia(
-                arregloApps,
-                'valor',
-                'App',
-                'graficaEjercicio',
-                'Media por App (' + COLUMNA_CALCULO_EJ + ')'
-            );
-        } else {
-            // Fallback sencillo: dibujar barras con Chart.js aquí
-            let etiquetas = [];
-            let valores = [];
-            for (let i = 0; i < arregloApps.length; i++) {
-                etiquetas.push(arregloApps[i].App);
-                valores.push(arregloApps[i].valor);
-            }
-
-            let ctx = document.getElementById('graficaEjercicio').getContext('2d');
-            graficoEjercicioInstancia = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: etiquetas,
-                    datasets: [{
-                        label: 'Media (' + COLUMNA_CALCULO_EJ + ')',
-                        data: valores,
-                        backgroundColor: 'rgba(99, 102, 241, 0.7)',
-                        borderColor: 'rgba(99, 102, 241, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: { position: 'top' },
-                        title: {
-                            display: true,
-                            text: 'Media por App (' + COLUMNA_CALCULO_EJ + ')'
-                        },
-                        tooltip: {
-                            enabled: true,
-                            displayColors: false,
-                            callbacks: {
-                                title: function() { return ''; },
-                                label: function(context) {
-                                    let nombre = context.label || '';
-                                    let valor = (context.parsed && context.parsed.y !== undefined) ? context.parsed.y : context.parsed;
-                                    return nombre + ' ' + Number(valor).toFixed(2);
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        y: { beginAtZero: true }
-                    }
-                }
-            });
-        }
-
-    } else {
-        // ocultar y destruir grafico si existe
+    // --- OCULTAR ---
+    if (!cont.classList.contains('oculto')) {
         cont.classList.add('oculto');
         btn.textContent = '📊 Ver Gráfico Comparativo';
 
+        // Destruye el gráfico anterior para liberar memoria
         if (graficoEjercicioInstancia) {
             graficoEjercicioInstancia.destroy();
             graficoEjercicioInstancia = null;
         }
+        return;
     }
+
+    // --- MOSTRAR ---
+    cont.classList.remove('oculto');
+    btn.textContent = '✖ Ocultar Gráfico';
+
+    // Destruye instancia previa si existe
+    if (graficoEjercicioInstancia) {
+        graficoEjercicioInstancia.destroy();
+        graficoEjercicioInstancia = null;
+    }
+
+    // Crea el canvas si no existe en el DOM
+    let canvas = document.getElementById('graficaEjercicio');
+    if (!canvas) {
+        canvas    = document.createElement('canvas');
+        canvas.id = 'graficaEjercicio';
+        cont.appendChild(canvas);
+    }
+
+    // Agrupa los datos por App y calcula la media de cada una
+    let arregloApps = agruparMediaPorApp();
+
+    // dibujarGrafico (media.js): arreglo, propiedad, canvasId, titulo
+    // No se pasa mediaExterna: la función la calcula internamente sobre arregloApps
+    graficoEjercicioInstancia = dibujarGraficoMedia(
+        arregloApps,
+        'valor',
+        'graficaEjercicio',
+        'Media por App (' + COLUMNA_CALCULO_EJ + ')'
+    );
+}
+
+// ============================================================
+// FUNCIÓN: cargarTablaPreviewDataset
+// Muestra los primeros 10 registros de SOCIAL_MEDIA_USAGE
+// en la tabla #tabla-preview-dataset al cargar la sección.
+// Se llama una sola vez desde el evento DOMContentLoaded.
+// ============================================================
+function cargarTablaPreviewDataset() {
+    let cuerpoTabla = document.getElementById("cuerpo-tabla-preview");
+    if (!cuerpoTabla) { return; }
+
+    let datos = SOCIAL_MEDIA_USAGE.datos_redes;
+    let filas = "";
+
+    // Recorre solo los primeros 10 registros del dataset
+    for (let indiceFila = 0; indiceFila < 10 && indiceFila < datos.length; indiceFila++) {
+        let registro = datos[indiceFila];
+        filas += "<tr>";
+        filas += "<td>" + (indiceFila + 1) + "</td>";
+        filas += "<td>" + registro.User_ID + "</td>";
+        filas += "<td>" + registro.App + "</td>";
+        filas += "<td>" + registro.Daily_Minutes_Spent + "</td>";
+        filas += "<td>" + registro.Posts_Per_Day + "</td>";
+        filas += "<td>" + registro.Likes_Per_Day + "</td>";
+        filas += "<td>" + registro.Follows_Per_Day + "</td>";
+        filas += "</tr>";
+    }
+
+    cuerpoTabla.innerHTML = filas;
+}
+
+// Llenar la tabla preview cuando el DOM esté listo
+document.addEventListener("DOMContentLoaded", function() {
+    cargarTablaPreviewDataset();
+});
+
+// ============================================================
+// BLOQUE 12B: EJERCICIO PRACTICO - MEDIANA
+// ============================================================
+
+let graficoEjercicioMedianaInstancia = null;
+
+/**
+ * Calcula la mediana del dataset completo (los 200 registros)
+ * sobre la columna Daily_Minutes_Spent y genera la tabla HTML.
+ */
+function mostrarTablaMedianaDataset() {
+    let datos = cargarDatosSocial();
+    let idContenedor = 'resultado-ejercicio-mediana';
+
+    // Usar calcularMediana de mediana.js si está disponible
+    if (typeof calcularMediana === 'function') {
+        calcularMediana(datos, COLUMNA_CALCULO_EJ, idContenedor, NOMBRE_ETIQUETA_EJ);
+        return;
+    }
+
+    // Fallback manual si mediana.js no está cargado
+    let valores = [];
+    for (let i = 0; i < datos.length; i++) {
+        let v = Number(datos[i][COLUMNA_CALCULO_EJ]);
+        if (!isNaN(v)) {
+            valores.push(v);
+        }
+    }
+
+    // Ordenar de menor a mayor
+    valores.sort(function(a, b) { return a - b; });
+
+    let centro = Math.floor(valores.length / 2);
+    let mediana = 0;
+    if (valores.length % 2 === 0) {
+        mediana = (valores[centro - 1] + valores[centro]) / 2;
+    } else {
+        mediana = valores[centro];
+    }
+
+    let html = '';
+    html += '<p><strong>Mediana de ' + COLUMNA_CALCULO_EJ + ' (200 registros ordenados):</strong></p>';
+    html += '<div class="detalle-calculo">';
+    html += 'Total de registros: <strong>' + valores.length + '</strong><br>';
+    html += 'Posición central: <strong>' + (centro + 1) + '</strong><br>';
+    html += 'Mediana: <strong>' + mediana.toFixed(2) + '</strong>';
+    html += '</div>';
+    html += '<div class="caja-resultado">';
+    html += '📊 La mediana es: <strong>' + mediana.toFixed(2) + '</strong> minutos/día';
+    html += '</div>';
+
+    document.getElementById(idContenedor).innerHTML = html;
+}
+
+/**
+ * Toggle tabla de mediana del ejercicio práctico.
+ */
+function toggleEjercicioMediana() {
+    let cont = document.getElementById('resultado-ejercicio-mediana');
+    let btn  = document.getElementById('btn-ejercicio-mediana');
+
+    if (!cont || !btn) { return; }
+
+    if (cont.classList.contains('oculto')) {
+        mostrarTablaMedianaDataset();
+        cont.classList.remove('oculto');
+        btn.textContent = '✖ Ocultar Tabla';
+    } else {
+        cont.classList.add('oculto');
+        btn.textContent = '▶ Calcular Mediana';
+    }
+}
+
+/**
+ * Toggle gráfico de mediana del ejercicio práctico.
+ * Usa dibujarGraficoMediana de mediana.js con los 200 registros.
+ */
+function toggleGraficoEjercicioMediana() {
+    let cont = document.getElementById('contenedor-grafico-ejercicio-mediana');
+    let btn  = document.getElementById('btn-grafico-ejercicio-mediana');
+
+    if (!cont || !btn) { return; }
+
+    // --- OCULTAR ---
+    if (!cont.classList.contains('oculto')) {
+        cont.classList.add('oculto');
+        btn.textContent = '📊 Ver Gráfico de Distribución';
+        return;
+    }
+
+    // --- MOSTRAR ---
+    cont.classList.remove('oculto');
+    btn.textContent = '✖ Ocultar Gráfico';
+
+    // Reemplazar canvas para evitar "Canvas already in use"
+    let canvasViejo = document.getElementById('graficaEjercicioMediana');
+    if (canvasViejo && canvasViejo.parentNode) {
+        let canvasNuevo = document.createElement('canvas');
+        canvasNuevo.id = 'graficaEjercicioMediana';
+        canvasViejo.parentNode.replaceChild(canvasNuevo, canvasViejo);
+    }
+
+    // setTimeout obligatorio: el canvas nuevo necesita tiempo para tener tamaño real
+    setTimeout(function () {
+        dibujarGraficoMediana(
+            cargarDatosSocial(),
+            COLUMNA_CALCULO_EJ,
+            'graficaEjercicioMediana',
+            'Distribución de minutos diarios con línea de mediana',
+            NOMBRE_ETIQUETA_EJ
+        );
+    }, 50);
+}
+
+// ============================================================
+// BLOQUE 12C: EJERCICIO PRACTICO - MINIMO Y MAXIMO
+// ============================================================
+
+let graficoEjercicioMinMaxInstancia = null;
+
+/**
+ * Muestra la tabla del dataset completo (200 registros)
+ * destacando el mínimo y el máximo con calcularMinMax de minMax.js.
+ */
+function mostrarTablaMinMaxDataset() {
+    let datos = cargarDatosSocial();
+    let idContenedor = 'resultado-ejercicio-minmax';
+
+    // Usar calcularMinMax de minMax.js con los datos de redes sociales
+    calcularMinMax(datos, COLUMNA_CALCULO_EJ, idContenedor, NOMBRE_ETIQUETA_EJ);
+}
+
+/**
+ * Toggle (mostrar/ocultar) la tabla del ejercicio práctico de mínimo y máximo.
+ */
+function toggleEjercicioMinMax() {
+    let cont = document.getElementById('resultado-ejercicio-minmax');
+    let btn  = document.getElementById('btn-ejercicio-minmax');
+
+    if (!cont || !btn) { return; }
+
+    if (cont.classList.contains('oculto')) {
+        mostrarTablaMinMaxDataset();
+        cont.classList.remove('oculto');
+        btn.textContent = '✖ Ocultar Tabla';
+    } else {
+        cont.classList.add('oculto');
+        btn.textContent = '▶ Calcular Mínimo y Máximo';
+    }
+}
+
+/**
+ * Toggle (mostrar/ocultar) el gráfico de mínimo y máximo del ejercicio práctico.
+ */
+function toggleGraficoEjercicioMinMax() {
+    let cont = document.getElementById('contenedor-grafico-ejercicio-minmax');
+    let btn  = document.getElementById('btn-grafico-ejercicio-minmax');
+
+    if (!cont || !btn) { return; }
+
+    // --- OCULTAR ---
+    if (!cont.classList.contains('oculto')) {
+        cont.classList.add('oculto');
+        btn.textContent = '📊 Ver Gráfico de Barras';
+
+        if (graficoEjercicioMinMaxInstancia) {
+            try { graficoEjercicioMinMaxInstancia.destroy(); } catch (e) {}
+            graficoEjercicioMinMaxInstancia = null;
+        }
+        return;
+    }
+
+    // --- MOSTRAR ---
+    cont.classList.remove('oculto');
+    btn.textContent = '✖ Ocultar Gráfico';
+
+    // Reemplazar canvas para evitar "Canvas already in use"
+    let canvasViejo = document.getElementById('graficaEjercicioMinMax');
+    if (!canvasViejo) { return; }
+    let canvasNuevo = document.createElement('canvas');
+    canvasNuevo.id = 'graficaEjercicioMinMax';
+    canvasViejo.parentNode.replaceChild(canvasNuevo, canvasViejo);
+
+    // setTimeout obligatorio: el canvas nuevo necesita tiempo para tener tamaño real
+    setTimeout(function () {
+        // Orden: arreglo, campoNumerico, canvasId, titulo
+        // (campoLabel detectado automáticamente por minMax.js)
+        graficoEjercicioMinMaxInstancia = dibujarGraficoMinMax(
+            cargarDatosSocial(),
+            COLUMNA_CALCULO_EJ,
+            'graficaEjercicioMinMax',
+            'Distribución de minutos diarios — azul: mínimo | rojo: máximo'
+        );
+    }, 50);
+}
+
+// ============================================================
+// BLOQUE 12D: EJERCICIO PRACTICO - MODA
+// ============================================================
+
+let graficoEjercicioModaInstancia = null;
+
+/**
+ * Muestra la tabla del dataset completo (200 registros)
+ * destacando la moda con calcularModa de moda.js.
+ */
+function mostrarTablaModaDataset() {
+    let datos = cargarDatosSocial();
+    let idContenedor = 'resultado-ejercicio-moda';
+
+    // Usar calcularModa de moda.js con los datos de redes sociales
+    calcularModa(datos, COLUMNA_CALCULO_EJ, idContenedor, NOMBRE_ETIQUETA_EJ);
+}
+
+/**
+ * Toggle (mostrar/ocultar) la tabla del ejercicio práctico de moda.
+ */
+function toggleEjercicioModa() {
+    let cont = document.getElementById('resultado-ejercicio-moda');
+    let btn  = document.getElementById('btn-ejercicio-moda');
+
+    if (!cont || !btn) { return; }
+
+    if (cont.classList.contains('oculto')) {
+        mostrarTablaModaDataset();
+        cont.classList.remove('oculto');
+        btn.textContent = '✖ Ocultar Tabla';
+    } else {
+        cont.classList.add('oculto');
+        btn.textContent = '▶ Calcular Moda';
+    }
+}
+
+/**
+ * Toggle (mostrar/ocultar) el gráfico de moda del ejercicio práctico.
+ */
+function toggleGraficoEjercicioModa() {
+    let cont = document.getElementById('contenedor-grafico-ejercicio-moda');
+    let btn  = document.getElementById('btn-grafico-ejercicio-moda');
+
+    if (!cont || !btn) { return; }
+
+    // --- OCULTAR ---
+    if (!cont.classList.contains('oculto')) {
+        cont.classList.add('oculto');
+        btn.textContent = '📊 Ver Gráfico de Frecuencias';
+
+        if (graficoEjercicioModaInstancia) {
+            try { graficoEjercicioModaInstancia.destroy(); } catch (e) {}
+            graficoEjercicioModaInstancia = null;
+        }
+        return;
+    }
+
+    // --- MOSTRAR ---
+    cont.classList.remove('oculto');
+    btn.textContent = '✖ Ocultar Gráfico';
+
+    // Reemplazar canvas para evitar "Canvas already in use"
+    let canvasViejo = document.getElementById('graficaEjercicioModa');
+    if (!canvasViejo) { return; }
+    let canvasNuevo = document.createElement('canvas');
+    canvasNuevo.id = 'graficaEjercicioModa';
+    canvasViejo.parentNode.replaceChild(canvasNuevo, canvasViejo);
+
+    // setTimeout obligatorio: el canvas nuevo necesita tiempo para tener tamaño real
+    setTimeout(function () {
+        graficoEjercicioModaInstancia = dibujarGraficoModa(
+            cargarDatosSocial(),
+            COLUMNA_CALCULO_EJ,
+            'graficaEjercicioModa',
+            'Frecuencia de minutos diarios (barra azul = moda)'
+        );
+    }, 50);
+}
+
+// ============================================================
+// BLOQUE 12E: EJERCICIO PRACTICO - RANGO
+// ============================================================
+
+let graficoEjercicioRangoInstancia = null;
+
+/**
+ * Muestra la tabla del dataset completo (200 registros)
+ * con el cálculo del rango usando calcularRango de rango.js.
+ */
+function mostrarTablaRangoDataset() {
+    let datos = cargarDatosSocial();
+    let idContenedor = 'resultado-ejercicio-rango';
+
+    // Usar calcularRango de rango.js con los datos de redes sociales
+    calcularRango(datos, COLUMNA_CALCULO_EJ, idContenedor, NOMBRE_ETIQUETA_EJ);
+}
+
+/**
+ * Toggle (mostrar/ocultar) la tabla del ejercicio práctico de rango.
+ */
+function toggleEjercicioRango() {
+    let cont = document.getElementById('resultado-ejercicio-rango');
+    let btn  = document.getElementById('btn-ejercicio-rango');
+
+    if (!cont || !btn) { return; }
+
+    if (cont.classList.contains('oculto')) {
+        mostrarTablaRangoDataset();
+        cont.classList.remove('oculto');
+        btn.textContent = '✖ Ocultar Tabla';
+    } else {
+        cont.classList.add('oculto');
+        btn.textContent = '▶ Calcular Rango';
+    }
+}
+
+/**
+ * Toggle (mostrar/ocultar) el gráfico de rango del ejercicio práctico.
+ */
+function toggleGraficoEjercicioRango() {
+    let cont = document.getElementById('contenedor-grafico-ejercicio-rango');
+    let btn  = document.getElementById('btn-grafico-ejercicio-rango');
+
+    if (!cont || !btn) { return; }
+
+    // --- OCULTAR ---
+    if (!cont.classList.contains('oculto')) {
+        cont.classList.add('oculto');
+        btn.textContent = '📊 Ver Gráfico de Amplitud';
+
+        if (graficoEjercicioRangoInstancia) {
+            try { graficoEjercicioRangoInstancia.destroy(); } catch (e) {}
+            graficoEjercicioRangoInstancia = null;
+        }
+        return;
+    }
+
+    // --- MOSTRAR ---
+    cont.classList.remove('oculto');
+    btn.textContent = '✖ Ocultar Gráfico';
+
+    // Reemplazar canvas para evitar "Canvas already in use"
+    let canvasViejo = document.getElementById('graficaEjercicioRango');
+    if (!canvasViejo) { return; }
+    let canvasNuevo = document.createElement('canvas');
+    canvasNuevo.id = 'graficaEjercicioRango';
+    canvasViejo.parentNode.replaceChild(canvasNuevo, canvasViejo);
+
+    // setTimeout obligatorio: el canvas nuevo necesita tiempo para tener tamaño real
+    setTimeout(function () {
+        graficoEjercicioRangoInstancia = dibujarGraficoRango(
+            cargarDatosSocial(),
+            COLUMNA_CALCULO_EJ,
+            NOMBRE_ETIQUETA_EJ,
+            'graficaEjercicioRango',
+            'Amplitud de minutos diarios — rojo: mínimo | verde: máximo'
+        );
+    }, 50);
 }
