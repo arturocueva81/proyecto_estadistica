@@ -4,13 +4,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estadística Aplicada</title>
+    <title>Estadística Aplicada — Proyecto de Matemática 1</title>
+
+    <!-- Librería de iconos Font Awesome (versión 6.4.0 desde CDN) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Hoja de estilos principal del proyecto -->
     <link rel="stylesheet" href="estadistica.css">
 </head>
 
 <body>
-    <!-- MENU DE NAVEGACION (nav)                           -->
+
+    <!-- ============================================================
+            MENÚ DE NAVEGACIÓN PRINCIPAL
+            Cada botón llama a mostrarSeccion() con el ID de la sección
+            que se desea mostrar. El resto de secciones se ocultan.
+            ============================================================ -->
     <nav>
         <button onclick="mostrarSeccion('portada')">Portada</button>
         <button onclick="mostrarSeccion('que-es')">¿Qué es la Estadística?</button>
@@ -25,70 +34,88 @@
         <button onclick="mostrarSeccion('ejercicio-practico')">Ejercicio Práctico</button>
     </nav>
 
-    <!-- SECCION 1: PORTADA   -->
 
-    <section id="portada" class="dos-columnas">
+    <!-- ============================================================
+            SECCIÓN 1: PORTADA
+            Visible por defecto al cargar la página (sin clase 'oculto').
+            Usa layout de dos columnas: teoría a la izquierda,
+            presentación del proyecto a la derecha.
+            ============================================================ -->
+        <section id="portada" class="dos-columnas">
 
+        <!-- Columna izquierda: título principal e imagen de portada -->
         <div class="columna-teoria">
             <h1>Estadística Aplicada</h1>
             <h2>Proyecto de Matemática 1</h2>
-            <img src="images/portada01.png" width="100%">
+            <img src="images/portada01.png" alt="Imagen de portada del proyecto de estadística" width="100%">
         </div>
 
+        <!-- Columna derecha: descripción del proyecto y autores -->
         <div class="columna-ejercicios">
             <p>
                 Bienvenido a este espacio dedicado a la <strong>Estadística Descriptiva</strong>, una disciplina
-                fundamental
-                que nos permite transformar datos brutos en información con significado. En el mundo actual, la
-                capacidad de
-                organizar, resumir y visualizar datos es esencial para comprender tendencias, realizar diagnósticos
-                precisos
-                y tomar decisiones fundamentadas en la evidencia.
+                fundamental que nos permite transformar datos brutos en información con significado. En el mundo
+                actual, la capacidad de organizar, resumir y visualizar datos es esencial para comprender tendencias,
+                realizar diagnósticos precisos y tomar decisiones fundamentadas en la evidencia.
             </p>
 
             <p>
                 A través de este sitio, exploraremos las medidas de tendencia central y de dispersión, herramientas
-                matemáticas que nos permiten describir el comportamiento de un conjunto de datos mediante un solo valor
-                o identificar qué tan variados son entre sí. Cada sección combina una sólida base teórica con
+                matemáticas que nos permiten describir el comportamiento de un conjunto de datos mediante un solo
+                valor o identificar qué tan variados son entre sí. Cada sección combina una sólida base teórica con
                 <strong>simulaciones interactivas en JavaScript</strong> y visualizaciones dinámicas de datos.
             </p>
 
             <p>
                 Te invitamos a utilizar el menú de navegación superior para recorrer los diferentes conceptos y
-                finalizar
-                con nuestro <strong>ejercicio práctico</strong>, donde aplicaremos todo lo aprendido en un dataset real
-                sobre el comportamiento de usuarios en redes sociales.
+                finalizar con nuestro <strong>ejercicio práctico</strong>, donde aplicaremos todo lo aprendido en
+                un dataset real sobre el comportamiento de usuarios en redes sociales.
             </p>
 
-                <div class="portada-footer">
-                    <h6>Proyecto de Matemáticas</h6>
-                    <div class="autores-contenedor">
-                        <div class="autor">
-                            <span class="autor-nombre">Jonathan Luna</span>
-                            <a href="https://github.com/JonathanLuna95" target="_blank" class="github-link">
-                                <i class="fab fa-github"></i> JonathanLuna95
-                            </a>
-                        </div>
-                        <div class="autor">
-                            <span class="autor-nombre">Arturo Cueva</span>
-                            <a href="https://github.com/arturocueva81" target="_blank" class="github-link">
-                                <i class="fab fa-github"></i> arturocueva81
-                            </a>
-                        </div>
+            <!-- Pie de portada: créditos del proyecto con enlaces a GitHub -->
+            <div class="portada-footer">
+                <h6>Proyecto de Matemáticas</h6>
+
+                <!-- Contenedor de los dos autores del proyecto -->
+                <div class="autores-contenedor">
+
+                    <!-- Autor 1 -->
+                    <div class="autor">
+                        <span class="autor-nombre">Jonathan Luna</span>
+                        <!-- Enlace al perfil de GitHub del autor 1 -->
+                        <a href="https://github.com/JonathanLuna95" target="_blank" class="github-link">
+                            <i class="fab fa-github"></i> JonathanLuna95
+                        </a>
                     </div>
+
+                    <!-- Autor 2 -->
+                    <div class="autor">
+                        <span class="autor-nombre">Arturo Cueva</span>
+                        <!-- Enlace al perfil de GitHub del autor 2 -->
+                        <a href="https://github.com/arturocueva81" target="_blank" class="github-link">
+                            <i class="fab fa-github"></i> arturocueva81
+                        </a>
+                    </div>
+
                 </div>
+            </div>
 
         </div>
-
     </section>
 
-    <!-- SECCION 2: QUE ES LA ESTADISTICA                   -->
+
+    <!-- ============================================================
+            SECCIÓN 2: ¿QUÉ ES LA ESTADÍSTICA?
+            Introducción teórica al concepto de estadística descriptiva
+            e inferencial. Oculta por defecto (clase 'oculto').
+            ============================================================ -->
     <section id="que-es" class="oculto dos-columnas">
 
+        <!-- Columna izquierda: definición e imagen ilustrativa -->
         <div class="columna-teoria">
             <h2>¿Qué es la Estadística?</h2>
 
-            <img src="images/estadistica.png" width="100%">
+            <img src="images/estadistica.png" alt="Ilustración sobre estadística" width="100%">
 
             <h3>Definición</h3>
             <p>
@@ -109,11 +136,11 @@
             </p>
         </div>
 
+        <!-- Columna derecha: ramas de la estadística y ejemplo práctico -->
         <div class="columna-ejercicios">
-            <p>
-                De manera general, la estadística se divide en dos grandes ramas:
-            </p>
+            <p>De manera general, la estadística se divide en dos grandes ramas:</p>
 
+            <!-- Lista de las dos ramas principales de la estadística -->
             <ul>
                 <li>
                     <strong>Estadística descriptiva:</strong> se encarga de recopilar,
@@ -149,20 +176,28 @@
                 visualizaciones, "me gusta" o comentarios para conocer el desempeño de una
                 publicación y comprender el comportamiento de los usuarios.
             </p>
-            </di>
+
+        </div>
     </section>
 
-    <!-- SECCION 3: MEDIA (PROMEDIO)                        -->
+
+    <!-- ============================================================
+            SECCIÓN 3: MEDIA (PROMEDIO)
+            Explica el concepto de media aritmética con definición,
+            ejemplo manual, código JavaScript y ejemplo interactivo.
+            ============================================================ -->
     <section id="media" class="oculto dos-columnas">
+
+        <!-- Columna izquierda: teoría, fórmula y código de consola -->
         <div class="columna-teoria">
             <h2>Media (Promedio)</h2>
-            <img src="images/media.jpg" width="100%">
+            <img src="images/media.jpg" alt="Ilustración de la media aritmética" width="100%">
 
             <h3>Definición</h3>
             <p>
-                La media aritmética, comúnmente llamada promedio, es el
-                resultado de sumar todos los valores de un conjunto de datos
-                y dividir esa suma entre la cantidad total de valores.
+                La media aritmética, comúnmente llamada promedio, es el resultado de sumar
+                todos los valores de un conjunto de datos y dividir esa suma entre la
+                cantidad total de valores.
             </p>
             <p>
                 <strong>Fórmula:</strong>
@@ -171,61 +206,59 @@
 
             <h3>Ejemplo</h3>
             <p>Las edades de 5 personas son: <strong>20, 25, 30, 22, 28</strong></p>
-            <p>
-                Paso 1: Sumamos todos los valores:
-                20 + 25 + 30 + 22 + 28 = <strong>125</strong>
-            </p>
-            <p>
-                Paso 2: Dividimos entre la cantidad de valores (5):
-                125 / 5 = <strong>25</strong>
-            </p>
+            <p>Paso 1: Sumamos todos los valores: 20 + 25 + 30 + 22 + 28 = <strong>125</strong></p>
+            <p>Paso 2: Dividimos entre la cantidad de valores (5): 125 / 5 = <strong>25</strong></p>
             <p>La media de las edades es <strong>25 años</strong>.</p>
 
-
-            <!-- CAJA CONSOLA  -->
-
+            <!-- Bloque de código JavaScript que muestra cómo calcular la media -->
             <h3>¿Cómo se calcula en JavaScript?</h3>
             <pre class="consola">
-            // --- Calcular la MEDIA (Promedio) ---
+// --- Calcular la MEDIA (Promedio) ---
 
-            let datos = [20, 25, 30, 22, 28];
-            let suma = 0;
-                for (let i = 0; i &lt; datos.length; i++) {
-                    suma = suma + datos[i];
-                }
-            let media = suma / datos.length;
-            console.log("La media es: " + media);
-        </pre>
+let listaEdades = [20, 25, 30, 22, 28];
+let sumaEdades = 0;
+
+for (let indiceEdad = 0; indiceEdad &lt; listaEdades.length; indiceEdad++) {
+    sumaEdades = sumaEdades + listaEdades[indiceEdad];
+}
+
+let valorMedia = sumaEdades / listaEdades.length;
+console.log("La media es: " + valorMedia);
+            </pre>
 
         </div><!-- fin columna-teoria -->
 
+        <!-- Columna derecha: botones interactivos y gráfico de barras -->
         <div class="columna-ejercicios">
             <h3>Ejemplo interactivo</h3>
             <p>
                 El siguiente ejemplo usa un arreglo de <strong>20 objetos</strong>
-                precargados, cada uno con el nombre de un estudiante y su
-                calificación. Al hacer clic en el botón, JavaScript recorre
-                el arreglo, suma todas las calificaciones y calcula la media.
+                precargados, cada uno con el nombre de un estudiante y su calificación.
+                Al hacer clic en el botón, JavaScript recorre el arreglo, suma todas
+                las calificaciones y calcula la media.
             </p>
 
+            <!-- Botón que activa toggleEjemploMedia() en estadistica.js -->
             <button onclick="toggleEjemploMedia()" class="btn-interactivo" id="btn-ejemplo-media">
                 ▶ Calcular Media
             </button>
 
-            <!-- Resultado del ejemplo interactivo -->
+            <!-- Contenedor donde se inyecta la tabla de resultados de la media -->
             <div id="resultado-media" class="oculto"></div>
 
-            <!-- GRAFICO DE BARRAS                                  -->
+            <!-- Sección del gráfico de barras de calificaciones -->
             <h3>Gráfico de calificaciones</h3>
             <p>
                 Haz clic en el botón para ver el gráfico de barras
                 con las calificaciones de los 20 estudiantes.
             </p>
 
+            <!-- Botón que activa toggleGraficoMedia() en estadistica.js -->
             <button onclick="toggleGraficoMedia()" class="btn-interactivo" id="btn-grafico-media">
                 📊 Ver Gráfico de Barras
             </button>
 
+            <!-- Contenedor del canvas de Chart.js para el gráfico de media -->
             <div id="contenedor-grafico-media" class="oculto" style="margin-top:20px;">
                 <canvas id="graficaMedia"></canvas>
             </div>
@@ -233,123 +266,133 @@
         </div><!-- fin columna-ejercicios -->
     </section>
 
-    <!-- SECCION 4: MEDIANA                                -->
 
+    <!-- ============================================================
+            SECCIÓN 4: MEDIANA
+            Explica el valor central de un conjunto de datos ordenados,
+            con casos para cantidad par e impar de elementos.
+            ============================================================ -->
     <section id="mediana" class="oculto dos-columnas">
+
+        <!-- Columna izquierda: teoría, ejemplos y código de consola -->
         <div class="columna-teoria">
             <h2>Mediana</h2>
-            <img src="images/mediana.jpg" width="100%">
+            <img src="images/mediana.jpg" alt="Ilustración de la mediana" width="100%">
 
             <h3>Definición</h3>
             <p>
-                La mediana es el valor que se encuentra exactamente en el
-                centro de un conjunto de datos cuando estos están ordenados
-                de menor a mayor.
+                La mediana es el valor que se encuentra exactamente en el centro de un
+                conjunto de datos cuando estos están ordenados de menor a mayor.
             </p>
             <p>
-                Si la cantidad de datos es impar, la mediana es el valor
-                central. Si es par, la mediana es el promedio de los dos
-                valores centrales.
+                Si la cantidad de datos es impar, la mediana es el valor central.
+                Si es par, la mediana es el promedio de los dos valores centrales.
             </p>
 
             <h3>Ejemplo con cantidad impar</h3>
             <p>Datos: <strong>3, 7, 1, 9, 5</strong></p>
-            <p>
-                Paso 1: Ordenamos de menor a mayor:
-                1, 3, <strong>5</strong>, 7, 9
-            </p>
+            <p>Paso 1: Ordenamos de menor a mayor: 1, 3, <strong>5</strong>, 7, 9</p>
             <p>Paso 2: El valor del centro es <strong>5</strong></p>
             <p>La mediana es <strong>5</strong>.</p>
 
             <h3>Ejemplo con cantidad par</h3>
             <p>Datos: <strong>2, 4, 6, 8</strong></p>
-            <p>
-                Paso 1: Ya están ordenados:
-                2, <strong>4, 6</strong>, 8
-            </p>
+            <p>Paso 1: Ya están ordenados: 2, <strong>4, 6</strong>, 8</p>
             <p>Paso 2: Los dos valores centrales son 4 y 6</p>
             <p>Paso 3: Promediamos: (4 + 6) / 2 = <strong>5</strong></p>
             <p>La mediana es <strong>5</strong>.</p>
 
-
-            <!-- CAJA CONSOLA -->
-
+            <!-- Bloque de código JavaScript que muestra cómo calcular la mediana -->
             <h3>¿Cómo se calcula en JavaScript?</h3>
             <pre class="consola">
-            // --- Calcular la MEDIANA ---
+// --- Calcular la MEDIANA ---
 
-            let datos = [3, 7, 1, 9, 5];
-            datos.sort(function(a, b) {
-                return a - b;
-            });
-            let centro = Math.floor(datos.length / 2);
+let listaCalificaciones = [3, 7, 1, 9, 5];
 
-            if (datos.length % 2 === 0) {
-                mediana = (datos[centro - 1] + datos[centro]) / 2;
-            } else {
-                mediana = datos[centro];
-            }
+// Se ordena el arreglo de menor a mayor antes de buscar el centro
+listaCalificaciones.sort(function(valorA, valorB) {
+    return valorA - valorB;
+});
 
-            console.log("La mediana es: " + mediana);
-        </pre>
+let posicionCentral = Math.floor(listaCalificaciones.length / 2);
+let valorMediana = 0;
+
+// Si la cantidad de datos es par, se promedian los dos valores centrales
+if (listaCalificaciones.length % 2 === 0) {
+    valorMediana = (listaCalificaciones[posicionCentral - 1] +
+                    listaCalificaciones[posicionCentral]) / 2;
+} else {
+    valorMediana = listaCalificaciones[posicionCentral];
+}
+
+console.log("La mediana es: " + valorMediana);
+            </pre>
 
         </div><!-- fin columna-teoria -->
 
+        <!-- Columna derecha: botones interactivos y gráfico de barras horizontales -->
         <div class="columna-ejercicios">
             <h3>Ejemplo interactivo</h3>
             <p>
                 El siguiente ejemplo usa un arreglo de <strong>20 objetos</strong>
-                precargados, cada uno con el nombre de un estudiante y su
-                calificación. Al hacer clic en el botón, JavaScript ordena
-                las calificaciones de menor a mayor y encuentra el valor central.
+                precargados, cada uno con el nombre de un estudiante y su calificación.
+                Al hacer clic en el botón, JavaScript ordena las calificaciones de
+                menor a mayor y encuentra el valor central.
             </p>
 
+            <!-- Botón que activa toggleEjemploMediana() en estadistica.js -->
             <button onclick="toggleEjemploMediana()" class="btn-interactivo" id="btn-ejemplo-mediana">
                 ▶ Calcular Mediana
             </button>
 
+            <!-- Contenedor donde se inyecta la tabla de resultados de la mediana -->
             <div id="resultado-mediana" class="oculto"></div>
 
-            <!-- GRAFICO DE BARRAS HORIZONTALES: Mediana            -->
+            <!-- Sección del gráfico de barras horizontales -->
             <h3>Gráfico de calificaciones</h3>
             <p>
-                Haz clic en el botón para ver el gráfico de barras
-                horizontales con las calificaciones ordenadas y la
-                línea de mediana como referencia.
+                Haz clic en el botón para ver el gráfico de barras horizontales
+                con las calificaciones ordenadas y la línea de mediana como referencia.
             </p>
 
+            <!-- Botón que activa toggleGraficoMediana() en estadistica.js -->
             <button onclick="toggleGraficoMediana()" class="btn-interactivo" id="btn-grafico-mediana">
                 📊 Ver Gráfico de Barras Horizontales
             </button>
 
+            <!-- Contenedor del canvas de Chart.js para el gráfico de mediana -->
             <div id="contenedor-grafico-mediana" class="oculto" style="margin-top:20px;">
                 <canvas id="graficaMediana"></canvas>
             </div>
+
         </div><!-- fin columna-ejercicios -->
     </section>
 
-    <!-- SECCION 5: MODA                                    -->
+
+    <!-- ============================================================
+            SECCIÓN 5: MODA
+            Explica el valor más frecuente de un conjunto de datos.
+            ============================================================ -->
     <section id="moda" class="oculto dos-columnas">
+
+        <!-- Columna izquierda: teoría, ejemplo y código de consola -->
         <div class="columna-teoria">
             <h2>Moda</h2>
-            <img src="images/moda.jpg" width="100%">
+            <img src="images/moda.jpg" alt="Ilustración de la moda estadística" width="100%">
 
             <h3>Definición</h3>
             <p>
-                La moda es el valor que más se repite dentro de un conjunto
-                de datos. Un conjunto puede tener una moda (unimodal), dos
-                modas (bimodal), varias modas (multimodal) o ninguna moda
-                si todos los valores aparecen la misma cantidad de veces.
+                La moda es el valor que más se repite dentro de un conjunto de datos.
+                Un conjunto puede tener una moda (unimodal), dos modas (bimodal),
+                varias modas (multimodal) o ninguna moda si todos los valores aparecen
+                la misma cantidad de veces.
             </p>
 
             <h3>Ejemplo</h3>
-            <p>
-                Calificaciones de un grupo:
-                <strong>8, 7, 9, 8, 10, 8, 7</strong>
-            </p>
+            <p>Calificaciones de un grupo: <strong>8, 7, 9, 8, 10, 8, 7</strong></p>
             <p>Contamos las repeticiones:</p>
 
-            <!-- Lista desordenada con el conteo de cada valor -->
+            <!-- Lista con el conteo de frecuencia de cada valor -->
             <ul>
                 <li>7 aparece 2 veces</li>
                 <li>8 aparece 3 veces</li>
@@ -361,149 +404,154 @@
                 por lo tanto la moda es <strong>8</strong>.
             </p>
 
-
-            <!-- CAJA CONSOLA  -->
-
+            <!-- Bloque de código JavaScript que muestra cómo calcular la moda -->
             <h3>¿Cómo se calcula en JavaScript?</h3>
             <pre class="consola">
-            // --- Calcular la MODA en JavaScript ---
+// --- Calcular la MODA en JavaScript ---
 
-                let datos = [8, 7, 9, 8, 10, 8, 7];
-                let conteos = [];
+let listaCalificaciones = [8, 7, 9, 8, 10, 8, 7];
+let listaConteos = [];
 
-                for (let i = 0; i &lt; datos.length; i++) {
-                    let encontrado = false;
+// BUCLE EXTERNO: recorre cada calificación del arreglo
+for (let indiceCalificacion = 0; indiceCalificacion &lt; listaCalificaciones.length; indiceCalificacion++) {
+    let yaExiste = false;
 
-                    for (let j = 0; j &lt; conteos.length; j++) {
-                        if (conteos[j].valor === datos[i]) {
-                            conteos[j].conteo = conteos[j].conteo + 1;
-                            encontrado = true;
-                        }
-                    }
+    // BUCLE INTERNO: busca si la calificación ya fue registrada
+    for (let indiceConteo = 0; indiceConteo &lt; listaConteos.length; indiceConteo++) {
+        if (listaConteos[indiceConteo].valor === listaCalificaciones[indiceCalificacion]) {
+            listaConteos[indiceConteo].conteo = listaConteos[indiceConteo].conteo + 1;
+            yaExiste = true;
+        }
+    }
 
-                if (encontrado === false) {
-                    conteos.push({ valor: datos[i], conteo: 1 });
-                }
-            }
+    // Si no existe, se agrega como nuevo registro con conteo 1
+    if (yaExiste === false) {
+        listaConteos.push({ valor: listaCalificaciones[indiceCalificacion], conteo: 1 });
+    }
+}
 
-            let moda = conteos[0].valor;
-            let maxConteo = conteos[0].conteo;
+let valorModa = listaConteos[0].valor;
+let conteoMaximo = listaConteos[0].conteo;
 
-            for (let k = 1; k &lt; conteos.length; k++) {
-                if (conteos[k].conteo > maxConteo) {
-                    maxConteo = conteos[k].conteo;
-                    moda = conteos[k].valor;
-                }
-            }
+// Se busca el valor con mayor frecuencia
+for (let indiceConteo = 1; indiceConteo &lt; listaConteos.length; indiceConteo++) {
+    if (listaConteos[indiceConteo].conteo > conteoMaximo) {
+        conteoMaximo = listaConteos[indiceConteo].conteo;
+        valorModa = listaConteos[indiceConteo].valor;
+    }
+}
 
-            console.log("La moda es: " + moda);
-        </pre>
+console.log("La moda es: " + valorModa);
+            </pre>
 
         </div><!-- fin columna-teoria -->
 
+        <!-- Columna derecha: botones interactivos y gráfico de frecuencias -->
         <div class="columna-ejercicios">
             <h3>Ejemplo interactivo</h3>
             <p>
                 El siguiente ejemplo usa un arreglo de <strong>20 objetos</strong>
-                precargados. Al hacer clic, JavaScript cuenta cuántas veces
-                se repite cada calificación y determina la moda.
+                precargados. Al hacer clic, JavaScript cuenta cuántas veces se repite
+                cada calificación y determina la moda.
             </p>
 
+            <!-- Botón que activa toggleEjemploModa() en estadistica.js -->
             <button onclick="toggleEjemploModa()" class="btn-interactivo" id="btn-ejemplo-moda">
                 ▶ Calcular Moda
             </button>
 
+            <!-- Contenedor donde se inyecta la tabla de resultados de la moda -->
             <div id="resultado-moda" class="oculto"></div>
 
-            <!-- GRAFICO DE FRECUENCIAS: MODA                       -->
+            <!-- Sección del gráfico de frecuencias -->
             <h3>Gráfico de frecuencias</h3>
             <p>
-                Haz clic en el botón para ver cuántas veces se repite
-                cada calificación. La barra más alta representa la moda.
+                Haz clic en el botón para ver cuántas veces se repite cada calificación.
+                La barra más alta representa la moda.
             </p>
 
+            <!-- Botón que activa toggleGraficoModa() en estadistica.js -->
             <button onclick="toggleGraficoModa()" class="btn-interactivo" id="btn-grafico-moda">
                 📊 Ver Gráfico de Frecuencias
             </button>
 
+            <!-- Contenedor del canvas de Chart.js para el gráfico de moda -->
             <div id="contenedor-grafico-moda" class="oculto" style="margin-top:20px;">
                 <canvas id="graficaModa"></canvas>
             </div>
+
         </div><!-- fin columna-ejercicios -->
     </section>
 
 
-    <!-- SECCION 6: VALOR MINIMO /MAXIMO -->
+    <!-- ============================================================
+            SECCIÓN 6: VALOR MÍNIMO Y MÁXIMO
+            Explica los extremos de un conjunto de datos y su utilidad
+            como base para calcular el rango.
+            ============================================================ -->
     <section id="min-max" class="oculto dos-columnas">
+
+        <!-- Columna izquierda: teoría, ejemplo y código de consola -->
         <div class="columna-teoria">
             <h2>Valor Mínimo y Valor Máximo</h2>
-            <img src="images/val_min_max.jpeg" width="100%">
+            <img src="images/val_min_max.jpeg" alt="Ilustración de valor mínimo y máximo" width="100%">
 
             <h3>Definición</h3>
+            <p>El <strong>valor mínimo</strong> es el número más pequeño dentro de un conjunto de datos.</p>
+            <p>El <strong>valor máximo</strong> es el número más grande dentro de un conjunto de datos.</p>
             <p>
-                El <strong>valor mínimo</strong> es el número más pequeño
-                dentro de un conjunto de datos.
-            </p>
-            <p>
-                El <strong>valor máximo</strong> es el número más grande
-                dentro de un conjunto de datos.
-            </p>
-            <p>
-                Estos dos valores nos permiten conocer los extremos del
-                conjunto y son la base para calcular el rango.
+                Estos dos valores nos permiten conocer los extremos del conjunto
+                y son la base para calcular el rango.
             </p>
 
             <h3>Ejemplo</h3>
-            <p>
-                Temperaturas registradas durante una semana:
-                <strong>18, 22, 15, 28, 20, 25, 17</strong>
-            </p>
+            <p>Temperaturas registradas durante una semana: <strong>18, 22, 15, 28, 20, 25, 17</strong></p>
             <p>Ordenamos de menor a mayor: 15, 17, 18, 20, 22, 25, 28</p>
             <p>Valor mínimo: <strong>15°C</strong></p>
             <p>Valor máximo: <strong>28°C</strong></p>
 
-
-            <!-- CAJA CONSOLA -->
+            <!-- Bloque de código JavaScript que muestra cómo calcular mínimo y máximo -->
             <h3>¿Cómo se calcula en JavaScript?</h3>
             <pre class="consola">
-            // --- Calcular el MINIMO y MAXIMO en JavaScript ---
+// --- Calcular el MÍNIMO y MÁXIMO en JavaScript ---
 
-            let datos = [18, 22, 15, 28, 20, 25, 17];
-            let minimo = datos[0];
-            let maximo = datos[0];
+let listaTemperaturas = [18, 22, 15, 28, 20, 25, 17];
+let valorMinimo = listaTemperaturas[0];
+let valorMaximo = listaTemperaturas[0];
 
-            for (let i = 1; i &lt; datos.length; i++) {
-                if (datos[i] &lt; minimo) {
-                    minimo = datos[i];
-                }
-                if (datos[i] > maximo) {
-                    maximo = datos[i];
-                }
-            }
+// Se recorre desde el índice 1 porque el índice 0 ya fue asignado como referencia
+for (let indiceTemperatura = 1; indiceTemperatura &lt; listaTemperaturas.length; indiceTemperatura++) {
+    if (listaTemperaturas[indiceTemperatura] &lt; valorMinimo) {
+        valorMinimo = listaTemperaturas[indiceTemperatura];
+    }
+    if (listaTemperaturas[indiceTemperatura] > valorMaximo) {
+        valorMaximo = listaTemperaturas[indiceTemperatura];
+    }
+}
 
-            console.log("Valor minimo: " + minimo);
-            console.log("Valor maximo: " + maximo);
-
-        </pre>
+console.log("Valor mínimo: " + valorMinimo);
+console.log("Valor máximo: " + valorMaximo);
+            </pre>
 
         </div><!-- fin columna-teoria -->
 
+        <!-- Columna derecha: botones interactivos y gráfico de barras -->
         <div class="columna-ejercicios">
             <h3>Ejemplo interactivo</h3>
             <p>
-                Al hacer clic, JavaScript recorre el arreglo de
-                <strong>20 estudiantes</strong> y encuentra la calificación
-                más baja y la más alta.
+                Al hacer clic, JavaScript recorre el arreglo de <strong>20 estudiantes</strong>
+                y encuentra la calificación más baja y la más alta.
             </p>
 
+            <!-- Botón que activa toggleEjemploMinMax() en estadistica.js -->
             <button onclick="toggleEjemploMinMax()" class="btn-interactivo" id="btn-ejemplo-minmax">
                 ▶ Calcular Mínimo y Máximo
             </button>
 
+            <!-- Contenedor donde se inyecta la tabla de resultados de mínimo y máximo -->
             <div id="resultado-minmax" class="oculto"></div>
 
-            <!-- GRAFICO DE BARRAS VERTICALES: MINIMO Y MAXIMO      -->
-
+            <!-- Sección del gráfico de barras verticales -->
             <h3>Gráfico de calificaciones</h3>
             <p>
                 Haz clic para ver el gráfico de barras verticales.
@@ -511,10 +559,12 @@
                 y la barra <strong style="color:#22c55e;">verde</strong> es el máximo.
             </p>
 
+            <!-- Botón que activa toggleGraficoMinMax() en estadistica.js -->
             <button onclick="toggleGraficoMinMax()" class="btn-interactivo" id="btn-grafico-minmax">
                 📊 Ver Gráfico de Barras Verticales
             </button>
 
+            <!-- Contenedor del canvas de Chart.js para el gráfico de mínimo y máximo -->
             <div id="contenedor-grafico-minmax" class="oculto" style="margin-top:20px;">
                 <canvas id="graficaMinMax"></canvas>
             </div>
@@ -523,117 +573,119 @@
     </section>
 
 
-    <!-- SECCION 7: RANGO                                   -->
-
+    <!-- ============================================================
+            SECCIÓN 7: RANGO
+            Explica la diferencia entre el valor máximo y mínimo como
+            medida de dispersión de los datos.
+            ============================================================ -->
     <section id="rango" class="oculto dos-columnas">
+
+        <!-- Columna izquierda: teoría, fórmula y código de consola -->
         <div class="columna-teoria">
             <h2>Rango</h2>
-            <img src="images/rango.jpg" width="50%">
+            <img src="images/rango.jpg" alt="Ilustración del rango estadístico" width="50%">
 
             <h3>Definición</h3>
             <p>
-                El rango es la diferencia entre el valor máximo y el valor
-                mínimo de un conjunto de datos. Nos indica qué tan dispersos
-                o separados están los datos.
+                El rango es la diferencia entre el valor máximo y el valor mínimo de un
+                conjunto de datos. Nos indica qué tan dispersos o separados están los datos.
             </p>
-            <p>
-                <strong>Fórmula:</strong>
-                Rango = Valor Máximo - Valor Mínimo
-            </p>
+            <p><strong>Fórmula:</strong> Rango = Valor Máximo - Valor Mínimo</p>
 
             <h3>Ejemplo</h3>
-            <p>
-                Temperaturas de la semana:
-                <strong>15, 17, 18, 20, 22, 25, 28</strong>
-            </p>
+            <p>Temperaturas de la semana: <strong>15, 17, 18, 20, 22, 25, 28</strong></p>
             <p>Valor máximo: 28</p>
             <p>Valor mínimo: 15</p>
             <p>Rango = 28 - 15 = <strong>13°C</strong></p>
-            <p>
-                Esto significa que la temperatura varió 13 grados
-                durante la semana.
-            </p>
+            <p>Esto significa que la temperatura varió 13 grados durante la semana.</p>
 
-
-            <!-- CAJA CONSOLA  -->
+            <!-- Bloque de código JavaScript que muestra cómo calcular el rango -->
             <h3>¿Cómo se calcula en JavaScript?</h3>
             <pre class="consola">
-            // --- Calcular el RANGO en JavaScript ---
+// --- Calcular el RANGO en JavaScript ---
 
-            let datos = [15, 17, 18, 20, 22, 25, 28];
-            let minimo = datos[0];
-            let maximo = datos[0];
+let listaTemperaturas = [15, 17, 18, 20, 22, 25, 28];
+let valorMinimo = listaTemperaturas[0];
+let valorMaximo = listaTemperaturas[0];
 
-            for (let i = 1; i &lt; datos.length; i++) {
-                if (datos[i] &lt; minimo) {
-                    minimo = datos[i];
-                }
-                if (datos[i] > maximo) {
-                    maximo = datos[i];
-                }
-            }
+for (let indiceTemperatura = 1; indiceTemperatura &lt; listaTemperaturas.length; indiceTemperatura++) {
+    if (listaTemperaturas[indiceTemperatura] &lt; valorMinimo) {
+        valorMinimo = listaTemperaturas[indiceTemperatura];
+    }
+    if (listaTemperaturas[indiceTemperatura] > valorMaximo) {
+        valorMaximo = listaTemperaturas[indiceTemperatura];
+    }
+}
 
-            let rango = maximo - minimo;
-
-            console.log("El rango es: " + rango);
-        </pre>
+let valorRango = valorMaximo - valorMinimo;
+console.log("El rango es: " + valorRango);
+            </pre>
 
         </div><!-- fin columna-teoria -->
+
+        <!-- Columna derecha: botones interactivos y gráfico de barras -->
         <div class="columna-ejercicios">
             <h3>Ejemplo interactivo</h3>
             <p>
-                Al hacer clic, JavaScript calcula el rango restando
-                el valor mínimo al valor máximo del arreglo de
-                <strong>20 estudiantes</strong>.
+                Al hacer clic, JavaScript calcula el rango restando el valor mínimo
+                al valor máximo del arreglo de <strong>20 estudiantes</strong>.
             </p>
 
+            <!-- Botón que activa toggleEjemploRango() en estadistica.js -->
             <button onclick="toggleEjemploRango()" class="btn-interactivo" id="btn-ejemplo-rango">
                 ▶ Calcular Rango
             </button>
 
+            <!-- Contenedor donde se inyecta la tabla de resultados del rango -->
             <div id="resultado-rango" class="oculto"></div>
 
-
-            <!-- GRAFICO DE BARRAS VERTICALES: RANGO                -->
+            <!-- Sección del gráfico de barras verticales del rango -->
             <h3>Gráfico de calificaciones</h3>
             <p>
                 Haz clic para ver el gráfico. Las barras
                 <strong style="color:#ef4444;">roja</strong> y
-                <strong style="color:#22c55e;">verde</strong> marcan
-                el mínimo y el máximo, y la zona entre ellas representa
-                el rango.
+                <strong style="color:#22c55e;">verde</strong> marcan el mínimo y el máximo,
+                y la zona entre ellas representa el rango.
             </p>
 
+            <!-- Botón que activa toggleGraficoRango() en estadistica.js -->
             <button onclick="toggleGraficoRango()" class="btn-interactivo" id="btn-grafico-rango">
                 📊 Ver Gráfico de Barras Verticales
             </button>
 
+            <!-- Contenedor del canvas de Chart.js para el gráfico de rango -->
             <div id="contenedor-grafico-rango" class="oculto" style="margin-top:20px;">
                 <canvas id="graficaRango"></canvas>
             </div>
+
         </div><!-- fin columna-ejercicios -->
     </section>
 
 
-    <!-- SECCION 8: VARIANZA
-
-
-    <!-- SECCION 8: VARIANZA                                -->
+    <!-- ============================================================
+            SECCIÓN 8: VARIANZA
+            Explica la dispersión de los datos respecto a la media,
+            con pasos detallados y código JavaScript.
+            NOTA: Se eliminó el comentario de apertura duplicado que
+            existía antes de esta sección en el código original.
+            ============================================================ -->
     <section id="varianza" class="oculto dos-columnas">
+
+        <!-- Columna izquierda: teoría, pasos, ejemplo y código de consola -->
         <div class="columna-teoria">
             <h2>Varianza</h2>
-            <img src="images/varianza.jpg" width="100%">
+            <img src="images/varianza.jpg" alt="Ilustración de la varianza estadística" width="100%">
 
             <h3>Definición</h3>
             <p>
-                La varianza mide qué tan lejos están los datos respecto a
-                la media (promedio). Si la varianza es alta, los datos están
-                muy dispersos. Si es baja, los datos están cercanos al
-                promedio.
+                La varianza mide qué tan lejos están los datos respecto a la media (promedio).
+                Si la varianza es alta, los datos están muy dispersos. Si es baja, los datos
+                están cercanos al promedio.
             </p>
+
             <p><strong>Pasos para calcularla:</strong></p>
 
-            <!-- Lista ordenada (ol) porque los pasos van en orden -->
+            <!-- Lista ordenada: los pasos deben seguirse en secuencia -->
             <ol>
                 <li>Calcular la media del conjunto.</li>
                 <li>Restar la media a cada valor (obtener las diferencias).</li>
@@ -644,52 +696,41 @@
 
             <h3>Ejemplo</h3>
             <p>Datos: <strong>4, 8, 6, 2, 10</strong></p>
-            <p>
-                Paso 1 - Media:
-                (4 + 8 + 6 + 2 + 10) / 5 = <strong>6</strong>
-            </p>
-            <p>
-                Paso 2 - Diferencias:
-                (4-6), (8-6), (6-6), (2-6), (10-6) = -2, 2, 0, -4, 4
-            </p>
+            <p>Paso 1 - Media: (4 + 8 + 6 + 2 + 10) / 5 = <strong>6</strong></p>
+            <p>Paso 2 - Diferencias: (4-6), (8-6), (6-6), (2-6), (10-6) = -2, 2, 0, -4, 4</p>
             <p>Paso 3 - Cuadrados: 4, 4, 0, 16, 16</p>
-            <p>
-                Paso 4 - Suma de cuadrados:
-                4 + 4 + 0 + 16 + 16 = <strong>40</strong>
-            </p>
+            <p>Paso 4 - Suma de cuadrados: 4 + 4 + 0 + 16 + 16 = <strong>40</strong></p>
             <p>Paso 5 - Varianza: 40 / 5 = <strong>8</strong></p>
             <p>La varianza es <strong>8</strong>.</p>
 
-
-            <!-- CAJA CONSOLA    -->
+            <!-- Bloque de código JavaScript que muestra cómo calcular la varianza -->
             <h3>¿Cómo se calcula en JavaScript?</h3>
             <pre class="consola">
 // --- Calcular la VARIANZA en JavaScript ---
 
-            let datos = [4, 8, 6, 2, 10];
-            let suma = 0;
-            for (let i = 0; i &lt; datos.length; i++) {
-                suma = suma + datos[i];
-            }
-            let media = suma / datos.length;
-            let sumaCuadrados = 0;
+let listaDatos = [4, 8, 6, 2, 10];
+let sumaDatos = 0;
 
-            for (let i = 0; i &lt; datos.length; i++) {
-                let diferencia = datos[i] - media;
-                let cuadrado = diferencia * diferencia;
+for (let indiceDato = 0; indiceDato &lt; listaDatos.length; indiceDato++) {
+    sumaDatos = sumaDatos + listaDatos[indiceDato];
+}
 
-                sumaCuadrados = sumaCuadrados + cuadrado;
-            }
+let valorMedia = sumaDatos / listaDatos.length;
+let sumaCuadradosDiferencias = 0;
 
-            let varianza = sumaCuadrados / datos.length;
+for (let indiceDato = 0; indiceDato &lt; listaDatos.length; indiceDato++) {
+    let valorDiferencia = listaDatos[indiceDato] - valorMedia;
+    let valorCuadrado = valorDiferencia * valorDiferencia;
+    sumaCuadradosDiferencias = sumaCuadradosDiferencias + valorCuadrado;
+}
 
-            console.log("La varianza es: " + varianza);
-        </pre>
-
+let valorVarianza = sumaCuadradosDiferencias / listaDatos.length;
+console.log("La varianza es: " + valorVarianza);
+            </pre>
 
         </div><!-- fin columna-teoria -->
 
-        <!-- EJEMPLO INTERACTIVO: VARIANZA -->
+        <!-- Columna derecha: botones interactivos y gráfico de varianza -->
         <div class="columna-ejercicios">
             <h3>Ejemplo interactivo</h3>
             <p>
@@ -697,97 +738,100 @@
                 de los <strong>20 estudiantes</strong> cargados desde el archivo datos.js.
             </p>
 
+            <!-- Botón que activa toggleEjemploVarianza() en estadistica.js -->
             <button onclick="toggleEjemploVarianza()" class="btn-interactivo" id="btn-ejemplo-varianza">
                 ▶ Calcular Varianza
             </button>
 
+            <!-- Contenedor donde se inyecta la tabla de resultados de la varianza -->
             <div id="resultado-varianza" class="oculto"></div>
 
-            <!-- GRAFICO DE VARIANZA -->
+            <!-- Sección del gráfico de desviaciones respecto a la media -->
             <h3>Gráfico de desviaciones respecto a la media</h3>
             <p>
-                Haz clic para ver un gráfico donde se comparan las calificaciones
-                con la media del grupo. Esto permite visualizar qué tan alejados
-                están los datos respecto al promedio.
+                Haz clic para ver un gráfico donde se comparan las calificaciones con la
+                media del grupo. Esto permite visualizar qué tan alejados están los datos
+                respecto al promedio.
             </p>
 
+            <!-- Botón que activa toggleGraficoVarianza() en estadistica.js -->
             <button onclick="toggleGraficoVarianza()" class="btn-interactivo" id="btn-grafico-varianza">
                 📊 Ver Gráfico de Varianza
             </button>
 
+            <!-- Contenedor del canvas de Chart.js para el gráfico de varianza -->
             <div id="contenedor-grafico-varianza" class="oculto" style="margin-top:20px;">
                 <canvas id="graficaVarianza"></canvas>
             </div>
+
         </div><!-- fin columna-ejercicios -->
     </section>
 
 
-    <!-- SECCION 9: DESVIACION
-
-
-    <!-- SECCION 9: DESVIACION ESTANDAR                     -->
+    <!-- ============================================================
+            SECCIÓN 9: DESVIACIÓN ESTÁNDAR
+            Explica la raíz cuadrada de la varianza como medida de
+            dispersión en las mismas unidades que los datos originales.
+            NOTA: Se eliminó el comentario de apertura duplicado que
+            existía antes de esta sección en el código original.
+            ============================================================ -->
     <section id="desviacion" class="oculto dos-columnas">
+
+        <!-- Columna izquierda: teoría, fórmula, ejemplo y código de consola -->
         <div class="columna-teoria">
             <h2>Desviación Estándar</h2>
-            <img src="images/desv_estandar.jpeg" width="100%">
+            <img src="images/desv_estandar.jpeg" alt="Ilustración de la desviación estándar" width="100%">
 
             <h3>Definición</h3>
             <p>
-                La desviación estándar es la raíz cuadrada de la varianza.
-                Nos indica, en las mismas unidades de los datos originales,
-                qué tanto se desvían los valores respecto a la media.
+                La desviación estándar es la raíz cuadrada de la varianza. Nos indica,
+                en las mismas unidades de los datos originales, qué tanto se desvían
+                los valores respecto a la media.
             </p>
+            <p><strong>Fórmula:</strong> Desviación Estándar = √Varianza</p>
             <p>
-                <strong>Fórmula:</strong>
-                Desviación Estándar = √Varianza
-            </p>
-            <p>
-                Una desviación estándar baja indica que los datos están
-                agrupados cerca del promedio. Una desviación alta indica
-                que están muy dispersos.
+                Una desviación estándar baja indica que los datos están agrupados cerca
+                del promedio. Una desviación alta indica que están muy dispersos.
             </p>
 
             <h3>Ejemplo</h3>
-            <p>
-                Usando los datos del ejemplo anterior:
-                <strong>4, 8, 6, 2, 10</strong>
-            </p>
+            <p>Usando los datos del ejemplo anterior: <strong>4, 8, 6, 2, 10</strong></p>
             <p>Ya calculamos que la varianza es <strong>8</strong>.</p>
+            <p>Desviación estándar = √8 = <strong>2.83</strong> (aproximadamente)</p>
             <p>
-                Desviación estándar = √8 = <strong>2.83</strong>
-                (aproximadamente)
-            </p>
-            <p>
-                Esto significa que, en promedio, los datos se desvían
-                2.83 unidades respecto a la media de 6.
+                Esto significa que, en promedio, los datos se desvían 2.83 unidades
+                respecto a la media de 6.
             </p>
 
-
-            <!-- CAJA CONSOLA   -->
-
+            <!-- Bloque de código JavaScript que muestra cómo calcular la desviación estándar -->
             <h3>¿Cómo se calcula en JavaScript?</h3>
             <pre class="consola">
-            // --- Calcular la DESVIACION ESTANDAR en JavaScript ---
+// --- Calcular la DESVIACIÓN ESTÁNDAR en JavaScript ---
 
-            let datos = [4, 8, 6, 2, 10];
-            let suma = 0;
-            for (let i = 0; i &lt; datos.length; i++) {
-                suma = suma + datos[i];
-            }
-            let media = suma / datos.length;
-            let sumaCuadrados = 0;
-            for (let i = 0; i &lt; datos.length; i++) {
-                let diferencia = datos[i] - media;
-                sumaCuadrados = sumaCuadrados + (diferencia * diferencia);
-            }
-            let varianza = sumaCuadrados / datos.length;
-            let desviacion = Math.sqrt(varianza);
+let listaDatos = [4, 8, 6, 2, 10];
+let sumaDatos = 0;
 
-            console.log("La desviacion estandar es: " + desviacion.toFixed(2));
+for (let indiceDato = 0; indiceDato &lt; listaDatos.length; indiceDato++) {
+    sumaDatos = sumaDatos + listaDatos[indiceDato];
+}
 
-        </pre>
+let valorMedia = sumaDatos / listaDatos.length;
+let sumaCuadradosDiferencias = 0;
+
+for (let indiceDato = 0; indiceDato &lt; listaDatos.length; indiceDato++) {
+    let valorDiferencia = listaDatos[indiceDato] - valorMedia;
+    sumaCuadradosDiferencias = sumaCuadradosDiferencias + (valorDiferencia * valorDiferencia);
+}
+
+let valorVarianza = sumaCuadradosDiferencias / listaDatos.length;
+let valorDesviacion = Math.sqrt(valorVarianza);
+
+console.log("La desviación estándar es: " + valorDesviacion.toFixed(2));
+            </pre>
 
         </div><!-- fin columna-teoria -->
+
+        <!-- Columna derecha: botones interactivos y gráfico de desviación -->
         <div class="columna-ejercicios">
             <h3>Ejemplo interactivo</h3>
             <p>
@@ -795,30 +839,41 @@
                 calificaciones de los <strong>20 estudiantes</strong> cargados desde datos.js.
             </p>
 
+            <!-- Botón que activa toggleEjemploDesviacion() en estadistica.js -->
             <button onclick="toggleEjemploDesviacion()" class="btn-interactivo" id="btn-ejemplo-desviacion">
                 ▶ Calcular Desviación Estándar
             </button>
 
+            <!-- Contenedor donde se inyecta la tabla de resultados de la desviación estándar -->
             <div id="resultado-desviacion" class="oculto"></div>
 
-            <!-- GRAFICO DE DESVIACION ESTANDAR -->
+            <!-- Sección del gráfico de desviación estándar -->
             <h3>Gráfico de desviación estándar</h3>
             <p>
-                Haz clic para ver un gráfico donde se comparan las calificaciones
-                con la media y se muestra visualmente la dispersión de los datos.
+                Haz clic para ver un gráfico donde se comparan las calificaciones con la
+                media y se muestra visualmente la dispersión de los datos.
             </p>
 
+            <!-- Botón que activa toggleGraficoDesviacion() en estadistica.js -->
             <button onclick="toggleGraficoDesviacion()" class="btn-interactivo" id="btn-grafico-desviacion">
                 📊 Ver Gráfico de Desviación Estándar
             </button>
 
+            <!-- Contenedor del canvas de Chart.js para el gráfico de desviación estándar -->
             <div id="contenedor-grafico-desviacion" class="oculto" style="margin-top:20px;">
                 <canvas id="graficaDesviacion"></canvas>
             </div>
+
         </div><!-- fin columna-ejercicios -->
     </section>
 
-    <!-- SECCION 10: TEST DE EVALUACION -->
+
+    <!-- ============================================================
+            SECCIÓN 10: TEST DE EVALUACIÓN
+            Cuestionario generado dinámicamente desde PREGUNTASTEST
+            (definido en estadistica.js). El usuario responde y recibe
+            una calificación sobre 10 puntos.
+            ============================================================ -->
     <section id="test" class="oculto">
         <h2>Test de Evaluación</h2>
 
@@ -827,26 +882,37 @@
             Al finalizar, presiona el botón para conocer tu calificación.
         </p>
 
+        <!-- Contenedor donde generarTest() inyecta las preguntas dinámicamente -->
         <div id="contenedor-test"></div>
 
+        <!-- Botón para enviar y calificar las respuestas del test -->
         <button onclick="calificarTest()" class="btn-interactivo">
             Calificar Test
         </button>
 
+        <!-- Botón para limpiar respuestas y reiniciar el test desde cero -->
         <button onclick="reiniciarTest()" class="btn-interactivo">
             Reiniciar Test
         </button>
 
+        <!-- Contenedor donde se muestra el resultado final del test -->
         <div id="resultado-test"></div>
     </section>
 
-    <!-- EJERCICIO PRACTICO-->
 
+    <!-- ============================================================
+            SECCIÓN 11: EJERCICIO PRÁCTICO
+            Aplica todas las medidas estadísticas sobre un dataset real
+            de 200 registros de uso de redes sociales (Kaggle 2024).
+            Columna izquierda: contexto y vista previa del dataset.
+            Columna derecha: 7 subsecciones estadísticas interactivas.
+        ============================================================ -->
     <section id="ejercicio-practico" class="oculto dos-columnas">
 
+        <!-- Columna izquierda: descripción del dataset y tabla de previsualización -->
         <div class="columna-teoria">
             <h2>Ejercicio Práctico</h2>
-            <img src="images/social_media.jpeg" width="50%">
+            <img src="images/social_media.jpeg" alt="Imagen de redes sociales" width="50%">
 
             <h3>Contexto del dataset</h3>
             <p>
@@ -858,8 +924,10 @@
             </p>
             <p>
                 Cada registro representa el comportamiento diario de un usuario en
-                una red social específica en USA en el año 2024 . Las variables registradas son:
+                una red social específica en USA en el año 2024. Las variables registradas son:
             </p>
+
+            <!-- Lista de variables del dataset con su descripción -->
             <ul>
                 <li><strong>App:</strong> red social utilizada (Instagram, TikTok, Facebook, etc.)</li>
                 <li><strong>Daily_Minutes_Spent:</strong> minutos diarios que el usuario pasa en la app</li>
@@ -868,13 +936,14 @@
                 <li><strong>Follows_Per_Day:</strong> cuentas seguidas por día</li>
             </ul>
 
-            <!-- TABLA DE MUESTRA: primeros 10 registros del dataset -->
+            <!-- Tabla de previsualización: primeros 10 registros del dataset -->
             <h3>Vista previa del dataset</h3>
             <p>
                 Los primeros <strong>10 registros</strong> del dataset para
                 entender la estructura de los datos que se van a analizar:
             </p>
 
+            <!-- Contenedor de la tabla de previsualización del dataset -->
             <div id="contenedor-tabla-preview">
                 <table id="tabla-preview-dataset" class="tabla-interactiva">
                     <thead>
@@ -888,22 +957,25 @@
                             <th>Follows / Día</th>
                         </tr>
                     </thead>
+                    <!-- El tbody es llenado dinámicamente por cargarTablaPreviewDataset() en estadistica.js -->
                     <tbody id="cuerpo-tabla-preview">
                     </tbody>
                 </table>
             </div>
 
             <p>
-                El objetivo de este ejercicio es buscar algunas métricas a traves de la estadistica</strong>
-                para compararlas en cada red social.
+                El objetivo de este ejercicio es calcular métricas estadísticas
+                para comparar el comportamiento de los usuarios en cada red social.
             </p>
         </div>
 
-        <!-- ── COLUMNA DERECHA: 8 subsecciones estadísticas ──────── -->
+        <!-- Columna derecha: 7 subsecciones estadísticas interactivas -->
         <div class="columna-ejercicios">
 
             <!-- ================================================== -->
             <!-- SUBSECCIÓN 1: MEDIA                                 -->
+            <!-- Agrupa los 200 registros por App y calcula la media -->
+            <!-- de Daily_Minutes_Spent para cada red social.        -->
             <!-- ================================================== -->
             <div class="subseccion-interactiva" id="sub-ep-media">
                 <h4>📘 Media — Minutos diarios por App</h4>
@@ -913,19 +985,23 @@
                     <strong>Daily_Minutes_Spent</strong> para cada red social.
                 </p>
 
+                <!-- Botón que activa toggleEjercicioPractico() en estadistica.js -->
                 <button onclick="toggleEjercicioPractico()" class="btn-interactivo" id="btn-ejercicio-practico">
                     ▶ Calcular Media por App
                 </button>
 
+                <!-- Contenedor donde se inyecta la tabla de media por App -->
                 <div id="resultado-ejercicio" class="oculto"></div>
 
                 <h4>📊 Gráfico comparativo</h4>
                 <p>Gráfico de barras con la media de minutos diarios por red social.</p>
 
+                <!-- Botón que activa toggleGraficoEjercicio() en estadistica.js -->
                 <button onclick="toggleGraficoEjercicio()" class="btn-interactivo" id="btn-grafico-ejercicio">
                     📊 Ver Gráfico Comparativo
                 </button>
 
+                <!-- Contenedor del canvas de Chart.js para el gráfico de media por App -->
                 <div id="contenedor-grafico-ejercicio" class="oculto" style="margin-top:16px;">
                     <canvas id="graficaEjercicio"></canvas>
                 </div>
@@ -933,6 +1009,8 @@
 
             <!-- ================================================== -->
             <!-- SUBSECCIÓN 2: MEDIANA                               -->
+            <!-- Ordena los 200 valores y encuentra el valor central -->
+            <!-- de Daily_Minutes_Spent en el dataset completo.      -->
             <!-- ================================================== -->
             <div class="subseccion-interactiva" id="sub-ep-mediana">
                 <h4>📗 Mediana — Minutos diarios</h4>
@@ -942,20 +1020,24 @@
                     y encuentra el valor central del dataset completo.
                 </p>
 
+                <!-- Botón que activa toggleEjercicioMediana() en estadistica.js -->
                 <button onclick="toggleEjercicioMediana()" class="btn-interactivo" id="btn-ejercicio-mediana">
                     ▶ Calcular Mediana
                 </button>
 
+                <!-- Contenedor donde se inyecta el resultado de la mediana -->
                 <div id="resultado-ejercicio-mediana" class="oculto"></div>
 
                 <h4>📊 Gráfico de distribución</h4>
                 <p>Valores ordenados con la línea de mediana como referencia visual.</p>
 
+                <!-- Botón que activa toggleGraficoEjercicioMediana() en estadistica.js -->
                 <button onclick="toggleGraficoEjercicioMediana()" class="btn-interactivo"
                     id="btn-grafico-ejercicio-mediana">
                     📊 Ver Gráfico de Distribución
                 </button>
 
+                <!-- Contenedor del canvas de Chart.js para el gráfico de mediana del ejercicio -->
                 <div id="contenedor-grafico-ejercicio-mediana" class="oculto" style="margin-top:16px;">
                     <canvas id="graficaEjercicioMediana"></canvas>
                 </div>
@@ -963,6 +1045,8 @@
 
             <!-- ================================================== -->
             <!-- SUBSECCIÓN 3: MODA                                  -->
+            <!-- Cuenta cuántas veces aparece cada App y determina   -->
+            <!-- cuál es la red social más representada.             -->
             <!-- ================================================== -->
             <div class="subseccion-interactiva" id="sub-ep-moda">
                 <h4>📙 Moda — App más frecuente</h4>
@@ -972,19 +1056,23 @@
                     cuál es la red social más representada en el dataset.
                 </p>
 
+                <!-- Botón que activa toggleEjercicioModa() en estadistica.js -->
                 <button onclick="toggleEjercicioModa()" class="btn-interactivo" id="btn-ejercicio-moda">
                     ▶ Calcular Moda
                 </button>
 
+                <!-- Contenedor donde se inyecta el resultado de la moda -->
                 <div id="resultado-ejercicio-moda" class="oculto"></div>
 
                 <h4>📊 Gráfico de frecuencias</h4>
                 <p>La barra más alta representa la App que más se repite (moda).</p>
 
+                <!-- Botón que activa toggleGraficoEjercicioModa() en estadistica.js -->
                 <button onclick="toggleGraficoEjercicioModa()" class="btn-interactivo" id="btn-grafico-ejercicio-moda">
                     📊 Ver Gráfico de Frecuencias
                 </button>
 
+                <!-- Contenedor del canvas de Chart.js para el gráfico de moda del ejercicio -->
                 <div id="contenedor-grafico-ejercicio-moda" class="oculto" style="margin-top:16px;">
                     <canvas id="graficaEjercicioModa"></canvas>
                 </div>
@@ -992,19 +1080,22 @@
 
             <!-- ================================================== -->
             <!-- SUBSECCIÓN 4: MÍNIMO Y MÁXIMO                       -->
+            <!-- Encuentra el valor más bajo y más alto de           -->
+            <!-- Daily_Minutes_Spent en los 200 registros.           -->
             <!-- ================================================== -->
             <div class="subseccion-interactiva" id="sub-ep-minmax">
                 <h4>📕 Mínimo y Máximo — Minutos diarios</h4>
                 <p>
-                    JavaScript recorre los 200 registros y encuentra el valor
-                    más bajo y el más alto de <strong>Daily_Minutes_Spent</strong>
-                    en todo el dataset.
+                    JavaScript recorre los 200 registros y encuentra el valor más bajo
+                    y el más alto de <strong>Daily_Minutes_Spent</strong> en todo el dataset.
                 </p>
 
+                <!-- Botón que activa toggleEjercicioMinMax() en estadistica.js -->
                 <button onclick="toggleEjercicioMinMax()" class="btn-interactivo" id="btn-ejercicio-minmax">
                     ▶ Calcular Mínimo y Máximo
                 </button>
 
+                <!-- Contenedor donde se inyecta el resultado de mínimo y máximo -->
                 <div id="resultado-ejercicio-minmax" class="oculto"></div>
 
                 <h4>📊 Gráfico de extremos</h4>
@@ -1013,11 +1104,13 @@
                     y la barra <strong style="color:#22c55e;">verde</strong> es el máximo.
                 </p>
 
+                <!-- Botón que activa toggleGraficoEjercicioMinMax() en estadistica.js -->
                 <button onclick="toggleGraficoEjercicioMinMax()" class="btn-interactivo"
                     id="btn-grafico-ejercicio-minmax">
                     📊 Ver Gráfico de Extremos
                 </button>
 
+                <!-- Contenedor del canvas de Chart.js para el gráfico de mínimo y máximo del ejercicio -->
                 <div id="contenedor-grafico-ejercicio-minmax" class="oculto" style="margin-top:16px;">
                     <canvas id="graficaEjercicioMinMax"></canvas>
                 </div>
@@ -1025,29 +1118,35 @@
 
             <!-- ================================================== -->
             <!-- SUBSECCIÓN 5: RANGO                                 -->
+            <!-- Calcula la diferencia entre el máximo y el mínimo   -->
+            <!-- de Daily_Minutes_Spent en el dataset completo.      -->
             <!-- ================================================== -->
             <div class="subseccion-interactiva" id="sub-ep-rango">
                 <h4>📒 Rango — Amplitud de minutos diarios</h4>
                 <p>
-                    JavaScript calcula la diferencia entre el valor máximo y
-                    el mínimo de <strong>Daily_Minutes_Spent</strong> para
-                    conocer la amplitud total del dataset.
+                    JavaScript calcula la diferencia entre el valor máximo y el mínimo
+                    de <strong>Daily_Minutes_Spent</strong> para conocer la amplitud
+                    total del dataset.
                 </p>
 
+                <!-- Botón que activa toggleEjercicioRango() en estadistica.js -->
                 <button onclick="toggleEjercicioRango()" class="btn-interactivo" id="btn-ejercicio-rango">
                     ▶ Calcular Rango
                 </button>
 
+                <!-- Contenedor donde se inyecta el resultado del rango -->
                 <div id="resultado-ejercicio-rango" class="oculto"></div>
 
                 <h4>📊 Gráfico de amplitud</h4>
                 <p>Visualiza la distancia entre el valor mínimo y el máximo del dataset.</p>
 
+                <!-- Botón que activa toggleGraficoEjercicioRango() en estadistica.js -->
                 <button onclick="toggleGraficoEjercicioRango()" class="btn-interactivo"
                     id="btn-grafico-ejercicio-rango">
                     📊 Ver Gráfico de Amplitud
                 </button>
 
+                <!-- Contenedor del canvas de Chart.js para el gráfico de rango del ejercicio -->
                 <div id="contenedor-grafico-ejercicio-rango" class="oculto" style="margin-top:16px;">
                     <canvas id="graficaEjercicioRango"></canvas>
                 </div>
@@ -1055,29 +1154,34 @@
 
             <!-- ================================================== -->
             <!-- SUBSECCIÓN 6: VARIANZA                              -->
+            <!-- Calcula la dispersión de los 200 valores de         -->
+            <!-- Daily_Minutes_Spent respecto a la media.            -->
             <!-- ================================================== -->
             <div class="subseccion-interactiva" id="sub-ep-varianza">
                 <h4>📓 Varianza — Dispersión de minutos diarios</h4>
                 <p>
-                    JavaScript calcula qué tan dispersos están los 200 valores
-                    de <strong>Daily_Minutes_Spent</strong> respecto a la media
-                    del dataset completo.
+                    JavaScript calcula qué tan dispersos están los 200 valores de
+                    <strong>Daily_Minutes_Spent</strong> respecto a la media del dataset completo.
                 </p>
 
+                <!-- Botón que activa toggleEjercicioVarianza() en estadistica.js -->
                 <button onclick="toggleEjercicioVarianza()" class="btn-interactivo" id="btn-ejercicio-varianza">
                     ▶ Calcular Varianza
                 </button>
 
+                <!-- Contenedor donde se inyecta el resultado de la varianza del ejercicio -->
                 <div id="resultado-ejercicio-varianza" class="oculto"></div>
 
                 <h4>📊 Gráfico de desviaciones</h4>
                 <p>Compara cada valor con la media y visualiza la dispersión del dataset.</p>
 
+                <!-- Botón que activa toggleGraficoEjercicioVarianza() en estadistica.js -->
                 <button onclick="toggleGraficoEjercicioVarianza()" class="btn-interactivo"
                     id="btn-grafico-ejercicio-varianza">
                     📊 Ver Gráfico de Desviaciones
                 </button>
 
+                <!-- Contenedor del canvas de Chart.js para el gráfico de varianza del ejercicio -->
                 <div id="contenedor-grafico-ejercicio-varianza" class="oculto" style="margin-top:16px;">
                     <canvas id="graficaEjercicioVarianza"></canvas>
                 </div>
@@ -1085,48 +1189,61 @@
 
             <!-- ================================================== -->
             <!-- SUBSECCIÓN 7: DESVIACIÓN ESTÁNDAR                   -->
+            <!-- Calcula la raíz cuadrada de la varianza de          -->
+            <!-- Daily_Minutes_Spent en los 200 registros.           -->
             <!-- ================================================== -->
             <div class="subseccion-interactiva" id="sub-ep-desviacion">
                 <h4>📔 Desviación Estándar — Minutos diarios</h4>
                 <p>
                     JavaScript calcula la raíz cuadrada de la varianza de
-                    <strong>Daily_Minutes_Spent</strong> para obtener la
-                    dispersión en las mismas unidades que los datos originales.
+                    <strong>Daily_Minutes_Spent</strong> para obtener la dispersión
+                    en las mismas unidades que los datos originales.
                 </p>
 
+                <!-- Botón que activa toggleEjercicioDesviacion() en estadistica.js -->
                 <button onclick="toggleEjercicioDesviacion()" class="btn-interactivo" id="btn-ejercicio-desviacion">
                     ▶ Calcular Desviación Estándar
                 </button>
 
+                <!-- Contenedor donde se inyecta el resultado de la desviación estándar del ejercicio -->
                 <div id="resultado-ejercicio-desviacion" class="oculto"></div>
 
                 <h4>📊 Gráfico de dispersión</h4>
                 <p>Muestra visualmente qué tan alejados están los datos respecto al promedio.</p>
 
+                <!-- Botón que activa toggleGraficoEjercicioDesviacion() en estadistica.js -->
                 <button onclick="toggleGraficoEjercicioDesviacion()" class="btn-interactivo"
                     id="btn-grafico-ejercicio-desviacion">
                     📊 Ver Gráfico de Dispersión
                 </button>
 
+                <!-- Contenedor del canvas de Chart.js para el gráfico de desviación del ejercicio -->
                 <div id="contenedor-grafico-ejercicio-desviacion" class="oculto" style="margin-top:16px;">
                     <canvas id="graficaEjercicioDesviacion"></canvas>
                 </div>
             </div>
 
-        </div>
-        <!-- FIN columna-ejercicios -->
+        </div><!-- fin columna-ejercicios -->
     </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="datos.js"></script> <!-- fuente de datos de ejemplo -->
-    <script src="social_media_200.js"></script> <!-- fuente de datos para Ejercicio practico -->
-    <script src="funciones_estadisticas/media.js"></script> <!-- funcion de calculo de media -->
-    <script src="funciones_estadisticas/mediana.js"></script> <!-- funcion de calculo de mediana -->
-    <script src="funciones_estadisticas/moda.js"></script> <!-- funcion de calculo de moda -->
-    <script src="funciones_estadisticas/minMax.js"></script> <!-- funcion de calculo de minimo y maximo de una lista -->
-    <script src="funciones_estadisticas/rango.js"></script> <!-- funcion de calculo deñl rango de una lista  -->
 
-    <script src="estadistica.js"></script> <!-- llama a funciones de calculo y procesa el dibujado en la pagina -->
+        <!-- ============================================================
+            SCRIPTS — Orden de carga obligatorio:
+            1. Chart.js (CDN): librería de gráficos, debe cargarse primero
+            2. datos.js: arreglo de 20 estudiantes para los ejemplos
+            3. social_media_200.js: 200 registros para el ejercicio práctico
+            4. Funciones estadísticas individuales (media, mediana, etc.)
+            5. estadistica.js: controlador principal que usa todas las anteriores
+            ============================================================ -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="datos.js"></script>
+    <script src="social_media_200.js"></script>
+    <script src="funciones_estadisticas/media.js"></script>
+    <script src="funciones_estadisticas/mediana.js"></script>
+    <script src="funciones_estadisticas/moda.js"></script>
+    <script src="funciones_estadisticas/minMax.js"></script>
+    <script src="funciones_estadisticas/rango.js"></script>
+    <script src="estadistica.js"></script>
 
 </body>
 
