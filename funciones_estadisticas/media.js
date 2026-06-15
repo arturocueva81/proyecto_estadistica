@@ -28,7 +28,7 @@
 // Se usa 'var' (no 'let') para evitar errores si el navegador
 // carga el archivo más de una vez.
 // ------------------------------------------------------------
-var instanciaGraficoMedia = null;
+let instanciaGraficoMedia = null;
 
 
 // ------------------------------------------------------------
