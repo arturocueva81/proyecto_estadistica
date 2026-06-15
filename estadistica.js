@@ -428,7 +428,7 @@ function toggleGraficoMinMax() {
 
 // Variable de control para la instancia del gráfico de rango (Chart.js)
 // NOTA: Esta declaración faltaba en el código original y causaba error de referencia
-let instanciaGraficoRango = null;
+let graficoRangoEjemploInstancia = null;
 
 /**
  * Funcion: toggleEjemploRango
@@ -469,13 +469,13 @@ function toggleGraficoRango() {
         botonInteractivo.textContent = '📊 Ver Gráfico de Barras Verticales';
 
         // CONDICIONAL: Se destruye la instancia previa si existe
-        if (instanciaGraficoRango !== null) {
+        if (graficoRangoEjemploInstancia !== null) {
             try {
-                instanciaGraficoRango.destroy();
+                graficoRangoEjemploInstancia.destroy();
             } catch (errorDestruccion) {
                 // Se ignora el error si la instancia ya no es válida
             }
-            instanciaGraficoRango = null;
+            graficoRangoEjemploInstancia = null;
         }
         return;
     }
@@ -521,7 +521,7 @@ let graficoVarianzaInstancia = null;
  * Realiza el cálculo matemático completo de la varianza poblacional
  * a partir de un arreglo de calificaciones numéricas.
  */
-function calcularVarianzaDesdeArreglo(listaCalificaciones) {
+function calcularVarianzaEjemploDesdeArreglo(listaCalificaciones) {
 
     // Se calcula la suma total de todas las calificaciones
     let sumaCalificaciones = 0;
@@ -573,7 +573,7 @@ function toggleEjemploVarianza() {
 
     // CONDICIONAL: Si está oculto, se genera el HTML del cálculo y se muestra
     if (contenedorResultado.classList.contains('oculto')) {
-        calcularVarianza();
+        calcularVarianzaEjemplo();
         contenedorResultado.classList.remove('oculto');
         botonInteractivo.textContent = '✖ Ocultar Ejemplo';
     } else {
@@ -587,10 +587,10 @@ function toggleEjemploVarianza() {
  * Genera el HTML completo de la tabla interactiva de varianza
  * con el paso a paso del cálculo estadístico.
  */
-function calcularVarianza() {
+function calcularVarianzaEjemplo() {
     let listaEstudiantes = cargarDatos();
     let listaCalificaciones = obtenerCalificaciones(listaEstudiantes);
-    let resultadoEstadistico = calcularVarianzaDesdeArreglo(listaCalificaciones);
+    let resultadoEstadistico = calcularVarianzaEjemploDesdeArreglo(listaCalificaciones);
 
     let contenidoHTML = "";
 
@@ -652,7 +652,7 @@ function toggleGraficoVarianza() {
         canvasNuevo.id = 'graficaVarianza';
         canvasAnterior.parentNode.replaceChild(canvasNuevo, canvasAnterior);
 
-        graficoVarianzaInstancia = dibujarGraficoVarianza();
+        graficoVarianzaInstancia = dibujarGraficoVarianzaEjemplo();
 
     } else {
         // Si está visible, se oculta y se actualiza el texto del botón
@@ -666,10 +666,10 @@ function toggleGraficoVarianza() {
  * Renderiza el gráfico de barras de calificaciones superpuesto con la línea de media.
  * Utiliza Chart.js para la visualización.
  */
-function dibujarGraficoVarianza() {
+function dibujarGraficoVarianzaEjemplo() {
     let listaEstudiantes = cargarDatos();
     let listaCalificaciones = obtenerCalificaciones(listaEstudiantes);
-    let resultadoEstadistico = calcularVarianzaDesdeArreglo(listaCalificaciones);
+    let resultadoEstadistico = calcularVarianzaEjemploDesdeArreglo(listaCalificaciones);
 
     let listaNombresEstudiantes = [];
 
@@ -736,9 +736,9 @@ let graficoDesviacionInstancia = null;
  * Calcula la desviación estándar poblacional a partir de un arreglo numérico.
  * Reutiliza el cálculo de varianza y aplica la raíz cuadrada.
  */
-function calcularDesviacionDesdeArreglo(listaCalificaciones) {
+function calcularDesviacionEjemploDesdeArreglo(listaCalificaciones) {
 
-    let resultadoVarianza = calcularVarianzaDesdeArreglo(listaCalificaciones);
+    let resultadoVarianza = calcularVarianzaEjemploDesdeArreglo(listaCalificaciones);
 
     let valorDesviacion = Math.sqrt(resultadoVarianza.varianza);
 
@@ -762,7 +762,7 @@ function toggleEjemploDesviacion() {
 
     // CONDICIONAL: Si está oculto, se genera el HTML del cálculo y se muestra
     if (contenedorResultado.classList.contains('oculto')) {
-        calcularDesviacion();
+        calcularDesviacionEjemplo();
         contenedorResultado.classList.remove('oculto');
         botonInteractivo.textContent = '✖ Ocultar Ejemplo';
     } else {
@@ -776,10 +776,10 @@ function toggleEjemploDesviacion() {
  * Genera el HTML completo de la tabla interactiva de desviación estándar
  * incluyendo el paso a paso desde la varianza hasta la raíz cuadrada.
  */
-function calcularDesviacion() {
+function calcularDesviacionEjemplo() {
     let listaEstudiantes = cargarDatos();
     let listaCalificaciones = obtenerCalificaciones(listaEstudiantes);
-    let resultadoEstadistico = calcularDesviacionDesdeArreglo(listaCalificaciones);
+    let resultadoEstadistico = calcularDesviacionEjemploDesdeArreglo(listaCalificaciones);
 
     let contenidoHTML = "";
 
@@ -842,7 +842,7 @@ function toggleGraficoDesviacion() {
         canvasNuevo.id = 'graficaDesviacion';
         canvasAnterior.parentNode.replaceChild(canvasNuevo, canvasAnterior);
 
-        graficoDesviacionInstancia = dibujarGraficoDesviacion();
+        graficoDesviacionInstancia = dibujarGraficoDesviacionEjemplo();
 
     } else {
         contenedorResultado.classList.add('oculto');
@@ -855,7 +855,7 @@ function toggleGraficoDesviacion() {
  * Renderiza el gráfico de barras con líneas de media y desviación estándar.
  * Muestra visualmente los límites superior e inferior (media ± desviación).
  */
-function dibujarGraficoDesviacion() {
+function dibujarGraficoDesviacionEjemplo() {
     let listaEstudiantes = cargarDatos();
     let listaCalificaciones = obtenerCalificaciones(listaEstudiantes);
     let resultadoEstadistico = calcularDesviacionDesdeArreglo(listaCalificaciones);
@@ -1460,6 +1460,222 @@ function toggleGraficoEjercicioMediana() {
             COLUMNA_CALCULO_EJERCICIO,
             'graficaEjercicioMediana',
             'Distribución de minutos diarios con línea de mediana',
+            NOMBRE_ETIQUETA_EJERCICIO
+        );
+    }, 50);
+}
+
+// ============================================================
+// BLOQUE 12F: EJERCICIO PRACTICO - VARIANZA
+// ============================================================
+
+// Variable de control para la instancia del gráfico de varianza del ejercicio
+let graficoEjercicioVarianzaInstancia = null;
+
+/**
+ * Funcion: mostrarTablaVarianzaDataset
+ * Muestra la varianza del dataset completo usando varianza.js.
+ */
+function mostrarTablaVarianzaDataset() {
+    let registrosRedesSociales = cargarDatosSocial();
+    let identificadorContenedor = 'resultado-ejercicio-varianza';
+
+    calcularVarianza(
+        registrosRedesSociales,
+        COLUMNA_CALCULO_EJERCICIO,
+        identificadorContenedor,
+        NOMBRE_ETIQUETA_EJERCICIO
+    );
+}
+
+/**
+ * Funcion: toggleEjercicioVarianza
+ * Alterna la visibilidad de la tabla de varianza del ejercicio práctico.
+ */
+function toggleEjercicioVarianza() {
+    let contenedorResultado = document.getElementById('resultado-ejercicio-varianza');
+    let botonInteractivo = document.getElementById('btn-ejercicio-varianza');
+
+    if (!contenedorResultado || !botonInteractivo) {
+        return;
+    }
+
+    if (contenedorResultado.classList.contains('oculto')) {
+        mostrarTablaVarianzaDataset();
+        contenedorResultado.classList.remove('oculto');
+        botonInteractivo.textContent = '✖ Ocultar Tabla';
+    } else {
+        contenedorResultado.classList.add('oculto');
+        botonInteractivo.textContent = '▶ Calcular Varianza';
+    }
+}
+
+/**
+ * Funcion: toggleGraficoEjercicioVarianza
+ * Alterna la visibilidad del gráfico de varianza del ejercicio práctico.
+ */
+function toggleGraficoEjercicioVarianza() {
+    let contenedorResultado = document.getElementById('contenedor-grafico-ejercicio-varianza');
+    let botonInteractivo = document.getElementById('btn-grafico-ejercicio-varianza');
+
+    if (!contenedorResultado || !botonInteractivo) {
+        return;
+    }
+
+    if (!contenedorResultado.classList.contains('oculto')) {
+        contenedorResultado.classList.add('oculto');
+        botonInteractivo.textContent = '📊 Ver Gráfico de Desviaciones';
+
+        if (graficoEjercicioVarianzaInstancia) {
+            try {
+                graficoEjercicioVarianzaInstancia.destroy();
+            } catch (errorDestruccion) {
+                // Se ignora el error si la instancia ya no es válida
+            }
+
+            graficoEjercicioVarianzaInstancia = null;
+        }
+
+        return;
+    }
+
+    contenedorResultado.classList.remove('oculto');
+    botonInteractivo.textContent = '✖ Ocultar Gráfico';
+
+    if (graficoEjercicioVarianzaInstancia) {
+        try {
+            graficoEjercicioVarianzaInstancia.destroy();
+        } catch (errorDestruccion) {
+            // Se ignora el error si la instancia ya no es válida
+        }
+
+        graficoEjercicioVarianzaInstancia = null;
+    }
+
+    let canvasAnterior = document.getElementById('graficaEjercicioVarianza');
+
+    if (!canvasAnterior) {
+        return;
+    }
+
+    let canvasNuevo = document.createElement('canvas');
+    canvasNuevo.id = 'graficaEjercicioVarianza';
+    canvasAnterior.parentNode.replaceChild(canvasNuevo, canvasAnterior);
+
+    setTimeout(function () {
+        graficoEjercicioVarianzaInstancia = dibujarGraficoVarianza(
+            cargarDatosSocial(),
+            COLUMNA_CALCULO_EJERCICIO,
+            'graficaEjercicioVarianza',
+            'Varianza de minutos diarios en redes sociales',
+            NOMBRE_ETIQUETA_EJERCICIO
+        );
+    }, 50);
+}
+
+// ============================================================
+// BLOQUE 12G: EJERCICIO PRACTICO - DESVIACION ESTANDAR
+// ============================================================
+
+// Variable de control para la instancia del gráfico de desviación del ejercicio
+let graficoEjercicioDesviacionInstancia = null;
+
+/**
+ * Funcion: mostrarTablaDesviacionDataset
+ * Muestra la desviación estándar del dataset completo usando desviacion.js.
+ */
+function mostrarTablaDesviacionDataset() {
+    let registrosRedesSociales = cargarDatosSocial();
+    let identificadorContenedor = 'resultado-ejercicio-desviacion';
+
+    calcularDesviacion(
+        registrosRedesSociales,
+        COLUMNA_CALCULO_EJERCICIO,
+        identificadorContenedor,
+        NOMBRE_ETIQUETA_EJERCICIO
+    );
+}
+
+/**
+ * Funcion: toggleEjercicioDesviacion
+ * Alterna la visibilidad de la tabla de desviación estándar del ejercicio práctico.
+ */
+function toggleEjercicioDesviacion() {
+    let contenedorResultado = document.getElementById('resultado-ejercicio-desviacion');
+    let botonInteractivo = document.getElementById('btn-ejercicio-desviacion');
+
+    if (!contenedorResultado || !botonInteractivo) {
+        return;
+    }
+
+    if (contenedorResultado.classList.contains('oculto')) {
+        mostrarTablaDesviacionDataset();
+        contenedorResultado.classList.remove('oculto');
+        botonInteractivo.textContent = '✖ Ocultar Tabla';
+    } else {
+        contenedorResultado.classList.add('oculto');
+        botonInteractivo.textContent = '▶ Calcular Desviación Estándar';
+    }
+}
+
+/**
+ * Funcion: toggleGraficoEjercicioDesviacion
+ * Alterna la visibilidad del gráfico de desviación estándar del ejercicio práctico.
+ */
+function toggleGraficoEjercicioDesviacion() {
+    let contenedorResultado = document.getElementById('contenedor-grafico-ejercicio-desviacion');
+    let botonInteractivo = document.getElementById('btn-grafico-ejercicio-desviacion');
+
+    if (!contenedorResultado || !botonInteractivo) {
+        return;
+    }
+
+    if (!contenedorResultado.classList.contains('oculto')) {
+        contenedorResultado.classList.add('oculto');
+        botonInteractivo.textContent = '📊 Ver Gráfico de Desviación Estándar';
+
+        if (graficoEjercicioDesviacionInstancia) {
+            try {
+                graficoEjercicioDesviacionInstancia.destroy();
+            } catch (errorDestruccion) {
+                // Se ignora el error si la instancia ya no es válida
+            }
+
+            graficoEjercicioDesviacionInstancia = null;
+        }
+
+        return;
+    }
+
+    contenedorResultado.classList.remove('oculto');
+    botonInteractivo.textContent = '✖ Ocultar Gráfico';
+
+    if (graficoEjercicioDesviacionInstancia) {
+        try {
+            graficoEjercicioDesviacionInstancia.destroy();
+        } catch (errorDestruccion) {
+            // Se ignora el error si la instancia ya no es válida
+        }
+
+        graficoEjercicioDesviacionInstancia = null;
+    }
+
+    let canvasAnterior = document.getElementById('graficaEjercicioDesviacion');
+
+    if (!canvasAnterior) {
+        return;
+    }
+
+    let canvasNuevo = document.createElement('canvas');
+    canvasNuevo.id = 'graficaEjercicioDesviacion';
+    canvasAnterior.parentNode.replaceChild(canvasNuevo, canvasAnterior);
+
+    setTimeout(function () {
+        graficoEjercicioDesviacionInstancia = dibujarGraficoDesviacion(
+            cargarDatosSocial(),
+            COLUMNA_CALCULO_EJERCICIO,
+            'graficaEjercicioDesviacion',
+            'Desviación estándar de minutos diarios en redes sociales',
             NOMBRE_ETIQUETA_EJERCICIO
         );
     }, 50);
