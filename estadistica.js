@@ -1312,15 +1312,15 @@ function cargarTablaPreviewDataset() {
     // BUCLE: Se recorren únicamente los primeros 10 registros del dataset
     for (let indiceFila = 0; indiceFila < 10 && indiceFila < registrosRedesSociales.length; indiceFila++) {
         let registroRedSocial = registrosRedesSociales[indiceFila];
-        filasTablaHTML += "<​tr>";
-        filasTablaHTML += "<​td>" + (indiceFila + 1) + "<​/td>";
-        filasTablaHTML += "<​td>" + registroRedSocial.User_ID + "<​/td>";
-        filasTablaHTML += "<​td>" + registroRedSocial.App + "<​/td>";
-        filasTablaHTML += "<​td>" + registroRedSocial.Daily_Minutes_Spent + "<​/td>";
-        filasTablaHTML += "<​td>" + registroRedSocial.Posts_Per_Day + "<​/td>";
-        filasTablaHTML += "<​td>" + registroRedSocial.Likes_Per_Day + "<​/td>";
-        filasTablaHTML += "<​td>" + registroRedSocial.Follows_Per_Day + "<​/td>";
-        filasTablaHTML += "<​/tr>";
+        filasTablaHTML += "<tr>";
+        filasTablaHTML += "<td>" + (indiceFila + 1) + "</td>";
+        filasTablaHTML += "<td>" + registroRedSocial.User_ID + "</td>";
+        filasTablaHTML += "<td>" + registroRedSocial.App + "</td>";
+        filasTablaHTML += "<td>" + registroRedSocial.Daily_Minutes_Spent + "</td>";
+        filasTablaHTML += "<td>" + registroRedSocial.Posts_Per_Day + "</td>";
+        filasTablaHTML += "<td>" + registroRedSocial.Likes_Per_Day + "<​td>";
+        filasTablaHTML += "<td>" + registroRedSocial.Follows_Per_Day + "</td>";
+        filasTablaHTML += "</tr>";
     }
 
     cuerpoTablaPreview.innerHTML = filasTablaHTML;
