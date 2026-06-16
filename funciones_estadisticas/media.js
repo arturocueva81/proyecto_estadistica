@@ -2,474 +2,436 @@
 // media.js — Cálculo y visualización de la Media Aritmética
 // ============================================================
 // Este archivo contiene TODAS las funciones relacionadas con
-// la media aritmética: cálculo, tabla HTML y gráfico Chart.js.
+// la media: cálculo matemático, tabla HTML y gráfico Chart.js.
 //
-// Funciones públicas (se llaman desde estadistica.js):
-//   - calcularMedia(...)   → calcula y muestra la tabla
-//   - dibujarGrafico(...)  → dibuja el gráfico Chart.js
+// Funciones públicas:
+//   - calcularMedia(...)       → calcula y muestra la tabla HTML
+//   - dibujarGraficoMedia(...) → dibuja el gráfico Chart.js
 //
-// Funciones internas (solo se usan dentro de este archivo):
-//   - _prepararDatosGrafico(...)  → prepara etiquetas y colores
-//   - _pluginTextoCentral(...)    → dibuja el valor en el centro
-//   - _opcionesGrafico(...)       → devuelve la configuración
+// Orden de carga en el HTML:
+//   1. chart.js (CDN)
+//   2. datos.js o social_media_200.js  → fuentes de datos
+//   3. media.js                        → este archivo
+//   4. media_pagina.js                 → controlador de página
 // ============================================================
 
 
 // ------------------------------------------------------------
-// VARIABLE GLOBAL: instanciaGraficoMedia
+// VARIABLE GLOBAL
 // ------------------------------------------------------------
-// Guarda la referencia al gráfico Chart.js que está activo.
-// Se necesita para poder DESTRUIRLO antes de crear uno nuevo,
-// porque Chart.js no permite reutilizar un <canvas> sin antes
-// destruir el gráfico anterior.
-//
-// IMPORTANTE: esta es la ÚNICA declaración de esta variable
-// en todo el proyecto. NO repetirla en estadistica.js.
-// Se usa 'var' (no 'let') para evitar errores si el navegador
-// carga el archivo más de una vez.
+// Guarda la instancia activa del gráfico Chart.js para poder
+// destruirla antes de crear una nueva. Chart.js no permite
+// reutilizar un <canvas> sin destruir el gráfico anterior.
 // ------------------------------------------------------------
 let instanciaGraficoMedia = null;
 
 
 // ------------------------------------------------------------
-// CONSTANTE: TIPO_GRAFICO_MEDIA
+// CONSTANTE: TIPO DE GRÁFICO
 // ------------------------------------------------------------
-// Define qué tipo de gráfico se dibuja en TODA la sección Media.
-// Cambiar este valor afecta tanto el gráfico del ejemplo
-// interactivo como el del ejercicio práctico.
+// Define el tipo de gráfico para TODA la sección Media.
+// Cambiar este valor afecta tanto el ejemplo interactivo como
+// el ejercicio práctico.
 //
 // Opciones válidas:
 //   'bar'           → Barras verticales
 //   'barHorizontal' → Barras horizontales
-//   'line'          → Línea (ideal para datos por fecha)
-//   'radar'         → Telaraña (compara categorías)
-//   'polarArea'     → Área polar (radio = valor)
-//   'doughnut'      → Dona (agrupa en 4 rangos por cuartiles)
-//   'pie'           → Pastel (igual que dona, sin hueco)
+//   'line'          → Línea continua
+//   'doughnut'      → Dona (agrupa en rangos por cuartiles)
+//   'pie'           → Pastel
+//   'radar'         → Telaraña
+//   'polarArea'     → Área polar
 // ------------------------------------------------------------
-const TIPO_GRAFICO_MEDIA = 'doughnut';
+const TIPO_GRAFICO_MEDIA = 'bar';
+
+
+// ============================================================
+// FUNCIÓN: calcularMediaDesdeArregloNumerico
+// ============================================================
+// Núcleo matemático puro. Recibe un arreglo de números ya
+// validados y devuelve todos los datos del cálculo de la media.
+//
+// Pasos del algoritmo:
+//   1. Sumar todos los valores del arreglo
+//   2. Contar cuántos valores hay
+//   3. Dividir la suma entre la cantidad
+//
+// Parámetros:
+//   listaNumeros → arreglo de números válidos (sin NaN)
+//
+// Devuelve: { sumaTotal, totalRegistros, media }
+// ============================================================
+function calcularMediaDesdeArregloNumerico(listaNumeros) {
+
+    // PASO 1: Sumar todos los valores
+    let sumaTotalAcumulada = 0;
+
+    for (let posicionNumero = 0; posicionNumero < listaNumeros.length; posicionNumero++) {
+        sumaTotalAcumulada = sumaTotalAcumulada + listaNumeros[posicionNumero];
+    }
+
+    // PASO 2: Contar la cantidad de valores
+    let totalRegistrosValidos = listaNumeros.length;
+
+    // PASO 3: Calcular el promedio
+    let valorMediaCalculado = 0;
+
+    if (totalRegistrosValidos > 0) {
+        valorMediaCalculado = sumaTotalAcumulada / totalRegistrosValidos;
+    }
+
+    return {
+        sumaTotal      : Number(sumaTotalAcumulada.toFixed(2)),
+        totalRegistros : totalRegistrosValidos,
+        media          : Number(valorMediaCalculado.toFixed(2))
+    };
+}
 
 
 // ============================================================
 // FUNCIÓN PÚBLICA: calcularMedia
 // ============================================================
-// Recorre un arreglo de objetos, suma los valores de una
-// propiedad numérica y calcula el promedio (media aritmética).
-// Opcionalmente genera una tabla HTML en el contenedor indicado.
+// Recorre un arreglo de objetos, extrae los valores numéricos
+// de una propiedad específica, calcula la media y genera
+// una tabla HTML con la fórmula y el resultado.
 //
 // Parámetros:
-//   arregloEstudiantes → arreglo de objetos con los datos
-//                        Ejemplo: [{nombre:'Ana', nota:15}, ...]
-//   nombreColumnaNum   → nombre de la propiedad numérica a promediar
-//                        Ejemplo: 'nota' o 'Daily_Minutes_Spent'
+//   listaDeDatos       → arreglo de objetos
+//   propiedadNumerica  → nombre de la propiedad numérica a analizar
 //   idContenedorTabla  → id del elemento HTML donde mostrar la tabla
-//                        Pasar null si NO se quiere generar tabla
-//   nombreColumnaLabel → nombre de la propiedad de texto para la tabla
-//                        Ejemplo: 'nombre' o 'App'
+//                        (pasar null si NO se quiere tabla)
+//   propiedadEtiqueta  → nombre de la propiedad de texto para la tabla
 //
-// Devuelve un objeto: { suma, cantidad, media }
+// Devuelve el objeto con: { sumaTotal, totalRegistros, media }
 // ============================================================
-function calcularMedia(arregloEstudiantes, nombreColumnaNum, idContenedorTabla, nombreColumnaLabel) {
+function calcularMedia(listaDeDatos, propiedadNumerica, idContenedorTabla, propiedadEtiqueta) {
 
-    // --- PASO 1: Filtrar registros con valor numérico válido ---
-    // No todos los objetos del arreglo tienen garantizado un número
-    // en la columna indicada. Este bucle descarta los que no sirven.
-    let registrosConNumero = [];
+    // PASO 1: Filtrar registros con valor numérico válido
+    let registrosValidos = [];
 
-    // Recorre cada objeto del arreglo de inicio a fin
-    for (let indiceFiltro = 0; indiceFiltro < arregloEstudiantes.length; indiceFiltro++) {
-
-        // Convierte el valor de la columna a número (Number() devuelve NaN si no es válido)
-        let valorNumerico = Number(arregloEstudiantes[indiceFiltro][nombreColumnaNum]);
-
-        // isNaN() devuelve true si el valor NO es un número válido
-        // Solo agrega al arreglo si SÍ es un número válido
+    for (let posicionRegistro = 0; posicionRegistro < listaDeDatos.length; posicionRegistro++) {
+        let valorNumerico = Number(listaDeDatos[posicionRegistro][propiedadNumerica]);
         if (!isNaN(valorNumerico)) {
-            registrosConNumero.push(arregloEstudiantes[indiceFiltro]);
+            registrosValidos.push(listaDeDatos[posicionRegistro]);
         }
     }
 
-    // --- PASO 2: Sumar los valores válidos y calcular la media ---
-    let sumaDeValores   = 0;
-    let cantidadDatos   = registrosConNumero.length;
-    let mediaAritmetica = 0;
+    // PASO 2: Extraer solo los números para el cálculo
+    let listaSoloNumeros = [];
 
-    // Solo calcula si hay al menos un registro válido (evita dividir entre 0)
-    if (cantidadDatos > 0) {
-
-        // Recorre solo los registros que pasaron el filtro numérico
-        for (let indiceSuma = 0; indiceSuma < cantidadDatos; indiceSuma++) {
-            sumaDeValores += Number(registrosConNumero[indiceSuma][nombreColumnaNum]);
-        }
-
-        // Fórmula de la media: suma total / cantidad de datos
-        // toFixed(2) redondea a 2 decimales, Number() lo convierte de texto a número
-        mediaAritmetica = Number((sumaDeValores / cantidadDatos).toFixed(2));
+    for (let posicionNumero = 0; posicionNumero < registrosValidos.length; posicionNumero++) {
+        listaSoloNumeros.push(Number(registrosValidos[posicionNumero][propiedadNumerica]));
     }
 
-    // --- PASO 3: Generar tabla HTML (solo si se recibió un id de contenedor) ---
-    // Si idContenedorTabla es null o vacío, se salta este bloque completamente
+    // PASO 3: Calcular la media con la función interna
+    let resultadoMedia = calcularMediaDesdeArregloNumerico(listaSoloNumeros);
+
+    // PASO 4: (sin ordenamiento — la media no requiere orden)
+
+    // PASO 5: Generar tabla HTML (solo si se recibió un id de contenedor)
     if (typeof idContenedorTabla === 'string' && idContenedorTabla.length > 0) {
 
-        // Busca el elemento HTML con ese id en el documento
         let elementoContenedor = document.getElementById(idContenedorTabla);
 
-        // Solo continúa si el elemento existe en el HTML
         if (elementoContenedor) {
 
-            // Construye el HTML de la tabla como un texto largo
-            let codigoTabla = '';
-            codigoTabla += '<p><strong>Cálculo de la Media — ' + nombreColumnaNum + '</strong></p>';
+            let contenidoEstructuraHTML = '';
+            contenidoEstructuraHTML += '<p><strong>Datos registrados — ' + propiedadNumerica + '</strong></p>';
+            contenidoEstructuraHTML += '<table class="tabla-interactiva">';
 
-            // Abre la tabla con la clase CSS que le da estilo
-            codigoTabla += '<table class="tabla-interactiva">';
+            let nombreColumnaIdentificador = propiedadEtiqueta || 'Ítem';
+            contenidoEstructuraHTML += '<tr>';
+            contenidoEstructuraHTML += '<th>#</th>';
+            contenidoEstructuraHTML += '<th>' + nombreColumnaIdentificador + '</th>';
+            contenidoEstructuraHTML += '<th>Valor</th>';
+            contenidoEstructuraHTML += '<th>¿Sobre la media?</th>';
+            contenidoEstructuraHTML += '</tr>';
 
-            // Fila de encabezados: número, etiqueta y valor
-            codigoTabla += '<tr><th>#</th><th>' + (nombreColumnaLabel || 'Ítem') + '</th><th>Valor</th></tr>';
+            // Genera una fila por cada registro
+            for (let posicionFila = 0; posicionFila < registrosValidos.length; posicionFila++) {
 
-            // Genera una fila por cada registro válido
-            for (let indiceFila = 0; indiceFila < registrosConNumero.length; indiceFila++) {
+                let valorFilaNumerico  = Number(registrosValidos[posicionFila][propiedadNumerica]);
+                let sobreLaMedia       = valorFilaNumerico >= resultadoMedia.media;
+                let marcaSobreMedia    = sobreLaMedia ? '▲ sobre' : '▼ bajo';
+                let estiloFilaMedia    = sobreLaMedia
+                    ? ' style="background:#dcfce7;"'   // verde claro = sobre la media
+                    : ' style="background:#fee2e2;"';  // rojo claro  = bajo la media
 
-                // Si se recibió un nombre de columna de texto, usa ese valor como etiqueta
-                // Si no, usa "Dato 1", "Dato 2", etc.
-                let textoEtiqueta = nombreColumnaLabel
-                    ? registrosConNumero[indiceFila][nombreColumnaLabel]
-                    : 'Dato ' + (indiceFila + 1);
+                let textoEtiquetaFila = propiedadEtiqueta
+                    ? registrosValidos[posicionFila][propiedadEtiqueta]
+                    : 'Dato ' + (posicionFila + 1);
 
-                let numeroDeFila = Number(registrosConNumero[indiceFila][nombreColumnaNum]);
-
-                codigoTabla += '<tr>';
-                codigoTabla += '<td>' + (indiceFila + 1) + '</td>';
-                codigoTabla += '<td>' + textoEtiqueta + '</td>';
-                codigoTabla += '<td>' + numeroDeFila + '</td>';
-                codigoTabla += '</tr>';
+                contenidoEstructuraHTML += '<tr' + estiloFilaMedia + '>';
+                contenidoEstructuraHTML += '<td>' + (posicionFila + 1) + '</td>';
+                contenidoEstructuraHTML += '<td>' + textoEtiquetaFila + '</td>';
+                contenidoEstructuraHTML += '<td>' + valorFilaNumerico + '</td>';
+                contenidoEstructuraHTML += '<td>' + marcaSobreMedia + '</td>';
+                contenidoEstructuraHTML += '</tr>';
             }
 
-            codigoTabla += '</table>';
+            contenidoEstructuraHTML += '</table>';
 
-            // Caja estilo consola que muestra el proceso de cálculo
-            codigoTabla += '<div class="detalle-calculo">';
-            codigoTabla += 'Suma: ' + sumaDeValores + ' | Registros: ' + cantidadDatos + '<br>';
-            codigoTabla += 'Media = ' + sumaDeValores + ' / ' + cantidadDatos;
-            codigoTabla += '</div>';
+            // Caja con el proceso de cálculo
+            contenidoEstructuraHTML += '<div class="detalle-calculo">';
+            contenidoEstructuraHTML += 'Total de datos: ' + resultadoMedia.totalRegistros + '<br>';
+            contenidoEstructuraHTML += 'Suma total: <strong>' + resultadoMedia.sumaTotal + '</strong><br>';
+            contenidoEstructuraHTML += 'Fórmula: Media = Suma ÷ Cantidad<br>';
+            contenidoEstructuraHTML += 'Operación: ' + resultadoMedia.sumaTotal + ' ÷ ' + resultadoMedia.totalRegistros + ' = <strong>' + resultadoMedia.media.toFixed(2) + '</strong>';
+            contenidoEstructuraHTML += '</div>';
 
-            // Caja destacada con el resultado final
-            codigoTabla += '<div class="caja-resultado">';
-            codigoTabla += '📘 Media aritmética: <strong>' + mediaAritmetica.toFixed(2) + '</strong>';
-            codigoTabla += '</div>';
+            contenidoEstructuraHTML += '<div class="caja-resultado">';
+            contenidoEstructuraHTML += '📘 Media aritmética: <strong>' + resultadoMedia.media.toFixed(2) + '</strong>';
+            contenidoEstructuraHTML += '</div>';
 
-            // Inserta todo el HTML generado dentro del contenedor en la página
-            elementoContenedor.innerHTML = codigoTabla;
+            elementoContenedor.innerHTML = contenidoEstructuraHTML;
         }
     }
 
-    // Devuelve los tres valores clave para que otras funciones los puedan usar
-    return { suma: sumaDeValores, cantidad: cantidadDatos, media: mediaAritmetica };
+    // PASO 6: Devolver el resultado del cálculo
+    return resultadoMedia;
 }
 
 
 // ============================================================
-// FUNCIÓN INTERNA: _prepararDatosGrafico
+// FUNCIÓN: prepararDatosParaGraficoMedia
 // ============================================================
-// Transforma el arreglo de registros en tres arreglos paralelos
-// que Chart.js necesita para dibujar el gráfico:
-//   - etiquetas[]      → textos del eje X o de la leyenda
-//   - valoresGrafico[] → números que determinan el tamaño de cada barra/sector
-//   - coloresGrafico[] → color de cada barra o sector
+// Transforma el arreglo de registros en los arreglos paralelos
+// que Chart.js necesita para dibujar el gráfico.
 //
-// El resultado cambia según TIPO_GRAFICO_MEDIA:
-//   Dona / Pie  → agrupa todos los datos en 4 rangos por cuartiles
-//   Resto       → un punto por cada registro, coloreado vs la media
-//
-// Parámetros:
-//   arregloRegistros → arreglo de objetos con los datos
-//   nombreColumnaNum → nombre de la propiedad numérica
-//   valorMediaCalc   → media ya calculada (para colorear barras)
+// Si el tipo es 'doughnut' o 'pie', agrupa los datos en 4 rangos
+// por cuartiles. Para el resto de tipos, genera un punto por
+// cada registro, coloreando verde los que están sobre la media
+// y azul los que están por debajo.
 // ============================================================
-function _prepararDatosGrafico(arregloRegistros, nombreColumnaNum, valorMediaCalc) {
+function prepararDatosParaGraficoMedia(listaDeDatos, propiedadNumerica) {
 
-    // ── MODO DONA / PIE: agrupar datos en 4 rangos por cuartiles ──
-    // Los cuartiles dividen los datos ordenados en 4 grupos iguales:
-    //   Q1 = valor en la posición 25% → separa el 25% más bajo
-    //   Q2 = valor en la posición 50% → es la mediana
-    //   Q3 = valor en la posición 75% → separa el 25% más alto
+    // ── MODO DONA / PIE: agrupar en 4 rangos por cuartiles ──
     if (TIPO_GRAFICO_MEDIA === 'doughnut' || TIPO_GRAFICO_MEDIA === 'pie') {
 
-        // Extrae solo los valores numéricos válidos en un arreglo simple
-        let soloNumeros = [];
-        for (let indiceNum = 0; indiceNum < arregloRegistros.length; indiceNum++) {
-            let valorExtraido = Number(arregloRegistros[indiceNum][nombreColumnaNum]);
+        let soloNumerosParaCuartiles = [];
+
+        for (let posicionRegistro = 0; posicionRegistro < listaDeDatos.length; posicionRegistro++) {
+            let valorExtraido = Number(listaDeDatos[posicionRegistro][propiedadNumerica]);
             if (!isNaN(valorExtraido)) {
-                soloNumeros.push(valorExtraido);
+                soloNumerosParaCuartiles.push(valorExtraido);
             }
         }
 
-        // Ordena los números de menor a mayor para poder calcular cuartiles
-        // La función de comparación (a - b) le dice a sort() el orden correcto
-        soloNumeros.sort(function(numeroA, numeroB) { return numeroA - numeroB; });
+        soloNumerosParaCuartiles.sort(function(numeroA, numeroB) { return numeroA - numeroB; });
 
-        // Calcula los tres cuartiles usando posiciones del arreglo ordenado
-        // Math.floor() redondea hacia abajo para obtener un índice entero
-        let cuartil1 = soloNumeros[Math.floor(soloNumeros.length * 0.25)] || 0;
-        let cuartil2 = soloNumeros[Math.floor(soloNumeros.length * 0.50)] || 0;
-        let cuartil3 = soloNumeros[Math.floor(soloNumeros.length * 0.75)] || 0;
+        let valorCuartilPrimero = soloNumerosParaCuartiles[Math.floor(soloNumerosParaCuartiles.length * 0.25)] || 0;
+        let valorCuartilSegundo = soloNumerosParaCuartiles[Math.floor(soloNumerosParaCuartiles.length * 0.50)] || 0;
+        let valorCuartilTercero = soloNumerosParaCuartiles[Math.floor(soloNumerosParaCuartiles.length * 0.75)] || 0;
 
-        // Contadores para cada uno de los 4 rangos
-        let contadorAlto      = 0;  // valores por encima de Q3 (top 25%)
-        let contadorMedioAlto = 0;  // valores entre Q2 y Q3
-        let contadorMedioBajo = 0;  // valores entre Q1 y Q2
-        let contadorBajo      = 0;  // valores por debajo o igual a Q1 (bottom 25%)
+        let cantidadRangoAlto      = 0;
+        let cantidadRangoMedioAlto = 0;
+        let cantidadRangoMedioBajo = 0;
+        let cantidadRangoBajo      = 0;
 
-        // Clasifica cada valor en su rango correspondiente
-        for (let indiceClasif = 0; indiceClasif < arregloRegistros.length; indiceClasif++) {
-            let valorClasif = Number(arregloRegistros[indiceClasif][nombreColumnaNum]);
-
-            if (!isNaN(valorClasif)) {
-                // Evalúa de mayor a menor para que cada valor caiga en un solo rango
-                if      (valorClasif > cuartil3) { contadorAlto++;      }
-                else if (valorClasif > cuartil2) { contadorMedioAlto++; }
-                else if (valorClasif > cuartil1) { contadorMedioBajo++;  }
-                else                             { contadorBajo++;       }
+        for (let posicionClasif = 0; posicionClasif < listaDeDatos.length; posicionClasif++) {
+            let valorClasificado = Number(listaDeDatos[posicionClasif][propiedadNumerica]);
+            if (!isNaN(valorClasificado)) {
+                if      (valorClasificado > valorCuartilTercero) { cantidadRangoAlto++;      }
+                else if (valorClasificado > valorCuartilSegundo) { cantidadRangoMedioAlto++; }
+                else if (valorClasificado > valorCuartilPrimero) { cantidadRangoMedioBajo++; }
+                else                                             { cantidadRangoBajo++;      }
             }
         }
 
-        // Devuelve los tres arreglos que Chart.js necesita para la dona/pastel
+        // Calculamos la media real para mostrarla en el plugin central
+        let listaNumerosCompleta = [];
+        for (let pos = 0; pos < listaDeDatos.length; pos++) {
+            let v = Number(listaDeDatos[pos][propiedadNumerica]);
+            if (!isNaN(v)) { listaNumerosCompleta.push(v); }
+        }
+        let resultadoMediaDona = calcularMediaDesdeArregloNumerico(listaNumerosCompleta);
+
         return {
-            etiquetas: [
-                'Alto (> '     + cuartil3 + ')',
-                'Medio-Alto (' + cuartil2 + '  ' + cuartil3 + ')',
-                'Medio-Bajo (' + cuartil1 + '  ' + cuartil2 + ')',
-                'Bajo (≤ '     + cuartil1 + ')'
+            arregloEtiquetas: [
+                'Alto (> '     + valorCuartilTercero + ')',
+                'Medio-Alto (' + valorCuartilSegundo + ' – ' + valorCuartilTercero + ')',
+                'Medio-Bajo (' + valorCuartilPrimero + ' – ' + valorCuartilSegundo + ')',
+                'Bajo (≤ '     + valorCuartilPrimero + ')'
             ],
-            valoresGrafico: [contadorAlto, contadorMedioAlto, contadorMedioBajo, contadorBajo],
-            // Verde=alto, Azul=medio-alto, Amarillo=medio-bajo, Rojo=bajo
-            coloresGrafico: ['#2ecc71', '#3498db', '#f1c40f', '#e74c3c']
+            arregloValoresGrafico: [cantidadRangoAlto, cantidadRangoMedioAlto, cantidadRangoMedioBajo, cantidadRangoBajo],
+            arregloColoresGrafico: ['#2ecc71', '#3498db', '#f1c40f', '#e74c3c'],
+            arregloLineaMedia:     [],
+            valorMediaFinal:       resultadoMediaDona.media
         };
     }
 
-    // ── RESTO DE TIPOS: un punto por cada registro ──────────────
-    // Busca la primera propiedad de texto del objeto para usarla
-    // como etiqueta en el eje X (por ejemplo: 'nombre' o 'App')
-    let nombreColumnaTexto = null;
+    // ── RESTO DE TIPOS: un punto por cada registro ──
+    let registrosValidosFiltrados = [];
 
-    if (arregloRegistros.length > 0) {
-        // Object.keys() devuelve un arreglo con los nombres de las propiedades del objeto
-        let propiedadesObjeto = Object.keys(arregloRegistros[0]);
+    for (let posicionFiltro = 0; posicionFiltro < listaDeDatos.length; posicionFiltro++) {
+        let valorFiltrado = Number(listaDeDatos[posicionFiltro][propiedadNumerica]);
+        if (!isNaN(valorFiltrado)) {
+            registrosValidosFiltrados.push(listaDeDatos[posicionFiltro]);
+        }
+    }
 
-        // Recorre las propiedades hasta encontrar una de tipo texto (string)
-        // que no sea la misma columna numérica que ya estamos usando
-        for (let indiceProp = 0; indiceProp < propiedadesObjeto.length; indiceProp++) {
-            let nombrePropiedad = propiedadesObjeto[indiceProp];
+    let soloNumerosGrafico = [];
+    for (let posicionOrden = 0; posicionOrden < registrosValidosFiltrados.length; posicionOrden++) {
+        soloNumerosGrafico.push(Number(registrosValidosFiltrados[posicionOrden][propiedadNumerica]));
+    }
 
-            // Condición: debe ser diferente a la columna numérica Y ser de tipo string
-            if (nombrePropiedad !== nombreColumnaNum &&
-                typeof arregloRegistros[0][nombrePropiedad] === 'string') {
-                nombreColumnaTexto = nombrePropiedad;
-                break; // Ya encontró la primera columna de texto, no necesita seguir
+    let resultadoMediaGrafico = calcularMediaDesdeArregloNumerico(soloNumerosGrafico);
+
+    // Detectar propiedad de texto para etiquetas
+    let propiedadTextoDetectada = null;
+
+    if (registrosValidosFiltrados.length > 0) {
+        let propiedadesDelObjeto = Object.keys(registrosValidosFiltrados[0]);
+
+        for (let posicionPropiedad = 0; posicionPropiedad < propiedadesDelObjeto.length; posicionPropiedad++) {
+            let nombrePropiedad = propiedadesDelObjeto[posicionPropiedad];
+
+            if (nombrePropiedad !== propiedadNumerica &&
+                typeof registrosValidosFiltrados[0][nombrePropiedad] === 'string') {
+                propiedadTextoDetectada = nombrePropiedad;
+                break;
             }
         }
     }
 
-    // Arreglos vacíos que se irán llenando en el bucle siguiente
-    let arregloEtiquetas  = [];
-    let arregloValores    = [];
-    let arregloColores    = [];
+    let arregloEtiquetasGrafico = [];
+    let arregloValoresGrafico   = [];
+    let arregloColoresGrafico   = [];
+    let arregloLineaMediaGrafico = [];
 
-    // Construye un punto por cada registro con valor numérico válido
-    for (let indicePunto = 0; indicePunto < arregloRegistros.length; indicePunto++) {
-        let valorPunto = Number(arregloRegistros[indicePunto][nombreColumnaNum]);
+    for (let posicionPunto = 0; posicionPunto < registrosValidosFiltrados.length; posicionPunto++) {
+        let valorPuntoActual = Number(registrosValidosFiltrados[posicionPunto][propiedadNumerica]);
 
-        if (!isNaN(valorPunto)) {
-            // Usa el texto de la columna de etiqueta, o "Dato N" si no hay columna de texto
-            arregloEtiquetas.push(
-                nombreColumnaTexto
-                    ? arregloRegistros[indicePunto][nombreColumnaTexto]
-                    : 'Dato ' + (indicePunto + 1)
-            );
+        arregloEtiquetasGrafico.push(
+            propiedadTextoDetectada
+                ? registrosValidosFiltrados[posicionPunto][propiedadTextoDetectada]
+                : 'Dato ' + (posicionPunto + 1)
+        );
 
-            arregloValores.push(valorPunto);
+        arregloValoresGrafico.push(valorPuntoActual);
 
-            // Verde si el valor está en o por encima de la media, azul si está por debajo
-            // Esto permite identificar visualmente quién supera el promedio
-            arregloColores.push(
-                valorPunto >= valorMediaCalc
-                    ? 'rgba(46,204,113,0.7)'   // verde semitransparente
-                    : 'rgba(99,144,241,0.7)'   // azul semitransparente
-            );
-        }
+        // Verde = sobre la media, Azul = bajo la media
+        arregloColoresGrafico.push(
+            valorPuntoActual >= resultadoMediaGrafico.media
+                ? 'rgba(34, 197, 94, 0.75)'    // verde = sobre la media
+                : 'rgba(99, 144, 241, 0.75)'   // azul  = bajo la media
+        );
+
+        arregloLineaMediaGrafico.push(resultadoMediaGrafico.media);
     }
 
     return {
-        etiquetas:     arregloEtiquetas,
-        valoresGrafico: arregloValores,
-        coloresGrafico: arregloColores
+        arregloEtiquetas:      arregloEtiquetasGrafico,
+        arregloValoresGrafico: arregloValoresGrafico,
+        arregloColoresGrafico: arregloColoresGrafico,
+        arregloLineaMedia:     arregloLineaMediaGrafico,
+        valorMediaFinal:       resultadoMediaGrafico.media
     };
 }
 
 
 // ============================================================
-// FUNCIÓN INTERNA: _pluginTextoCentral
+// FUNCIÓN: crearPluginMarcadorMedia
 // ============================================================
-// Crea y devuelve un PLUGIN personalizado de Chart.js.
+// Crea un plugin personalizado de Chart.js que dibuja el valor
+// de la media en el centro del canvas.
 //
-// ¿Qué es un plugin de Chart.js?
-//   Chart.js permite agregar código propio que se ejecuta en
-//   momentos específicos del ciclo de vida del gráfico.
-//   El evento 'afterDraw' se dispara justo después de que
-//   Chart.js termina de dibujar el gráfico en el canvas.
-//
-// ¿Para qué sirve este plugin?
-//   Dibuja el valor de la media directamente sobre el canvas
-//   usando la API de dibujo 2D del navegador (Canvas API).
-//   Solo tiene efecto visual en los tipos 'doughnut' y 'pie',
-//   porque son los únicos que tienen espacio central vacío.
-//
-// Parámetros:
-//   valorMedia → número con la media ya calculada
-//   idPlugin   → identificador único del plugin (evita conflictos
-//                si hay varios gráficos en la misma página)
+// Solo tiene efecto visual en gráficos de tipo 'doughnut' y 'pie'.
 // ============================================================
-function _pluginTextoCentral(valorMedia, idPlugin) {
+function crearPluginMarcadorMedia(valorMediaPlugin, idUnicoPlugin) {
 
-    // Devuelve un objeto con la estructura que Chart.js espera para un plugin
     return {
+        id: idUnicoPlugin || 'pluginMarcadorMedia',
 
-        // 'id' identifica el plugin. Chart.js lo usa internamente.
-        id: idPlugin || 'pluginTextoCentral',
+        afterDraw: function(instanciaGrafico) {
 
-        // 'afterDraw' es el HOOK (gancho): Chart.js llama a esta función
-        // automáticamente cada vez que termina de renderizar el gráfico.
-        // El parámetro 'chart' es el objeto Chart.js con toda la información
-        // del gráfico: dimensiones, canvas, contexto de dibujo, etc.
-        afterDraw: function(chart) {
-
-            // Si el tipo de gráfico no es dona ni pastel, no dibuja nada
-            // y sale de la función inmediatamente con 'return'
             if (TIPO_GRAFICO_MEDIA !== 'doughnut' && TIPO_GRAFICO_MEDIA !== 'pie') { return; }
 
-            // Calcula el centro geométrico del canvas dividiendo entre 2
-            let coordCentroX = chart.width  / 2;
-            let coordCentroY = chart.height / 2;
+            let centroX  = instanciaGrafico.width  / 2;
+            let centroY  = instanciaGrafico.height / 2;
+            let contexto = instanciaGrafico.ctx;
 
-            // 'chart.ctx' es el contexto de dibujo 2D del canvas.
-            // Es el mismo objeto que se obtiene con canvas.getContext('2d').
-            // A través de él se accede a todas las funciones de dibujo.
-            let contexto2D = chart.ctx;
+            contexto.save();
 
-            // save() guarda el estado actual del contexto (fuente, color, etc.)
-            // para poder restaurarlo después con restore() sin afectar al gráfico
-            contexto2D.save();
+            contexto.font         = 'bold 28px Arial';
+            contexto.textAlign    = 'center';
+            contexto.textBaseline = 'middle';
+            contexto.fillStyle    = '#2c3e50';
+            contexto.fillText(valorMediaPlugin.toFixed(2), centroX, centroY - 14);
 
-            // --- Dibuja el número grande con el valor de la media ---
-            contexto2D.font         = 'bold 28px Arial';  // tamaño y fuente del texto
-            contexto2D.textAlign    = 'center';            // centra el texto en X
-            contexto2D.textBaseline = 'middle';            // centra el texto en Y
-            contexto2D.fillStyle    = '#2c3e50';           // color del texto (gris oscuro)
+            contexto.strokeStyle = '#2563EB';
+            contexto.lineWidth   = 3;
+            contexto.beginPath();
+            contexto.moveTo(centroX - 28, centroY + 8);
+            contexto.lineTo(centroX + 28, centroY + 8);
+            contexto.stroke();
 
-            // fillText(texto, x, y) dibuja el texto en las coordenadas indicadas
-            // Se sube 14px del centro para dejar espacio a la línea y la etiqueta
-            contexto2D.fillText(valorMedia.toFixed(2), coordCentroX, coordCentroY - 14);
+            contexto.font      = 'bold 11px Arial';
+            contexto.fillStyle = '#2563EB';
+            contexto.fillText('MEDIA', centroX, centroY + 26);
 
-            // --- Dibuja la línea roja decorativa debajo del número ---
-            contexto2D.strokeStyle = '#DC2626'; // color de la línea (rojo)
-            contexto2D.lineWidth   = 3;          // grosor de la línea en píxeles
-
-            // beginPath() inicia un nuevo trazo (borra el trazo anterior)
-            contexto2D.beginPath();
-            // moveTo(x, y) mueve el "lápiz" al punto de inicio sin dibujar
-            contexto2D.moveTo(coordCentroX - 28, coordCentroY + 8);
-            // lineTo(x, y) traza una línea desde el punto actual hasta este punto
-            contexto2D.lineTo(coordCentroX + 28, coordCentroY + 8);
-            // stroke() aplica el trazo con el color y grosor definidos arriba
-            contexto2D.stroke();
-
-            // --- Dibuja la etiqueta "MEDIA" debajo de la línea ---
-            contexto2D.font      = 'bold 11px Arial';
-            contexto2D.fillStyle = '#DC2626';  // mismo rojo que la línea
-            contexto2D.fillText('MEDIA', coordCentroX, coordCentroY + 26);
-
-            // restore() recupera el estado guardado con save(), dejando el
-            // contexto exactamente como estaba antes de que este plugin dibujara
-            contexto2D.restore();
+            contexto.restore();
         }
     };
 }
 
 
 // ============================================================
-// FUNCIÓN INTERNA: _opcionesGrafico
+// FUNCIÓN: obtenerConfiguracionGraficoMedia
 // ============================================================
 // Construye y devuelve el objeto 'options' que Chart.js usa
 // para configurar el comportamiento y apariencia del gráfico.
-//
-// Chart.js separa la configuración en dos partes:
-//   - 'data'    → qué datos mostrar (etiquetas, valores, colores)
-//   - 'options' → cómo mostrarlos (animación, leyenda, ejes, etc.)
-//
-// Esta función genera la parte 'options' de forma dinámica
-// según el tipo de gráfico definido en TIPO_GRAFICO_MEDIA.
-//
-// Parámetros:
-//   textTituloGrafico → texto que aparece como título del gráfico
 // ============================================================
-function _opcionesGrafico(textTituloGrafico) {
+function obtenerConfiguracionGraficoMedia(textoTituloGrafico) {
 
-    // Detecta si el tipo es barras horizontales
-    // (Chart.js usa el mismo tipo 'bar' pero con indexAxis:'y')
     let esBarraHorizontal = (TIPO_GRAFICO_MEDIA === 'barHorizontal');
+    let requiereEjes      = (TIPO_GRAFICO_MEDIA === 'bar' || esBarraHorizontal);
 
-    // Solo los gráficos de barras (vertical u horizontal) necesitan
-    // configurar los ejes X e Y. Los circulares (pie, doughnut, radar,
-    // polarArea) no tienen ejes y fallan si se les pasa esta configuración.
-    let requiereEjes = (TIPO_GRAFICO_MEDIA === 'bar' || esBarraHorizontal);
-
-    // Devuelve el objeto de configuración completo
     return {
-
-        // responsive: true → el gráfico se redimensiona automáticamente
-        // cuando cambia el tamaño del contenedor o la ventana del navegador
-        responsive: true,
-
-        // maintainAspectRatio: false → permite controlar la altura con CSS
-        // Si fuera true, Chart.js impondría su propia proporción ancho/alto
+        responsive:          true,
         maintainAspectRatio: false,
+        indexAxis:           esBarraHorizontal ? 'y' : 'x',
 
-        // indexAxis define qué eje es el "principal" (donde van las etiquetas)
-        // 'x' = barras verticales (por defecto)
-        // 'y' = barras horizontales (gira el gráfico 90°)
-        indexAxis: esBarraHorizontal ? 'y' : 'x',
-
-        // Configuración de la animación de entrada del gráfico
-        animation: {
-            animateRotate: true,       // los gráficos circulares giran al aparecer
-            animateScale:  true,       // el gráfico crece desde el centro
-            duration:      1000,       // duración de la animación en milisegundos
-            easing:        'easeInOutQuart'  // curva de aceleración (suave al inicio y al final)
-        },
-
-        // 'plugins' configura los módulos integrados de Chart.js
-        plugins: {
-
-            // Leyenda: el recuadro con los colores y nombres de cada serie
-            legend: {
-                position: 'bottom'  // la coloca debajo del gráfico
+        animations: (TIPO_GRAFICO_MEDIA === 'bar' || esBarraHorizontal)
+            ? {
+                [esBarraHorizontal ? 'x' : 'y']: {
+                    duration: 10,
+                    easing:   'easeInOutQuart',
+                    delay: function(contextoAnimacion) {
+                        return contextoAnimacion.dataIndex * 10;
+                    }
+                }
+            }
+            : {
+                animateRotate: true,
+                animateScale:  true,
+                duration:      1000,
+                easing:        'easeInOutQuart'
             },
 
-            // Título: texto que aparece encima del gráfico
+        plugins: {
+            legend: {
+                position: 'bottom'
+            },
             title: {
-                display: true,           // activa la visualización del título
-                text:    textTituloGrafico  // texto recibido como parámetro
+                display: true,
+                text:    textoTituloGrafico
+            },
+            tooltip: {
+                enabled:       true,
+                displayColors: false,
+                callbacks: {
+                    title: function() { return ''; },
+                    label: function(contextoTooltip) {
+                        let nombreItem = contextoTooltip.label || '';
+                        let ejeValor   = esBarraHorizontal ? 'x' : 'y';
+                        let valorItem  = Number(contextoTooltip.parsed[ejeValor]).toFixed(2);
+                        return nombreItem + ': ' + valorItem;
+                    }
+                }
             }
         },
 
-        // 'scales' configura los ejes del gráfico.
-        // Se usa un operador ternario: si requiereEjes es true, agrega la
-        // configuración del eje; si es false, devuelve un objeto vacío {}.
-        //
-        // La sintaxis [esBarraHorizontal ? 'x' : 'y'] es una "clave dinámica":
-        // crea la propiedad 'x' o 'y' según el tipo de gráfico.
-        //   - Barras verticales: configura el eje 'y' (el de los valores)
-        //   - Barras horizontales: configura el eje 'x' (el de los valores)
         scales: requiereEjes
             ? { [esBarraHorizontal ? 'x' : 'y']: { beginAtZero: true } }
             : {}
@@ -478,7 +440,7 @@ function _opcionesGrafico(textTituloGrafico) {
 
 
 // ============================================================
-// FUNCIÓN PÚBLICA: dibujarGrafico
+// FUNCIÓN PÚBLICA: dibujarGraficoMedia
 // ============================================================
 // Función principal de visualización. Orquesta todo el proceso
 // de creación del gráfico Chart.js en el canvas indicado.
@@ -486,155 +448,82 @@ function _opcionesGrafico(textTituloGrafico) {
 // Flujo interno:
 //   1. Busca el canvas en el DOM
 //   2. Destruye el gráfico anterior si existe
-//   3. Calcula la media (si no se recibió una ya calculada)
-//   4. Llama a _prepararDatosGrafico() para obtener etiquetas/colores
+//   3. Prepara los datos (etiquetas, colores, línea de referencia)
+//   4. Construye el objeto 'data' con uno o dos datasets
 //   5. Crea la instancia de Chart.js con todos los parámetros
-//   6. Guarda la instancia en instanciaGraficoMedia y la devuelve
+//   6. Guarda la instancia y la devuelve
 //
 // Parámetros:
-//   arregloRegistros  → arreglo de objetos con los datos
-//   nombreColumnaNum  → nombre de la propiedad numérica a graficar
-//   idCanvas          → id del elemento <canvas> en el HTML
-//   textTitulo        → texto que aparece como título del gráfico
-//   mediaYaCalculada  → (opcional) media precalculada; si no se
-//                       pasa, la función la calcula internamente
+//   listaDeDatos       → arreglo de objetos con los datos
+//   propiedadNumerica  → nombre de la propiedad numérica
+//   idCanvasDestino    → id del elemento <canvas> en el HTML
+//   textoTitulo        → título del gráfico
 //
 // Devuelve: la instancia del gráfico Chart.js creado
 // ============================================================
-function dibujarGraficoMedia(arregloRegistros, nombreColumnaNum, idCanvas, textTitulo, mediaYaCalculada) {
+function dibujarGraficoMedia(listaDeDatos, propiedadNumerica, idCanvasDestino, textoTitulo) {
 
-    // Busca el elemento <canvas> en el HTML usando su id
-    let elementoCanvas = document.getElementById(idCanvas);
+    let elementoCanvasMedia = document.getElementById(idCanvasDestino);
+    if (!elementoCanvasMedia) { return null; }
 
-    // Si no existe el canvas, no puede dibujar nada → sale con null
-    if (!elementoCanvas) { return null; }
+    elementoCanvasMedia.style.height    = '350px';
+    elementoCanvasMedia.style.maxHeight = '350px';
 
-    // Fija la altura del canvas con CSS para que pie/doughnut no quede
-    // aplastado. Con maintainAspectRatio:false, Chart.js respeta este valor.
-    elementoCanvas.style.height    = '350px';
-    elementoCanvas.style.maxHeight = '350px';
-
-    // --- Destruye el gráfico anterior si existe ---
-    // Chart.js lanza un error si se intenta crear un gráfico nuevo
-    // sobre un canvas que ya tiene uno activo. Por eso se destruye primero.
+    // PASO 1 y 2: Destruir gráfico anterior si existe
     if (instanciaGraficoMedia !== null) {
         try {
-            instanciaGraficoMedia.destroy(); // libera el canvas y la memoria
-        } catch(errorDestruccion) {
-            // Si destroy() falla (por ejemplo, el canvas ya fue removido del DOM),
-            // el try/catch evita que el error detenga la ejecución del resto del código
-        }
-        instanciaGraficoMedia = null; // limpia la referencia
+            instanciaGraficoMedia.destroy();
+        } catch(errorDestruccion) {}
+        instanciaGraficoMedia = null;
     }
 
-    // --- Determina el valor de la media a usar ---
-    let valorMediaFinal = 0;
+    // PASO 3: Preparar los datos
+    let datosPreparados = prepararDatosParaGraficoMedia(listaDeDatos, propiedadNumerica);
 
-    // Si se recibió una media externa válida (número y no NaN), la usa directamente
-    // Esto evita calcular la media dos veces cuando ya se calculó en estadistica.js
-    if (typeof mediaYaCalculada === 'number' && !isNaN(mediaYaCalculada)) {
-        valorMediaFinal = mediaYaCalculada;
+    // PASO 4: Construir datasets
+    let textoTituloDefinitivo = textoTitulo || ('Media: ' + datosPreparados.valorMediaFinal.toFixed(2));
 
-    } else {
-        // Si no se recibió media externa, la calcula recorriendo el arreglo
-        let acumuladorSuma  = 0;
-        let contadorValidos = 0;
-
-        for (let indiceCalc = 0; indiceCalc < arregloRegistros.length; indiceCalc++) {
-            let valorCalc = Number(arregloRegistros[indiceCalc][nombreColumnaNum]);
-
-            // Solo suma los valores que son números válidos
-            if (!isNaN(valorCalc)) {
-                acumuladorSuma += valorCalc;
-                contadorValidos++;
-            }
+    let arregloDatasetsGrafico = [
+        {
+            label:           'Valor (' + propiedadNumerica + ')',
+            data:            datosPreparados.arregloValoresGrafico,
+            backgroundColor: datosPreparados.arregloColoresGrafico,
+            borderColor:     datosPreparados.arregloColoresGrafico,
+            borderWidth:     1,
+            hoverOffset:     10
         }
+    ];
 
-        // Calcula la media solo si hay datos válidos (evita dividir entre 0)
-        valorMediaFinal = contadorValidos > 0
-            ? Number((acumuladorSuma / contadorValidos).toFixed(2))
-            : 0;
+    let esGraficoTipoBarra = (TIPO_GRAFICO_MEDIA === 'bar' || TIPO_GRAFICO_MEDIA === 'barHorizontal');
+
+    // Agregar línea de referencia de la media en gráficos de barras
+    if (esGraficoTipoBarra && datosPreparados.arregloLineaMedia.length > 0) {
+        arregloDatasetsGrafico.push({
+            label:       'Media (' + datosPreparados.valorMediaFinal.toFixed(2) + ')',
+            data:        datosPreparados.arregloLineaMedia,
+            type:        'line',
+            borderColor: 'rgba(37, 99, 235, 1)',
+            borderWidth: 2,
+            pointRadius: 0,
+            fill:        false
+        });
     }
 
-    // Llama a la función interna que prepara etiquetas, valores y colores
-    let datosParaGrafico = _prepararDatosGrafico(arregloRegistros, nombreColumnaNum, valorMediaFinal);
+    // PASO 5: Crear el gráfico
+    instanciaGraficoMedia = new Chart(elementoCanvasMedia.getContext('2d'), {
 
-    // Si no se recibió título, genera uno automático con el valor de la media
-    let textoTituloFinal = textTitulo || ('Media: ' + valorMediaFinal.toFixed(2));
-
-    // ============================================================
-    // CREACIÓN DEL GRÁFICO CON CHART.JS
-    // ============================================================
-    // 'new Chart(contexto, configuracion)' crea el gráfico.
-    //
-    // Parámetro 1: contexto de dibujo 2D del canvas
-    //   canvas.getContext('2d') devuelve el objeto que Chart.js
-    //   usa para dibujar formas, líneas y texto en el canvas.
-    //
-    // Parámetro 2: objeto de configuración con tres secciones:
-    //   - type    → tipo de gráfico ('bar', 'pie', 'doughnut', etc.)
-    //   - data    → los datos a visualizar
-    //   - options → comportamiento y apariencia
-    //   - plugins → extensiones personalizadas (como el texto central)
-    // ============================================================
-    instanciaGraficoMedia = new Chart(elementoCanvas.getContext('2d'), {
-
-        // 'type' define el tipo de gráfico.
-        // Si es 'barHorizontal' (valor propio de este proyecto),
-        // se convierte a 'bar' porque Chart.js no reconoce 'barHorizontal'.
-        // La orientación horizontal se controla con indexAxis:'y' en options.
         type: TIPO_GRAFICO_MEDIA === 'barHorizontal' ? 'bar' : TIPO_GRAFICO_MEDIA,
 
-        // 'data' contiene los datos que se van a visualizar
         data: {
-
-            // 'labels' → arreglo de textos para el eje X o la leyenda
-            // Cada etiqueta corresponde a un punto/sector del gráfico
-            labels: datosParaGrafico.etiquetas,
-
-            // 'datasets' → arreglo de series de datos.
-            // Cada objeto dentro del arreglo es una serie independiente.
-            // En este gráfico solo hay una serie (un solo arreglo de valores).
-            datasets: [{
-
-                // Nombre de la serie (aparece en la leyenda y en el tooltip)
-                label: 'Media',
-
-                // Arreglo de valores numéricos. Cada número corresponde
-                // a una etiqueta de 'labels' por posición (índice 0 con índice 0, etc.)
-                data: datosParaGrafico.valoresGrafico,
-
-                // Color de relleno de cada barra o sector.
-                // Puede ser un solo color (igual para todos) o un arreglo
-                // (un color diferente por barra/sector, como en este caso).
-                backgroundColor: datosParaGrafico.coloresGrafico,
-
-                // Color del borde de cada barra o sector
-                borderColor: datosParaGrafico.coloresGrafico,
-
-                // Grosor del borde en píxeles
-                borderWidth: 1,
-
-                // hoverOffset: cuántos píxeles se separa un sector al pasar
-                // el mouse por encima (solo aplica a pie y doughnut)
-                hoverOffset: 10
-            }]
+            labels:   datosPreparados.arregloEtiquetas,
+            datasets: arregloDatasetsGrafico
         },
 
-        // 'options' → configuración de comportamiento y apariencia
-        // Se genera dinámicamente con la función _opcionesGrafico()
-        options: _opcionesGrafico(textoTituloFinal),
+        options: obtenerConfiguracionGraficoMedia(textoTituloDefinitivo),
 
-        // 'plugins' → arreglo de plugins personalizados que se ejecutan
-        // durante el ciclo de vida del gráfico.
-        // _pluginTextoCentral() devuelve un objeto plugin que dibuja
-        // el valor de la media en el centro del canvas (solo en pie/doughnut).
-        // Se le pasa un id único combinando 'plugin_' con el id del canvas
-        // para evitar conflictos si hay varios gráficos en la misma página.
-        plugins: [ _pluginTextoCentral(valorMediaFinal, 'plugin_' + idCanvas) ]
+        plugins: [ crearPluginMarcadorMedia(datosPreparados.valorMediaFinal, 'pluginMedia_' + idCanvasDestino) ]
     });
 
-    // Guarda y devuelve la instancia para que estadistica.js pueda
-    // destruirla cuando el usuario oculte el gráfico
+    // PASO 6: Devolver la instancia creada
     return instanciaGraficoMedia;
 }

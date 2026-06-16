@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estadística Aplicada — Proyecto de Matemática 1</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="estadistica.css">
+</head>
+
+<body>
+
+        <!-- ============================================================
+            MENÚ DE NAVEGACIÓN PRINCIPAL
+            Cada botón/enlace redirige a su página HTML correspondiente.
+            La página activa se resalta con la clase 'activo'.
+            ============================================================ -->
+    <nav>
+        <a href="index.html" class="btn-nav activo">Portada</a>
+        <a href="media.html" class="btn-nav">Media</a>
+        <a href="mediana.html" class="btn-nav">Mediana</a>
+        <a href="moda.html" class="btn-nav">Moda</a>
+        <a href="minMax.html" class="btn-nav">Mínimo y Máximo</a>
+        <a href="rango.html" class="btn-nav">Rango</a>
+        <a href="varianza.html" class="btn-nav">Varianza</a>
+        <a href="desvEstandar.html" class="btn-nav">Desviación Estándar</a>
+        <a href="ejPractico.html" class="btn-nav">Ejercicio Práctico</a>
+        <a href="test.html" class="btn-nav">Test</a>
+        <a href="acercaDe.html" class="btn-nav">Acerca De</a>
+    </nav>
+
+        <!-- ============================================================
+            SECCIÓN 1: PORTADA
+            Visible por defecto al cargar la página (sin clase 'oculto').
+            ============================================================ -->
+    <section id="portada" class="dos-columnas">
+
+        <div class="columna-teoria">
+            <h1>Estadística Aplicada</h1>
+            <h2>Proyecto de Matemática 1</h2>
+            <img src="images/portada01.png" alt="Imagen de portada del proyecto de estadística" width="100%">
+        </div>
+
+        <div class="columna-ejercicios">
+            <p>
+                Bienvenido a este espacio dedicado a la <strong>Estadística Descriptiva</strong>, una disciplina
+                fundamental que nos permite transformar datos brutos en información con significado. En el mundo
+                actual, la capacidad de organizar, resumir y visualizar datos es esencial para comprender tendencias,
+                realizar diagnósticos precisos y tomar decisiones fundamentadas en la evidencia.
+            </p>
+            <p>
+                A través de este sitio, exploraremos las medidas de tendencia central y de dispersión, herramientas
+                matemáticas que nos permiten describir el comportamiento de un conjunto de datos mediante un solo
+                valor o identificar qué tan variados son entre sí. Cada sección combina una sólida base teórica con
+                <strong>simulaciones interactivas en JavaScript</strong> y visualizaciones dinámicas de datos.
+            </p>
+            <p>
+                Te invitamos a utilizar el menú de navegación superior para recorrer los diferentes conceptos y
+                finalizar con nuestro <strong>ejercicio práctico</strong>, donde aplicaremos todo lo aprendido en
+                un dataset real sobre el comportamiento de usuarios en redes sociales.
+            </p>
+            <div style="margin-top: auto; padding-top: 20px; text-align: center;">
+                <button onclick="mostrarSeccion('que-es')" class="btn-interactivo" id="btn-nav-quees">¿Qué es la Estadística?</button>
+            </div>
+        </div>
+    </section>
+
+
+        <!-- ============================================================
+            SECCIÓN 2: ¿QUÉ ES LA ESTADÍSTICA?
+            Oculta por defecto. Se activa con el botón de nav interna.
+            ============================================================ -->
+    <section id="que-es" class="oculto dos-columnas">
+
+        <div class="columna-teoria">
+            <h2>¿Qué es la Estadística?</h2>
+            <img src="images/estadistica.png" alt="Ilustración sobre estadística" width="100%">
+
+            <h3>Definición</h3>
+            <p>
+                La <strong>estadística</strong> es una rama de las matemáticas que se dedica
+                a la recopilación, organización, análisis e interpretación de datos con el
+                propósito de transformar la información en conocimiento útil. Gracias a la
+                estadística es posible identificar patrones, comparar resultados, comprender
+                fenómenos y tomar decisiones fundamentadas en evidencia objetiva.
+            </p>
+            <p>
+                En la actualidad, la estadística tiene aplicaciones en múltiples áreas como
+                la educación, la medicina, la economía, la investigación científica, el
+                marketing digital y las redes sociales. Cada vez que se analizan ventas,
+                calificaciones, encuestas, audiencias o interacciones en plataformas como
+                Instagram o TikTok, se están utilizando herramientas estadísticas para obtener
+                conclusiones relevantes.
+            </p>
+        </div>
+
+        <div class="columna-ejercicios">
+            <p>De manera general, la estadística se divide en dos grandes ramas:</p>
+            <ul>
+                <li>
+                    <strong>Estadística descriptiva:</strong> se encarga de recopilar,
+                    organizar y resumir los datos mediante tablas, gráficos y medidas
+                    estadísticas como la media, la mediana o la moda, facilitando la
+                    comprensión de la información.
+                </li>
+                <li>
+                    <strong>Estadística inferencial:</strong> utiliza muestras de datos
+                    para realizar estimaciones, predicciones o generalizaciones sobre una
+                    población más amplia, apoyando la toma de decisiones bajo condiciones
+                    de incertidumbre.
+                </li>
+            </ul>
+
+            <h3>Ejemplo práctico</h3>
+            <p>
+                Supongamos que un profesor registra las calificaciones de cinco estudiantes:
+                <strong>7, 8, 6, 9 y 10</strong>.
+            </p>
+            <p>
+                Mediante la estadística descriptiva puede calcular el promedio del grupo,
+                determinar cuál es la calificación central, identificar la nota más alta y
+                la más baja, y analizar la distribución general de los resultados. Esta
+                información permite evaluar el rendimiento académico de los estudiantes de
+                forma objetiva y fundamentada.
+            </p>
+            <p>
+                De manera similar, en las redes sociales se pueden analizar métricas como
+                visualizaciones, "me gusta" o comentarios para conocer el desempeño de una
+                publicación y comprender el comportamiento de los usuarios.
+            </p>
+        </div>
+    </section>
+
+
+        <!-- ============================================================
+            SCRIPTS
+            estadistica.js provee mostrarSeccion() para la nav interna.
+            datos.js y social_media_200.js se cargan por consistencia.
+            ============================================================ -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="datos.js"></script>
+    <script src="social_media_200.js"></script>
+    <script src="funciones_estadisticas/media.js"></script>
+    <script src="funciones_estadisticas/mediana.js"></script>
+    <script src="funciones_estadisticas/moda.js"></script>
+    <script src="funciones_estadisticas/minMax.js"></script>
+    <script src="funciones_estadisticas/rango.js"></script>
+    <script src="funciones_estadisticas/varianza.js"></script>
+    <script src="funciones_estadisticas/desviacion.js"></script>
+    <script src="estadistica.js"></script>
+
+</body>
+</html>

@@ -554,3 +554,71 @@
     color: #e11d48; /* Cambia a rojo al pasar el mouse */
     transform: translateY(-2px);
 }
+
+/* Estilo para el enlace de navegación activo */
+.btn-nav.activo {
+    background-color: #9A3412;
+    font-weight: bold;
+}
+
+/* ============================================================
+    ESTILO DE BOTONES DE NAVEGACIÓN
+   ============================================================ */
+
+/* Contenedor principal (asegúrate de que tu <nav> o <div> tenga una clase similar) */
+nav {
+    background-color: #a31a1a; /* El rojo oscuro de tu captura */
+    padding: 15px;
+    text-align: center;
+}
+
+/* Estilo base de los enlaces convertidos a botones */
+nav a {
+    display: inline-block;
+    color: white !important; /* Texto blanco */
+    text-decoration: none; /* Quitar subrayado */
+    padding: 10px 18px;
+    margin: 5px;
+    border-radius: 8px; /* Bordes redondeados */
+    background-color: rgba(255, 255, 255, 0.1); /* Fondo blanco muy transparente */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Borde sutil */
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease; /* Animación suave */
+}
+
+/* Efecto al pasar el mouse (Hover) */
+nav a:hover {
+    background-color: white; /* El fondo se vuelve blanco */
+    color: #a31a1a !important; /* El texto se vuelve rojo */
+    transform: translateY(-2px); /* Pequeño salto hacia arriba */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Sombra elegante */
+}
+
+/* Estilo para el botón de la página donde estás actualmente (clase opcional) */
+nav a.active {
+    background-color: #f1c40f; /* Color amarillo/oro para resaltar */
+    color: #000 !important;
+    border: none;
+    font-weight: bold;
+}
+
+/* Estilo especial para "Ejercicio Práctico" (si quieres que destaque más) */
+nav a[href*="ejercicio"] {
+    border: 2px solid #f1c40f;
+}
+
+.columna-ejercicios {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Botón de la página actualmente activa */
+.btn-nav.activo {
+    background-color: #6D0F1E; /* Color vino oscuro */
+    color: #ffffff;
+    border-color: #4a0a14;
+    font-weight: bold;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}

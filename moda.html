@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moda — Estadística Aplicada</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="estadistica.css">
+</head>
+
+<body>
+
+    <nav>
+        <a href="index.html" class="btn-nav">Portada</a>
+        <a href="media.html" class="btn-nav">Media</a>
+        <a href="mediana.html" class="btn-nav">Mediana</a>
+        <a href="moda.html" class="btn-nav activo">Moda</a>
+        <a href="minMax.html" class="btn-nav">Mínimo y Máximo</a>
+        <a href="rango.html" class="btn-nav">Rango</a>
+        <a href="varianza.html" class="btn-nav">Varianza</a>
+        <a href="desvEstandar.html" class="btn-nav">Desviación Estándar</a>
+        <a href="ejPractico.html" class="btn-nav">Ejercicio Práctico</a>
+        <a href="test.html" class="btn-nav">Test</a>
+        <a href="acercaDe.html" class="btn-nav">Acerca De</a>
+    </nav>
+
+
+    <!-- ============================================================
+         SECCIÓN: MODA
+         Visible por defecto al cargar esta página (sin clase 'oculto').
+         ============================================================ -->
+    <section id="moda" class="dos-columnas">
+
+        <div class="columna-teoria">
+            <h2>Moda</h2>
+            <img src="images/moda.jpg" alt="Ilustración de la moda estadística" width="100%">
+
+            <h3>Definición</h3>
+            <p>
+                La moda es el valor que más se repite dentro de un conjunto de datos.
+                Un conjunto puede tener una moda (unimodal), dos modas (bimodal),
+                varias modas (multimodal) o ninguna moda si todos los valores aparecen
+                la misma cantidad de veces.
+            </p>
+
+            <h3>Ejemplo</h3>
+            <p>Calificaciones de un grupo: <strong>8, 7, 9, 8, 10, 8, 7</strong></p>
+            <p>Contamos las repeticiones:</p>
+            <ul>
+                <li>7 aparece 2 veces</li>
+                <li>8 aparece 3 veces</li>
+                <li>9 aparece 1 vez</li>
+                <li>10 aparece 1 vez</li>
+            </ul>
+            <p>
+                El valor que más se repite es el <strong>8</strong>,
+                por lo tanto la moda es <strong>8</strong>.
+            </p>
+
+            <h3>¿Cómo se calcula en JavaScript?</h3>
+            <pre class="consola">
+// --- Calcular la MODA en JavaScript ---
+
+let listaCalificaciones = [8, 7, 9, 8, 10, 8, 7];
+let listaConteos = [];
+
+// BUCLE EXTERNO: recorre cada calificación del arreglo
+for (let indiceCalificacion = 0; indiceCalificacion < listaCalificaciones.length; indiceCalificacion++) {
+    let yaExiste = false;
+
+    // BUCLE INTERNO: busca si la calificación ya fue registrada
+    for (let indiceConteo = 0; indiceConteo < listaConteos.length; indiceConteo++) {
+        if (listaConteos[indiceConteo].valor === listaCalificaciones[indiceCalificacion]) {
+            listaConteos[indiceConteo].conteo = listaConteos[indiceConteo].conteo + 1;
+            yaExiste = true;
+        }
+    }
+
+    // Si no existe, se agrega como nuevo registro con conteo 1
+    if (yaExiste === false) {
+        listaConteos.push({ valor: listaCalificaciones[indiceCalificacion], conteo: 1 });
+    }
+}
+
+let valorModa = listaConteos[0].valor;
+let conteoMaximo = listaConteos[0].conteo;
+
+// Se busca el valor con mayor frecuencia
+for (let indiceConteo = 1; indiceConteo < listaConteos.length; indiceConteo++) {
+    if (listaConteos[indiceConteo].conteo > conteoMaximo) {
+        conteoMaximo = listaConteos[indiceConteo].conteo;
+        valorModa = listaConteos[indiceConteo].valor;
+    }
+}
+
+console.log("La moda es: " + valorModa);
+            </pre>
+        </div>
+
+        <div class="columna-ejercicios">
+            <h3>Ejemplo interactivo</h3>
+            <p>
+                El siguiente ejemplo usa un arreglo de <strong>20 objetos</strong>
+                precargados. Al hacer clic, JavaScript cuenta cuántas veces se repite
+                cada calificación y determina la moda.
+            </p>
+
+            <button onclick="toggleEjemploModa()" class="btn-interactivo" id="btn-ejemplo-moda">
+                ▶ Calcular Moda
+            </button>
+
+            <div id="resultado-moda" class="oculto"></div>
+
+            <h3>Gráfico de frecuencias</h3>
+            <p>
+                Haz clic en el botón para ver cuántas veces se repite cada calificación.
+                La barra más alta representa la moda.
+            </p>
+
+            <button onclick="toggleGraficoModa()" class="btn-interactivo" id="btn-grafico-moda">
+                📊 Ver Gráfico de Frecuencias
+            </button>
+
+            <div id="contenedor-grafico-moda" class="oculto" style="margin-top:20px;">
+                <canvas id="graficaModa"></canvas>
+            </div>
+        </div>
+    </section>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="datos.js"></script>
+    <script src="social_media_200.js"></script>
+
+    <script src="funciones_estadisticas/moda.js"></script>
+    <script src="moda_pagina.js"></script>
+
+
+</body>
+</html>

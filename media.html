@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media — Estadística Aplicada</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="estadistica.css">
+</head>
+
+<body>
+
+    <nav>
+        <a href="index.html" class="btn-nav">Portada</a>
+        <a href="media.html" class="btn-nav activo">Media</a>
+        <a href="mediana.html" class="btn-nav">Mediana</a>
+        <a href="moda.html" class="btn-nav">Moda</a>
+        <a href="minMax.html" class="btn-nav">Mínimo y Máximo</a>
+        <a href="rango.html" class="btn-nav">Rango</a>
+        <a href="varianza.html" class="btn-nav">Varianza</a>
+        <a href="desvEstandar.html" class="btn-nav">Desviación Estándar</a>
+        <a href="ejPractico.html" class="btn-nav">Ejercicio Práctico</a>
+        <a href="test.html" class="btn-nav">Test</a>
+        <a href="acercaDe.html" class="btn-nav">Acerca De</a>
+    </nav>
+
+
+        <!-- ============================================================
+            SECCIÓN: MEDIA (PROMEDIO)
+            Visible por defecto al cargar esta página (sin clase 'oculto').
+            ============================================================ -->
+    <section id="media" class="dos-columnas">
+
+        <div class="columna-teoria">
+            <h2>Media (Promedio)</h2>
+            <img src="images/media.jpg" alt="Ilustración de la media aritmética" width="100%">
+
+            <h3>Definición</h3>
+            <p>
+                La media aritmética, comúnmente llamada promedio, es el resultado de sumar
+                todos los valores de un conjunto de datos y dividir esa suma entre la
+                cantidad total de valores.
+            </p>
+            <p>
+                <strong>Fórmula:</strong>
+                Media = Suma de todos los valores / Cantidad de valores
+            </p>
+
+            <h3>Ejemplo</h3>
+            <p>Las edades de 5 personas son: <strong>20, 25, 30, 22, 28</strong></p>
+            <p>Paso 1: Sumamos todos los valores: 20 + 25 + 30 + 22 + 28 = <strong>125</strong></p>
+            <p>Paso 2: Dividimos entre la cantidad de valores (5): 125 / 5 = <strong>25</strong></p>
+            <p>La media de las edades es <strong>25 años</strong>.</p>
+
+            <h3>¿Cómo se calcula en JavaScript?</h3>
+            <pre class="consola">
+// --- Calcular la MEDIA (Promedio) ---
+
+let listaEdades = [20, 25, 30, 22, 28];
+let sumaEdades = 0;
+
+for (let indiceEdad = 0; indiceEdad < listaEdades.length; indiceEdad++) {
+    sumaEdades = sumaEdades + listaEdades[indiceEdad];
+}
+
+let valorMedia = sumaEdades / listaEdades.length;
+console.log("La media es: " + valorMedia);
+            </pre>
+        </div>
+
+        <div class="columna-ejercicios">
+            <h3>Ejemplo interactivo</h3>
+            <p>
+                El siguiente ejemplo usa un arreglo de <strong>20 objetos</strong>
+                precargados, cada uno con el nombre de un estudiante y su calificación.
+                Al hacer clic en el botón, JavaScript recorre el arreglo, suma todas
+                las calificaciones y calcula la media.
+            </p>
+
+            <button onclick="toggleEjemploMedia()" class="btn-interactivo" id="btn-ejemplo-media">
+                ▶ Calcular Media
+            </button>
+
+            <div id="resultado-media" class="oculto"></div>
+
+            <h3>Gráfico de calificaciones</h3>
+            <p>
+                Haz clic en el botón para ver el gráfico de barras
+                con las calificaciones de los 20 estudiantes.
+            </p>
+
+            <button onclick="toggleGraficoMedia()" class="btn-interactivo" id="btn-grafico-media">
+                📊 Ver Gráfico de Barras
+            </button>
+
+            <div id="contenedor-grafico-media" class="oculto" style="height: 400px;">
+                <canvas id="graficaMedia"></canvas>
+            </div>
+        </div>
+    </section>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3"></script>
+    <script src="datos.js"></script>
+    <script src="social_media_200.js"></script>
+    <script src="funciones_estadisticas/media.js"></script>
+    <script src="media_pagina.js"></script>
+
+    <!-- <script src="estadistica.js"></script> -->
+
+</body>
+</html>
