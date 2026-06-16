@@ -1318,6 +1318,7 @@ function cargarTablaPreviewDataset() {
         filasTablaHTML += "<td>" + registroRedSocial.App + "</td>";
         filasTablaHTML += "<td>" + registroRedSocial.Daily_Minutes_Spent + "</td>";
         filasTablaHTML += "<td>" + registroRedSocial.Posts_Per_Day + "</td>";
+        filasTablaHTML += "<td>" + registroRedSocial.Likes_Per_Day + "</td>";
         filasTablaHTML += "<td>" + registroRedSocial.Follows_Per_Day + "</td>";
         filasTablaHTML += "</tr>";
     }
