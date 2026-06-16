@@ -1318,7 +1318,6 @@ function cargarTablaPreviewDataset() {
         filasTablaHTML += "<td>" + registroRedSocial.App + "</td>";
         filasTablaHTML += "<td>" + registroRedSocial.Daily_Minutes_Spent + "</td>";
         filasTablaHTML += "<td>" + registroRedSocial.Posts_Per_Day + "</td>";
-        filasTablaHTML += "<td>" + registroRedSocial.Likes_Per_Day + "<​td>";
         filasTablaHTML += "<td>" + registroRedSocial.Follows_Per_Day + "</td>";
         filasTablaHTML += "</tr>";
     }
@@ -1327,7 +1326,7 @@ function cargarTablaPreviewDataset() {
 }
 
 // Llenar la tabla preview cuando el DOM esté completamente cargado
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     cargarTablaPreviewDataset();
 });
 
@@ -1365,7 +1364,7 @@ function mostrarTablaMedianaDataset() {
     }
 
     // Se ordenan los valores de menor a mayor
-    listaValoresNumericos.sort(function(valorA, valorB) {
+    listaValoresNumericos.sort(function (valorA, valorB) {
         return valorA - valorB;
     });
 
