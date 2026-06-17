@@ -42,7 +42,7 @@ let instanciaGraficoMedia = null;
 //   'radar'         → Telaraña
 //   'polarArea'     → Área polar
 // ------------------------------------------------------------
-const TIPO_GRAFICO_MEDIA = 'bar';
+const TIPO_GRAFICO_MEDIA = 'barHorizontal';
 
 
 // ============================================================
@@ -395,10 +395,10 @@ function obtenerConfiguracionGraficoMedia(textoTituloGrafico) {
         animations: (TIPO_GRAFICO_MEDIA === 'bar' || esBarraHorizontal)
             ? {
                 [esBarraHorizontal ? 'x' : 'y']: {
-                    duration: 10,
+                    duration: 100,
                     easing:   'easeInOutQuart',
                     delay: function(contextoAnimacion) {
-                        return contextoAnimacion.dataIndex * 10;
+                        return contextoAnimacion.dataIndex * 100;
                     }
                 }
             }
