@@ -92,6 +92,21 @@
 
         <!-- Columna derecha: 7 subsecciones estadísticas interactivas -->
         <div class="columna-ejercicios">
+            <div class="selector-ejercicio-box">
+                <h3>Selecciona el cálculo estadístico</h3>
+                <p>Elige una opción para visualizar únicamente el ejercicio correspondiente.</p>
+
+                <select id="selectorEjercicioPractico" onchange="mostrarEjercicioSeleccionado()">
+                    <option value="">-- Selecciona un cálculo --</option>
+                    <option value="sub-ep-media">Media</option>
+                    <option value="sub-ep-mediana">Mediana</option>
+                    <option value="sub-ep-moda">Moda</option>
+                    <option value="sub-ep-minmax">Mínimo y Máximo</option>
+                    <option value="sub-ep-rango">Rango</option>
+                    <option value="sub-ep-varianza">Varianza</option>
+                    <option value="sub-ep-desviacion">Desviación Estándar</option>
+                </select>
+            </div>
 
             <!-- SUBSECCIÓN 1: MEDIA -->
             <div class="subseccion-interactiva" id="sub-ep-media">
@@ -123,7 +138,8 @@
                     <strong>Daily_Minutes_Spent</strong> de menor a mayor
                     y encuentra el valor central del dataset completo.
                 </p>
-                <button onclick="toggleEjercicioPracticoMediana()" class="btn-interactivo" id="btn-ejercicio-practico-mediana">
+                <button onclick="toggleEjercicioPracticoMediana()" class="btn-interactivo"
+                    id="btn-ejercicio-practico-mediana">
                     ▶ Calcular Mediana
                 </button>
                 <div id="resultado-ejercicio-mediana" class="oculto"></div>
@@ -146,7 +162,8 @@
                     <strong>App</strong> en los 200 registros y determina
                     cuál es la red social más representada en el dataset.
                 </p>
-                <button onclick="toggleEjercicioPracticoModa()" class="btn-interactivo" id="btn-ejercicio-practico-moda">
+                <button onclick="toggleEjercicioPracticoModa()" class="btn-interactivo"
+                    id="btn-ejercicio-practico-moda">
                     ▶ Calcular Moda
                 </button>
                 <div id="resultado-ejercicio-moda" class="oculto"></div>
@@ -276,7 +293,9 @@
     <script src="varianza_pagina.js"></script>
     <script src="funciones_estadisticas/desviacion.js"></script>
     <script src="desviacion_pagina.js"></script>
+    <script src="selector_ejercicios.js"></script>
     <!-- <script src="estadistica.js"></script> -->
 
 </body>
+
 </html>
