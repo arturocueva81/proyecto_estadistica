@@ -106,7 +106,7 @@ function calcularDesviacion(arregloObjetos, propiedad, idContenedor, nombrePropM
  * Funcion: dibujarGraficoDesviacion
  * Dibuja un gráfico con barras, línea de media y límites de desviación.
  */
-function dibujarGraficoDesviacion(arregloObjetos, propiedad, canvasId, titulo, nombrePropMostrar) {
+function dibujarGraficoDesviacion(arregloObjetos, propiedad, canvasId, titulo, nombrePropMostrar, tipoGraficoOpcional) {
 
     let listaNumeros = [];
     let etiquetas = [];
@@ -134,7 +134,7 @@ function dibujarGraficoDesviacion(arregloObjetos, propiedad, canvasId, titulo, n
     let contextoGrafico = document.getElementById(canvasId).getContext('2d');
 
     return new Chart(contextoGrafico, {
-        type: 'bar',
+        type: tipoGraficoOpcional || 'bar',
         data: {
             labels: etiquetas,
             datasets: [
@@ -186,6 +186,11 @@ function dibujarGraficoDesviacion(arregloObjetos, propiedad, canvasId, titulo, n
                 }
             },
             scales: {
+                x: {
+                    ticks: {
+                        display: false // Evitar amontonamiento de 200 etiquetas
+                    }
+                },
                 y: {
                     beginAtZero: true
                 }

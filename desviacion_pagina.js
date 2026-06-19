@@ -81,12 +81,38 @@ function toggleGraficoEjercicioDesviacion() {
     canvasAnterior.parentNode.replaceChild(canvasNuevo, canvasAnterior);
 
     setTimeout(function () {
+        let selectorGrafico = document.getElementById('select-grafico-desviacion');
+        let tipoElegido = selectorGrafico ? selectorGrafico.value : null;
+
         graficoEjercicioDesviacionInstancia = dibujarGraficoDesviacion(
             obtenerListaRedesSociales(),
             PROPIEDAD_NUMERICA_EJERCICIO_DESVIACION,
             'graficaEjercicioDesviacion',
             'Desviación estándar de minutos diarios en redes sociales',
-            PROPIEDAD_ETIQUETA_EJERCICIO_DESVIACION
+            PROPIEDAD_ETIQUETA_EJERCICIO_DESVIACION,
+            tipoElegido
         );
     }, 50);
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    let selectorGrafico = document.getElementById('select-grafico-desviacion');
+    if (selectorGrafico) {
+        selectorGrafico.addEventListener('change', function() {
+            let contenedorGrafico = document.getElementById('contenedor-grafico-ejercicio-desviacion');
+            let botonAccion = document.getElementById('btn-grafico-ejercicio-desviacion');
+
+            if (contenedorGrafico && botonAccion) {
+                if (!contenedorGrafico.classList.contains('oculto')) {
+                    contenedorGrafico.classList.add('oculto');
+                    botonAccion.textContent = '📊 Ver Gráfico de Desviación Estándar';
+
+                    if (graficoEjercicioDesviacionInstancia !== null) {
+                        try { graficoEjercicioDesviacionInstancia.destroy(); } catch(error) {}
+                        graficoEjercicioDesviacionInstancia = null;
+                    }
+                }
+            }
+        });
+    }
+});

@@ -247,10 +247,12 @@ function calcularMediana(listaDeDatos, propiedadNumerica, idContenedorTabla, pro
 // por cuartiles. Para el resto de tipos, genera un punto por
 // cada registro, coloreando el/los valor(es) central(es) en rojo.
 // ============================================================
-function prepararDatosParaGraficoMediana(listaDeDatos, propiedadNumerica) {
+function prepararDatosParaGraficoMediana(listaDeDatos, propiedadNumerica, tipoGrafico) {
+
+    let tipoActivo = tipoGrafico || TIPO_GRAFICO_MEDIANA;
 
     // ── MODO DONA / PIE: agrupar en 4 rangos por cuartiles ──
-    if (TIPO_GRAFICO_MEDIANA === 'doughnut' || TIPO_GRAFICO_MEDIANA === 'pie') {
+    if (tipoActivo === 'doughnut' || tipoActivo === 'pie') {
 
         let soloNumerosParaCuartiles = [];
 
@@ -388,14 +390,16 @@ function prepararDatosParaGraficoMediana(listaDeDatos, propiedadNumerica) {
 //
 // Solo tiene efecto visual en gráficos de tipo 'doughnut' y 'pie'.
 // ============================================================
-function crearPluginMarcadorMediana(valorMedianaPlugin, idUnicoPlugin) {
+function crearPluginMarcadorMediana(valorMedianaPlugin, idUnicoPlugin, tipoGrafico) {
+
+    let tipoActivo = tipoGrafico || TIPO_GRAFICO_MEDIANA;
 
     return {
         id: idUnicoPlugin || 'pluginMarcadorMediana',
 
         afterDraw: function(instanciaGrafico) {
 
-            if (TIPO_GRAFICO_MEDIANA !== 'doughnut' && TIPO_GRAFICO_MEDIANA !== 'pie') { return; }
+            if (tipoActivo !== 'doughnut' && tipoActivo !== 'pie') { return; }
 
             let centroX = instanciaGrafico.width  / 2;
             let centroY = instanciaGrafico.height / 2;
@@ -432,17 +436,18 @@ function crearPluginMarcadorMediana(valorMedianaPlugin, idUnicoPlugin) {
 // Construye y devuelve el objeto 'options' que Chart.js usa
 // para configurar el comportamiento y apariencia del gráfico.
 // ============================================================
-function obtenerConfiguracionGraficoMediana(textoTituloGrafico) {
+function obtenerConfiguracionGraficoMediana(textoTituloGrafico, tipoGrafico) {
 
-    let esBarraHorizontal = (TIPO_GRAFICO_MEDIANA === 'barHorizontal');
-    let requiereEjes = (TIPO_GRAFICO_MEDIANA === 'bar' || esBarraHorizontal);
+    let tipoActivo = tipoGrafico || TIPO_GRAFICO_MEDIANA;
+    let esBarraHorizontal = (tipoActivo === 'barHorizontal');
+    let requiereEjes = (tipoActivo === 'bar' || esBarraHorizontal);
 
     return {
         responsive: true,
         maintainAspectRatio: false,
         indexAxis: esBarraHorizontal ? 'y' : 'x',
 
-        animations: (TIPO_GRAFICO_MEDIANA === 'bar' || esBarraHorizontal)
+        animations: (tipoActivo === 'bar' || esBarraHorizontal)
             ? {
                 [esBarraHorizontal ? 'x' : 'y']: {
                     duration: 10,
@@ -513,7 +518,9 @@ function obtenerConfiguracionGraficoMediana(textoTituloGrafico) {
 //
 // Devuelve: la instancia del gráfico Chart.js creado
 // ============================================================
-function dibujarGraficoMediana(listaDeDatos, propiedadNumerica, idCanvasDestino, textoTitulo) {
+function dibujarGraficoMediana(listaDeDatos, propiedadNumerica, idCanvasDestino, textoTitulo, tipoGraficoOpcional) {
+
+    let tipoActivo = tipoGraficoOpcional || TIPO_GRAFICO_MEDIANA;
 
     let elementoCanvasMediana = document.getElementById(idCanvasDestino);
     if (!elementoCanvasMediana) { return null; }
@@ -530,7 +537,7 @@ function dibujarGraficoMediana(listaDeDatos, propiedadNumerica, idCanvasDestino,
     }
 
     // PASO 3: Preparar los datos
-    let datosPreparados = prepararDatosParaGraficoMediana(listaDeDatos, propiedadNumerica);
+    let datosPreparados = prepararDatosParaGraficoMediana(listaDeDatos, propiedadNumerica, tipoActivo);
 
     // PASO 4: Construir datasets
     let textoTituloDefinitivo = textoTitulo || ('Mediana: ' + datosPreparados.valorMedianaFinal.toFixed(2));
@@ -546,7 +553,7 @@ function dibujarGraficoMediana(listaDeDatos, propiedadNumerica, idCanvasDestino,
         }
     ];
 
-    let esGraficoTipoBarra = (TIPO_GRAFICO_MEDIANA === 'bar' || TIPO_GRAFICO_MEDIANA === 'barHorizontal');
+    let esGraficoTipoBarra = (tipoActivo === 'bar' || tipoActivo === 'barHorizontal');
 
     if (esGraficoTipoBarra && datosPreparados.arregloLineaMediana.length > 0) {
         arregloDatasetsGrafico.push({
@@ -563,16 +570,16 @@ function dibujarGraficoMediana(listaDeDatos, propiedadNumerica, idCanvasDestino,
     // PASO 5: Crear el gráfico
     instanciaGraficoMediana = new Chart(elementoCanvasMediana.getContext('2d'), {
 
-        type: TIPO_GRAFICO_MEDIANA === 'barHorizontal' ? 'bar' : TIPO_GRAFICO_MEDIANA,
+        type: tipoActivo === 'barHorizontal' ? 'bar' : tipoActivo,
 
         data: {
             labels:   datosPreparados.arregloEtiquetas,
             datasets: arregloDatasetsGrafico
         },
 
-        options: obtenerConfiguracionGraficoMediana(textoTituloDefinitivo),
+        options: obtenerConfiguracionGraficoMediana(textoTituloDefinitivo, tipoActivo),
 
-        plugins: [ crearPluginMarcadorMediana(datosPreparados.valorMedianaFinal, 'pluginMed_' + idCanvasDestino) ]
+        plugins: [ crearPluginMarcadorMediana(datosPreparados.valorMedianaFinal, 'pluginMed_' + idCanvasDestino, tipoActivo) ]
     });
 
     // PASO 6: Devolver la instancia creada

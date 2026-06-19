@@ -127,7 +127,7 @@ function calcularVarianza(arregloObjetos, propiedad, idContenedor, nombrePropMos
  * Funcion: dibujarGraficoVarianza
  * Dibuja un gráfico de barras con línea de media.
  */
-function dibujarGraficoVarianza(arregloObjetos, propiedad, canvasId, titulo, nombrePropMostrar) {
+function dibujarGraficoVarianza(arregloObjetos, propiedad, canvasId, titulo, nombrePropMostrar, tipoGraficoOpcional) {
 
     let listaNumeros = [];
     let etiquetas = [];
@@ -152,7 +152,7 @@ function dibujarGraficoVarianza(arregloObjetos, propiedad, canvasId, titulo, nom
     let contextoGrafico = document.getElementById(canvasId).getContext('2d');
 
     return new Chart(contextoGrafico, {
-        type: 'bar',
+        type: tipoGraficoOpcional || 'bar',
         data: {
             labels: etiquetas,
             datasets: [
@@ -186,6 +186,11 @@ function dibujarGraficoVarianza(arregloObjetos, propiedad, canvasId, titulo, nom
                 }
             },
             scales: {
+                x: {
+                    ticks: {
+                        display: false // Evitar amontonamiento de 200 etiquetas
+                    }
+                },
                 y: {
                     beginAtZero: true
                 }

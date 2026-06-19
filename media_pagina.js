@@ -268,11 +268,15 @@ function toggleGraficoEjercicio() {
     setTimeout(function() {
         let resumenPorApp = agruparRegistrosPorApp();
 
+        let selectorGrafico = document.getElementById('select-grafico-media');
+        let tipoElegido = selectorGrafico ? selectorGrafico.value : null;
+
         instanciaGraficoEjercicioPractico = dibujarGraficoMedia(
             resumenPorApp,
             'mediaMinutos',   // propiedad numérica del resumen agrupado
             'graficaEjercicio',
-            'Media de ' + PROPIEDAD_NUMERICA_EJERCICIO + ' por App'
+            'Media de ' + PROPIEDAD_NUMERICA_EJERCICIO + ' por App',
+            tipoElegido
         );
     }, 50);
 }
@@ -314,4 +318,26 @@ function cargarVistaPreviaDataset() {
 // Se ejecuta automáticamente cuando el HTML termina de cargarse
 document.addEventListener('DOMContentLoaded', function() {
     cargarVistaPreviaDataset();
+
+    // Evento para ocultar el gráfico al cambiar el tipo en el combo box
+    let selectorGraficoMedia = document.getElementById('select-grafico-media');
+    if (selectorGraficoMedia) {
+        selectorGraficoMedia.addEventListener('change', function() {
+            let contenedorGraficoEjercicio = document.getElementById('contenedor-grafico-ejercicio');
+            let botonAccion = document.getElementById('btn-grafico-ejercicio');
+
+            if (contenedorGraficoEjercicio && botonAccion) {
+                if (!contenedorGraficoEjercicio.classList.contains('oculto')) {
+                    contenedorGraficoEjercicio.classList.add('oculto');
+                    botonAccion.textContent = '📊 Ver Gráfico Comparativo';
+
+                    // Limpiar la instancia previa si existe
+                    if (instanciaGraficoEjercicioPractico !== null) {
+                        try { instanciaGraficoEjercicioPractico.destroy(); } catch(error) {}
+                        instanciaGraficoEjercicioPractico = null;
+                    }
+                }
+            }
+        });
+    }
 });

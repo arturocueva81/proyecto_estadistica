@@ -80,12 +80,38 @@ function toggleGraficoEjercicioRango() {
     canvasAnterior.parentNode.replaceChild(canvasNuevo, canvasAnterior);
 
     setTimeout(function () {
+        let selectorGrafico = document.getElementById('select-grafico-rango');
+        let tipoElegido = selectorGrafico ? selectorGrafico.value : null;
+
         graficoEjercicioRangoInstancia = dibujarGraficoRango(
             obtenerListaRedesSociales(),
             PROPIEDAD_NUMERICA_EJERCICIO_RANGO,
             PROPIEDAD_ETIQUETA_EJERCICIO_RANGO,
             'graficaEjercicioRango',
-            'Amplitud de minutos diarios — rojo: mínimo | verde: máximo'
+            'Amplitud de minutos diarios — rojo: mínimo | verde: máximo',
+            tipoElegido
         );
     }, 50);
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    let selectorGrafico = document.getElementById('select-grafico-rango');
+    if (selectorGrafico) {
+        selectorGrafico.addEventListener('change', function() {
+            let contenedorGrafico = document.getElementById('contenedor-grafico-ejercicio-rango');
+            let botonAccion = document.getElementById('btn-grafico-ejercicio-rango');
+
+            if (contenedorGrafico && botonAccion) {
+                if (!contenedorGrafico.classList.contains('oculto')) {
+                    contenedorGrafico.classList.add('oculto');
+                    botonAccion.textContent = '📊 Ver Gráfico de Amplitud';
+
+                    if (graficoEjercicioRangoInstancia !== null) {
+                        try { graficoEjercicioRangoInstancia.destroy(); } catch(error) {}
+                        graficoEjercicioRangoInstancia = null;
+                    }
+                }
+            }
+        });
+    }
+});

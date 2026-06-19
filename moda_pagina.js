@@ -293,11 +293,15 @@ function toggleGraficoEjercicioModa() {
     setTimeout(function() {
         let todosLosRegistros = obtenerListaRedesSociales();
 
+        let selectorGrafico = document.getElementById('select-grafico-moda');
+        let tipoElegido = selectorGrafico ? selectorGrafico.value : null;
+
         instanciaGraficoEjercicioPracticoModa = dibujarGraficoModa(
             todosLosRegistros,
             'Daily_Minutes_Spent',
             'graficaEjercicioModa',
-            'Moda de Daily_Minutes_Spent en el dataset completo'
+            'Moda de Daily_Minutes_Spent en el dataset completo',
+            tipoElegido
         );
     }, 50);
 }
@@ -335,4 +339,26 @@ function cargarVistaPreviaDataset() {
 
 document.addEventListener('DOMContentLoaded', function() {
     cargarVistaPreviaDataset();
+
+    // Evento para ocultar el gráfico al cambiar el tipo en el combo box
+    let selectorGrafico = document.getElementById('select-grafico-moda');
+    if (selectorGrafico) {
+        selectorGrafico.addEventListener('change', function() {
+            let contenedorGrafico = document.getElementById('contenedor-grafico-ejercicio-moda');
+            let botonAccion = document.getElementById('btn-grafico-ejercicio-moda');
+
+            if (contenedorGrafico && botonAccion) {
+                if (!contenedorGrafico.classList.contains('oculto')) {
+                    contenedorGrafico.classList.add('oculto');
+                    botonAccion.textContent = '📊 Ver Gráfico de Frecuencias';
+
+                    // Limpiar la instancia previa si existe
+                    if (instanciaGraficoEjercicioPracticoModa !== null) {
+                        try { instanciaGraficoEjercicioPracticoModa.destroy(); } catch(error) {}
+                        instanciaGraficoEjercicioPracticoModa = null;
+                    }
+                }
+            }
+        });
+    }
 });

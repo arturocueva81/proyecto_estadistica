@@ -80,11 +80,37 @@ function toggleGraficoEjercicioMinMax() {
     canvasAnterior.parentNode.replaceChild(canvasNuevo, canvasAnterior);
 
     setTimeout(function () {
+        let selectorGrafico = document.getElementById('select-grafico-minmax');
+        let tipoElegido = selectorGrafico ? selectorGrafico.value : null;
+
         graficoEjercicioMinMaxInstancia = dibujarGraficoMinMax(
             obtenerListaRedesSociales(),
             PROPIEDAD_NUMERICA_EJERCICIO_MINMAX,
             'graficaEjercicioMinMax',
-            'Distribución de minutos diarios — azul: mínimo | rojo: máximo'
+            'Distribución de minutos diarios — azul: mínimo | rojo: máximo',
+            tipoElegido
         );
     }, 50);
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    let selectorGrafico = document.getElementById('select-grafico-minmax');
+    if (selectorGrafico) {
+        selectorGrafico.addEventListener('change', function() {
+            let contenedorGrafico = document.getElementById('contenedor-grafico-ejercicio-minmax');
+            let botonAccion = document.getElementById('btn-grafico-ejercicio-minmax');
+
+            if (contenedorGrafico && botonAccion) {
+                if (!contenedorGrafico.classList.contains('oculto')) {
+                    contenedorGrafico.classList.add('oculto');
+                    botonAccion.textContent = '📊 Ver Gráfico de Extremos';
+
+                    if (graficoEjercicioMinMaxInstancia !== null) {
+                        try { graficoEjercicioMinMaxInstancia.destroy(); } catch(error) {}
+                        graficoEjercicioMinMaxInstancia = null;
+                    }
+                }
+            }
+        });
+    }
+});

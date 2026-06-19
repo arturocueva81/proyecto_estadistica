@@ -303,14 +303,16 @@ function calcularMinMax(arregloObjetos, nombreColumnaNum, idContenedorTabla, nom
 //   arregloRegistros → arreglo de objetos con los datos
 //   nombreColumnaNum → nombre de la propiedad numérica
 // ============================================================
-function _prepararDatosGraficoMinMax(arregloRegistros, nombreColumnaNum) {
+function _prepararDatosGraficoMinMax(arregloRegistros, nombreColumnaNum, tipoGrafico) {
+
+    let tipoActivo = tipoGrafico || TIPO_GRAFICO_MINMAX;
 
     // ── MODO DONA / PIE: agrupar datos en 4 rangos por cuartiles ──
     // Los cuartiles dividen los datos ordenados en 4 grupos iguales:
     //   Q1 = valor en la posición 25% → separa el 25% más bajo
     //   Q2 = valor en la posición 50% → es la mediana
     //   Q3 = valor en la posición 75% → separa el 25% más alto
-    if (TIPO_GRAFICO_MINMAX === 'doughnut' || TIPO_GRAFICO_MINMAX === 'pie') {
+    if (tipoActivo === 'doughnut' || tipoActivo === 'pie') {
 
         // Extrae solo los valores numéricos válidos
         let soloNumerosParaCuartiles = [];
@@ -365,7 +367,7 @@ function _prepararDatosGraficoMinMax(arregloRegistros, nombreColumnaNum) {
         };
     }
 
-    // ── RESTO DE TIPOS: un punto por cada registro ──────────────
+    // ── RESTO DE TIPOS: mostrar solo dos barras (Mínimo y Máximo) ──────────────
     // Filtramos los registros con valor numérico válido
     let registrosValidosFiltrados = [];
 
@@ -384,58 +386,17 @@ function _prepararDatosGraficoMinMax(arregloRegistros, nombreColumnaNum) {
 
     let resultadoCalculado = _calcularMinMaxDesdeNumeros(soloNumerosParaGrafico);
 
-    // Buscamos la primera propiedad de texto del objeto para usarla como etiqueta
-    // (igual que en mediana.js: detección automática)
-    let nombreColumnaTextoDetectada = null;
-
-    if (registrosValidosFiltrados.length > 0) {
-        let propiedadesDelObjeto = Object.keys(registrosValidosFiltrados[0]);
-
-        for (let indiceProp = 0; indiceProp < propiedadesDelObjeto.length; indiceProp++) {
-            let nombrePropActual = propiedadesDelObjeto[indiceProp];
-
-            if (nombrePropActual !== nombreColumnaNum &&
-                typeof registrosValidosFiltrados[0][nombrePropActual] === 'string') {
-                nombreColumnaTextoDetectada = nombrePropActual;
-                break;
-            }
-        }
-    }
-
-    // Arreglos que se irán llenando en el bucle siguiente
-    let arregloEtiquetasGrafico  = [];
-    let arregloValoresGrafico    = [];
-    let arregloColoresGrafico    = [];
-
-    for (let indicePunto = 0; indicePunto < registrosValidosFiltrados.length; indicePunto++) {
-
-        // Etiqueta: usa la columna de texto detectada, o "Dato N"
-        arregloEtiquetasGrafico.push(
-            nombreColumnaTextoDetectada
-                ? registrosValidosFiltrados[indicePunto][nombreColumnaTextoDetectada]
-                : 'Dato ' + (indicePunto + 1)
-        );
-
-        arregloValoresGrafico.push(soloNumerosParaGrafico[indicePunto]);
-
-        // Asignamos el color según si esta posición es el mínimo, el máximo, ambos o ninguno
-        if (indicePunto === resultadoCalculado.posicionMinimo && indicePunto === resultadoCalculado.posicionMaximo) {
-            arregloColoresGrafico.push('rgba(150, 100, 220, 0.8)');  // morado = mínimo y máximo
-        } else if (indicePunto === resultadoCalculado.posicionMinimo) {
-            arregloColoresGrafico.push('rgba(22, 151, 249, 0.8)');   // azul = mínimo
-        } else if (indicePunto === resultadoCalculado.posicionMaximo) {
-            arregloColoresGrafico.push('rgba(247, 85, 85, 0.8)');    // rojo = máximo
-        } else {
-            arregloColoresGrafico.push('rgba(180, 180, 180, 0.6)');  // gris = valor normal
-        }
-    }
+    // Solo dos barras: Mínimo (rojo) y Máximo (verde)
+    let arregloEtiquetasGrafico  = ['Mínimo', 'Máximo'];
+    let arregloValoresGrafico    = [resultadoCalculado.valorMinimo, resultadoCalculado.valorMaximo];
+    let arregloColoresGrafico    = ['rgba(239, 68, 68, 0.8)', 'rgba(34, 197, 94, 0.8)'];
 
     return {
         arregloEtiquetas:     arregloEtiquetasGrafico,
         arregloValoresGrafico: arregloValoresGrafico,
         arregloColoresGrafico: arregloColoresGrafico,
-        posicionMinimo:        resultadoCalculado.posicionMinimo,
-        posicionMaximo:        resultadoCalculado.posicionMaximo,
+        posicionMinimo:        0,
+        posicionMaximo:        1,
         valorMinimoFinal:      resultadoCalculado.valorMinimo,
         valorMaximoFinal:      resultadoCalculado.valorMaximo
     };
@@ -453,13 +414,15 @@ function _prepararDatosGraficoMinMax(arregloRegistros, nombreColumnaNum) {
 //   datosPreparados    → objeto devuelto por _prepararDatosGraficoMinMax
 //                        (necesario para el tooltip personalizado)
 // ============================================================
-function _opcionesGraficoMinMax(textTituloGrafico, datosPreparados) {
+function _opcionesGraficoMinMax(textTituloGrafico, datosPreparados, tipoGrafico) {
+
+    let tipoActivo = tipoGrafico || TIPO_GRAFICO_MINMAX;
 
     // Detecta si el tipo es barras horizontales
-    let esBarraHorizontal = (TIPO_GRAFICO_MINMAX === 'barHorizontal');
+    let esBarraHorizontal = (tipoActivo === 'barHorizontal');
 
     // Solo los gráficos de barras necesitan configurar los ejes
-    let requiereConfiguracionEjes = (TIPO_GRAFICO_MINMAX === 'bar' || esBarraHorizontal);
+    let requiereConfiguracionEjes = (tipoActivo === 'bar' || esBarraHorizontal);
 
     return {
 
@@ -473,7 +436,7 @@ function _opcionesGraficoMinMax(textTituloGrafico, datosPreparados) {
         indexAxis: esBarraHorizontal ? 'y' : 'x',
 
         // Animación de cascada: cada barra aparece con un pequeño retraso
-        animations: (TIPO_GRAFICO_MINMAX === 'bar' || esBarraHorizontal)
+        animations: (tipoActivo === 'bar' || esBarraHorizontal)
             ? {
                 [esBarraHorizontal ? 'x' : 'y']: {
                     duration: 600,
@@ -574,7 +537,9 @@ function _opcionesGraficoMinMax(textTituloGrafico, datosPreparados) {
 //
 // Devuelve: la instancia del gráfico Chart.js creado
 // ============================================================
-function dibujarGraficoMinMax(arregloRegistros, nombreColumnaNum, idCanvas, textTitulo, nombreColumnaLabel) {
+function dibujarGraficoMinMax(arregloRegistros, nombreColumnaNum, idCanvas, textTitulo, nombreColumnaLabel, tipoGraficoOpcional) {
+
+    let tipoActivo = tipoGraficoOpcional || TIPO_GRAFICO_MINMAX;
 
     // Busca el elemento <canvas> en el HTML usando su id
     let elementoCanvasMinMax = document.getElementById(idCanvas);
@@ -600,7 +565,7 @@ function dibujarGraficoMinMax(arregloRegistros, nombreColumnaNum, idCanvas, text
     }
 
     // Llama a la función interna que prepara etiquetas, valores y colores
-    let datosPreparadosGrafico = _prepararDatosGraficoMinMax(arregloRegistros, nombreColumnaNum);
+    let datosPreparadosGrafico = _prepararDatosGraficoMinMax(arregloRegistros, nombreColumnaNum, tipoActivo);
 
     // Si no se recibió título, genera uno automático con los valores
     let textoTituloDefinitivo = textTitulo || (
@@ -630,7 +595,7 @@ function dibujarGraficoMinMax(arregloRegistros, nombreColumnaNum, idCanvas, text
         // 'barHorizontal' es un valor propio de este proyecto.
         // Chart.js no lo reconoce, así que se convierte a 'bar'.
         // La orientación horizontal se controla con indexAxis:'y' en options.
-        type: TIPO_GRAFICO_MINMAX === 'barHorizontal' ? 'bar' : TIPO_GRAFICO_MINMAX,
+        type: tipoActivo === 'barHorizontal' ? 'bar' : tipoActivo,
 
         data: {
             labels:   datosPreparadosGrafico.arregloEtiquetas,
@@ -639,7 +604,7 @@ function dibujarGraficoMinMax(arregloRegistros, nombreColumnaNum, idCanvas, text
 
         // Pasamos datosPreparadosGrafico a las opciones para que el tooltip
         // pueda acceder a posicionMinimo y posicionMaximo
-        options: _opcionesGraficoMinMax(textoTituloDefinitivo, datosPreparadosGrafico)
+        options: _opcionesGraficoMinMax(textoTituloDefinitivo, datosPreparadosGrafico, tipoActivo)
     });
 
     return instanciaGraficoMinMax;

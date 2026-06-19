@@ -122,6 +122,15 @@
                 <div id="resultado-ejercicio" class="oculto"></div>
                 <h4>📊 Gráfico comparativo</h4>
                 <p>Gráfico de barras con la media de minutos diarios por red social.</p>
+                
+                <label for="select-grafico-media" class="label-selector-grafico">Tipo de gráfico:</label>
+                <select id="select-grafico-media" class="selector-grafico-interno">
+                    <option value="barHorizontal">Barras horizontales</option>
+                    <option value="bar">Barras verticales</option>
+                    <option value="line">Líneas</option>
+                    <option value="doughnut">Dona</option>
+                </select>
+
                 <button onclick="toggleGraficoEjercicio()" class="btn-interactivo" id="btn-grafico-ejercicio">
                     📊 Ver Gráfico Comparativo
                 </button>
@@ -145,6 +154,12 @@
                 <div id="resultado-ejercicio-mediana" class="oculto"></div>
                 <h4>📊 Gráfico de distribución</h4>
                 <p>Valores ordenados con la línea de mediana como referencia visual.</p>
+                <label for="select-grafico-mediana" class="label-selector-grafico">Tipo de gráfico:</label>
+                <select id="select-grafico-mediana" class="selector-grafico-interno">
+                    <option value="barHorizontal">Barras horizontales</option>
+                    <option value="bar">Barras verticales</option>
+                    <option value="line">Líneas</option>
+                </select>
                 <button onclick="toggleGraficoEjercicioMediana()" class="btn-interactivo"
                     id="btn-grafico-ejercicio-mediana">
                     📊 Ver Gráfico de Distribución
@@ -169,6 +184,12 @@
                 <div id="resultado-ejercicio-moda" class="oculto"></div>
                 <h4>📊 Gráfico de frecuencias</h4>
                 <p>La barra más alta representa la App que más se repite (moda).</p>
+                <label for="select-grafico-moda" class="label-selector-grafico">Tipo de gráfico:</label>
+                <select id="select-grafico-moda" class="selector-grafico-interno">
+                    <option value="barHorizontal">Barras horizontales</option>
+                    <option value="bar">Barras verticales</option>
+                    <option value="line">Líneas</option>
+                </select>
                 <button onclick="toggleGraficoEjercicioModa()" class="btn-interactivo" id="btn-grafico-ejercicio-moda">
                     📊 Ver Gráfico de Frecuencias
                 </button>
@@ -193,6 +214,11 @@
                     La barra <strong style="color:#ef4444;">roja</strong> es el mínimo
                     y la barra <strong style="color:#22c55e;">verde</strong> es el máximo.
                 </p>
+                <label for="select-grafico-minmax" class="label-selector-grafico">Tipo de gráfico:</label>
+                <select id="select-grafico-minmax" class="selector-grafico-interno">
+                    <option value="bar">Barras verticales</option>
+                    <option value="barHorizontal">Barras horizontales</option>
+                </select>
                 <button onclick="toggleGraficoEjercicioMinMax()" class="btn-interactivo"
                     id="btn-grafico-ejercicio-minmax">
                     📊 Ver Gráfico de Extremos
@@ -216,6 +242,11 @@
                 <div id="resultado-ejercicio-rango" class="oculto"></div>
                 <h4>📊 Gráfico de amplitud</h4>
                 <p>Visualiza la distancia entre el valor mínimo y el máximo del dataset.</p>
+                <label for="select-grafico-rango" class="label-selector-grafico">Tipo de gráfico:</label>
+                <select id="select-grafico-rango" class="selector-grafico-interno">
+                    <option value="bar">Barras verticales</option>
+                    <option value="line">Líneas</option>
+                </select>
                 <button onclick="toggleGraficoEjercicioRango()" class="btn-interactivo"
                     id="btn-grafico-ejercicio-rango">
                     📊 Ver Gráfico de Amplitud
@@ -238,6 +269,11 @@
                 <div id="resultado-ejercicio-varianza" class="oculto"></div>
                 <h4>📊 Gráfico de desviaciones</h4>
                 <p>Compara cada valor con la media y visualiza la dispersión del dataset.</p>
+                <label for="select-grafico-varianza" class="label-selector-grafico">Tipo de gráfico:</label>
+                <select id="select-grafico-varianza" class="selector-grafico-interno">
+                    <option value="bar">Barras verticales</option>
+                    <option value="line">Líneas</option>
+                </select>
                 <button onclick="toggleGraficoEjercicioVarianza()" class="btn-interactivo"
                     id="btn-grafico-ejercicio-varianza">
                     📊 Ver Gráfico de Desviaciones
@@ -261,6 +297,11 @@
                 <div id="resultado-ejercicio-desviacion" class="oculto"></div>
                 <h4>📊 Gráfico de dispersión</h4>
                 <p>Muestra visualmente qué tan alejados están los datos respecto al promedio.</p>
+                <label for="select-grafico-desviacion" class="label-selector-grafico">Tipo de gráfico:</label>
+                <select id="select-grafico-desviacion" class="selector-grafico-interno">
+                    <option value="bar">Barras verticales</option>
+                    <option value="line">Líneas</option>
+                </select>
                 <button onclick="toggleGraficoEjercicioDesviacion()" class="btn-interactivo"
                     id="btn-grafico-ejercicio-desviacion">
                     📊 Ver Gráfico de Dispersión

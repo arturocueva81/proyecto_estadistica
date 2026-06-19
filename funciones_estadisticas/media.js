@@ -203,10 +203,12 @@ function calcularMedia(listaDeDatos, propiedadNumerica, idContenedorTabla, propi
 // cada registro, coloreando verde los que están sobre la media
 // y azul los que están por debajo.
 // ============================================================
-function prepararDatosParaGraficoMedia(listaDeDatos, propiedadNumerica) {
+function prepararDatosParaGraficoMedia(listaDeDatos, propiedadNumerica, tipoGrafico) {
+
+    let tipoActivo = tipoGrafico || TIPO_GRAFICO_MEDIA;
 
     // ── MODO DONA / PIE: agrupar en 4 rangos por cuartiles ──
-    if (TIPO_GRAFICO_MEDIA === 'doughnut' || TIPO_GRAFICO_MEDIA === 'pie') {
+    if (tipoActivo === 'doughnut' || tipoActivo === 'pie') {
 
         let soloNumerosParaCuartiles = [];
 
@@ -338,14 +340,16 @@ function prepararDatosParaGraficoMedia(listaDeDatos, propiedadNumerica) {
 //
 // Solo tiene efecto visual en gráficos de tipo 'doughnut' y 'pie'.
 // ============================================================
-function crearPluginMarcadorMedia(valorMediaPlugin, idUnicoPlugin) {
+function crearPluginMarcadorMedia(valorMediaPlugin, idUnicoPlugin, tipoGrafico) {
+
+    let tipoActivo = tipoGrafico || TIPO_GRAFICO_MEDIA;
 
     return {
         id: idUnicoPlugin || 'pluginMarcadorMedia',
 
         afterDraw: function(instanciaGrafico) {
 
-            if (TIPO_GRAFICO_MEDIA !== 'doughnut' && TIPO_GRAFICO_MEDIA !== 'pie') { return; }
+            if (tipoActivo !== 'doughnut' && tipoActivo !== 'pie') { return; }
 
             let centroX  = instanciaGrafico.width  / 2;
             let centroY  = instanciaGrafico.height / 2;
@@ -382,17 +386,18 @@ function crearPluginMarcadorMedia(valorMediaPlugin, idUnicoPlugin) {
 // Construye y devuelve el objeto 'options' que Chart.js usa
 // para configurar el comportamiento y apariencia del gráfico.
 // ============================================================
-function obtenerConfiguracionGraficoMedia(textoTituloGrafico) {
+function obtenerConfiguracionGraficoMedia(textoTituloGrafico, tipoGrafico) {
 
-    let esBarraHorizontal = (TIPO_GRAFICO_MEDIA === 'barHorizontal');
-    let requiereEjes      = (TIPO_GRAFICO_MEDIA === 'bar' || esBarraHorizontal);
+    let tipoActivo = tipoGrafico || TIPO_GRAFICO_MEDIA;
+    let esBarraHorizontal = (tipoActivo === 'barHorizontal');
+    let requiereEjes      = (tipoActivo === 'bar' || esBarraHorizontal);
 
     return {
         responsive:          true,
         maintainAspectRatio: false,
         indexAxis:           esBarraHorizontal ? 'y' : 'x',
 
-        animations: (TIPO_GRAFICO_MEDIA === 'bar' || esBarraHorizontal)
+        animations: (tipoActivo === 'bar' || esBarraHorizontal)
             ? {
                 [esBarraHorizontal ? 'x' : 'y']: {
                     duration: 100,
@@ -461,7 +466,9 @@ function obtenerConfiguracionGraficoMedia(textoTituloGrafico) {
 //
 // Devuelve: la instancia del gráfico Chart.js creado
 // ============================================================
-function dibujarGraficoMedia(listaDeDatos, propiedadNumerica, idCanvasDestino, textoTitulo) {
+function dibujarGraficoMedia(listaDeDatos, propiedadNumerica, idCanvasDestino, textoTitulo, tipoGraficoOpcional) {
+
+    let tipoActivo = tipoGraficoOpcional || TIPO_GRAFICO_MEDIA;
 
     let elementoCanvasMedia = document.getElementById(idCanvasDestino);
     if (!elementoCanvasMedia) { return null; }
@@ -478,7 +485,7 @@ function dibujarGraficoMedia(listaDeDatos, propiedadNumerica, idCanvasDestino, t
     }
 
     // PASO 3: Preparar los datos
-    let datosPreparados = prepararDatosParaGraficoMedia(listaDeDatos, propiedadNumerica);
+    let datosPreparados = prepararDatosParaGraficoMedia(listaDeDatos, propiedadNumerica, tipoActivo);
 
     // PASO 4: Construir datasets
     let textoTituloDefinitivo = textoTitulo || ('Media: ' + datosPreparados.valorMediaFinal.toFixed(2));
@@ -494,7 +501,7 @@ function dibujarGraficoMedia(listaDeDatos, propiedadNumerica, idCanvasDestino, t
         }
     ];
 
-    let esGraficoTipoBarra = (TIPO_GRAFICO_MEDIA === 'bar' || TIPO_GRAFICO_MEDIA === 'barHorizontal');
+    let esGraficoTipoBarra = (tipoActivo === 'bar' || tipoActivo === 'barHorizontal');
 
     // Agregar línea de referencia de la media en gráficos de barras
     if (esGraficoTipoBarra && datosPreparados.arregloLineaMedia.length > 0) {
@@ -512,16 +519,16 @@ function dibujarGraficoMedia(listaDeDatos, propiedadNumerica, idCanvasDestino, t
     // PASO 5: Crear el gráfico
     instanciaGraficoMedia = new Chart(elementoCanvasMedia.getContext('2d'), {
 
-        type: TIPO_GRAFICO_MEDIA === 'barHorizontal' ? 'bar' : TIPO_GRAFICO_MEDIA,
+        type: tipoActivo === 'barHorizontal' ? 'bar' : tipoActivo,
 
         data: {
             labels:   datosPreparados.arregloEtiquetas,
             datasets: arregloDatasetsGrafico
         },
 
-        options: obtenerConfiguracionGraficoMedia(textoTituloDefinitivo),
+        options: obtenerConfiguracionGraficoMedia(textoTituloDefinitivo, tipoActivo),
 
-        plugins: [ crearPluginMarcadorMedia(datosPreparados.valorMediaFinal, 'pluginMedia_' + idCanvasDestino) ]
+        plugins: [ crearPluginMarcadorMedia(datosPreparados.valorMediaFinal, 'pluginMedia_' + idCanvasDestino, tipoActivo) ]
     });
 
     // PASO 6: Devolver la instancia creada

@@ -207,7 +207,9 @@ function prepararDatosParaGraficoModa(listaDeDatos, propiedadNumerica) {
 // ============================================================
 // FUNCIÓN PÚBLICA: dibujarGraficoModa
 // ============================================================
-function dibujarGraficoModa(listaDeDatos, propiedadNumerica, idCanvasDestino, textoTitulo) {
+function dibujarGraficoModa(listaDeDatos, propiedadNumerica, idCanvasDestino, textoTitulo, tipoGraficoOpcional) {
+
+    let tipoActivo = tipoGraficoOpcional || TIPO_GRAFICO_MODA;
 
     let elementoCanvas = document.getElementById(idCanvasDestino);
     if (!elementoCanvas) return null;
@@ -235,7 +237,7 @@ function dibujarGraficoModa(listaDeDatos, propiedadNumerica, idCanvasDestino, te
 
     // PASO 5: Crear instancia de Chart.js
     instanciaGraficoModa = new Chart(elementoCanvas.getContext('2d'), {
-        type: TIPO_GRAFICO_MODA === 'barHorizontal' ? 'bar' : TIPO_GRAFICO_MODA,
+        type: tipoActivo === 'barHorizontal' ? 'bar' : tipoActivo,
         data: {
             labels: datos.arregloEtiquetas,
             datasets: configDatasets
@@ -243,7 +245,7 @@ function dibujarGraficoModa(listaDeDatos, propiedadNumerica, idCanvasDestino, te
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            indexAxis: TIPO_GRAFICO_MODA === 'barHorizontal' ? 'y' : 'x',
+            indexAxis: tipoActivo === 'barHorizontal' ? 'y' : 'x',
             plugins: {
                 legend: { position: 'bottom' },
                 title: {
@@ -251,7 +253,7 @@ function dibujarGraficoModa(listaDeDatos, propiedadNumerica, idCanvasDestino, te
                     text: textoTitulo || ('Moda: ' + datos.modasFinales.join(', '))
                 }
             },
-            scales: (TIPO_GRAFICO_MODA === 'bar' || TIPO_GRAFICO_MODA === 'barHorizontal') 
+            scales: (tipoActivo === 'bar' || tipoActivo === 'barHorizontal') 
                     ? { y: { beginAtZero: true, ticks: { stepSize: 1 } } } 
                     : {}
         }

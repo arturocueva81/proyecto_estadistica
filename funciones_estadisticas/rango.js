@@ -356,6 +356,11 @@ function _opcionesGraficoRango(textTituloGrafico, datosPreparados) {
         },
 
         scales: {
+            x: {
+                ticks: {
+                    display: false // Ocultar etiquetas para evitar amontonamiento con 200 datos
+                }
+            },
             // y: eje de los valores numéricos (barras y líneas)
             y: {
                 beginAtZero: true
@@ -390,7 +395,9 @@ function _opcionesGraficoRango(textTituloGrafico, datosPreparados) {
 //
 // Devuelve: la instancia del gráfico Chart.js creado
 // ============================================================
-function dibujarGraficoRango(arregloRegistros, nombreColumnaNum, nombreColumnaLabel, idCanvas, textTitulo) {
+function dibujarGraficoRango(arregloRegistros, nombreColumnaNum, nombreColumnaLabel, idCanvas, textTitulo, tipoGraficoOpcional) {
+
+    let tipoActivo = tipoGraficoOpcional || TIPO_GRAFICO_RANGO;
 
     // Busca el elemento <canvas> en el HTML usando su id
     let elementoCanvasRango = document.getElementById(idCanvas);
@@ -459,7 +466,7 @@ function dibujarGraficoRango(arregloRegistros, nombreColumnaNum, nombreColumnaLa
     let datasetLineaMaximo = {
         label:       'Máximo (' + datosPreparadosGrafico.valorMaximo + ')',
         data:        datosPreparadosGrafico.arregloLineaMaximo,
-        type:        'line',
+        type:       'line',
         borderColor: 'rgba(50, 200, 100, 0.9)',
         borderWidth: 2,
         borderDash: [6, 4],
@@ -473,7 +480,7 @@ function dibujarGraficoRango(arregloRegistros, nombreColumnaNum, nombreColumnaLa
     // ============================================================
     instanciaGraficoRango = new Chart(contextoCanvas, {
 
-        type: TIPO_GRAFICO_RANGO,
+        type: tipoActivo,
 
         data: {
             labels:   datosPreparadosGrafico.arregloEtiquetasGrafico,

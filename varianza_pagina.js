@@ -81,12 +81,38 @@ function toggleGraficoEjercicioVarianza() {
     canvasAnterior.parentNode.replaceChild(canvasNuevo, canvasAnterior);
 
     setTimeout(function () {
+        let selectorGrafico = document.getElementById('select-grafico-varianza');
+        let tipoElegido = selectorGrafico ? selectorGrafico.value : null;
+
         graficoEjercicioVarianzaInstancia = dibujarGraficoVarianza(
             obtenerListaRedesSociales(),
             PROPIEDAD_NUMERICA_EJERCICIO_VARIANZA,
             'graficaEjercicioVarianza',
             'Varianza de minutos diarios en redes sociales',
-            PROPIEDAD_ETIQUETA_EJERCICIO_VARIANZA
+            PROPIEDAD_ETIQUETA_EJERCICIO_VARIANZA,
+            tipoElegido
         );
     }, 50);
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    let selectorGrafico = document.getElementById('select-grafico-varianza');
+    if (selectorGrafico) {
+        selectorGrafico.addEventListener('change', function() {
+            let contenedorGrafico = document.getElementById('contenedor-grafico-ejercicio-varianza');
+            let botonAccion = document.getElementById('btn-grafico-ejercicio-varianza');
+
+            if (contenedorGrafico && botonAccion) {
+                if (!contenedorGrafico.classList.contains('oculto')) {
+                    contenedorGrafico.classList.add('oculto');
+                    botonAccion.textContent = '📊 Ver Gráfico de Desviaciones';
+
+                    if (graficoEjercicioVarianzaInstancia !== null) {
+                        try { graficoEjercicioVarianzaInstancia.destroy(); } catch(error) {}
+                        graficoEjercicioVarianzaInstancia = null;
+                    }
+                }
+            }
+        });
+    }
+});

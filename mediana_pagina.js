@@ -272,11 +272,15 @@ function toggleGraficoEjercicioMediana() {
     setTimeout(function() {
         let resumenPorApp = agruparRegistrosPorAppMediana();
 
+        let selectorGrafico = document.getElementById('select-grafico-mediana');
+        let tipoElegido = selectorGrafico ? selectorGrafico.value : null;
+
         instanciaGraficoEjercicioPracticoMediana = dibujarGraficoMediana(
             resumenPorApp,
             'medianaMinutos',   // propiedad numérica del resumen agrupado
             'graficaEjercicioMediana',
-            'Mediana de ' + PROPIEDAD_NUMERICA_EJERCICIO_MEDIANA + ' por App'
+            'Mediana de ' + PROPIEDAD_NUMERICA_EJERCICIO_MEDIANA + ' por App',
+            tipoElegido
         );
     }, 50);
 }
@@ -318,4 +322,26 @@ function cargarVistaPreviaDataset() {
 // Se ejecuta automáticamente cuando el HTML termina de cargarse
 document.addEventListener('DOMContentLoaded', function() {
     cargarVistaPreviaDataset();
+
+    // Evento para ocultar el gráfico al cambiar el tipo en el combo box
+    let selectorGrafico = document.getElementById('select-grafico-mediana');
+    if (selectorGrafico) {
+        selectorGrafico.addEventListener('change', function() {
+            let contenedorGrafico = document.getElementById('contenedor-grafico-ejercicio-mediana');
+            let botonAccion = document.getElementById('btn-grafico-ejercicio-mediana');
+
+            if (contenedorGrafico && botonAccion) {
+                if (!contenedorGrafico.classList.contains('oculto')) {
+                    contenedorGrafico.classList.add('oculto');
+                    botonAccion.textContent = '📊 Ver Gráfico de Distribución';
+
+                    // Limpiar la instancia previa si existe
+                    if (instanciaGraficoEjercicioPracticoMediana !== null) {
+                        try { instanciaGraficoEjercicioPracticoMediana.destroy(); } catch(error) {}
+                        instanciaGraficoEjercicioPracticoMediana = null;
+                    }
+                }
+            }
+        });
+    }
 });
