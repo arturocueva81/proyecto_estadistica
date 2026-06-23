@@ -1,221 +1,687 @@
+    /* -------------------------------------------------- */
+    /* CONFIGURACIÓN GENERAL                              */
+    /* -------------------------------------------------- */
+    * {
+        box-sizing: border-box;
+    }
 
-/* body: es el contenedor principal de toda la pagina */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #FEF2F2; 
-    color: #333333;
-}
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: #f5f7fa;
+        color: #333;
+        line-height: 1.7;
+    }
 
 
-/* MENU DE NAVEGACION (etiqueta <nav>)                */
-nav {
-    background-color: #B91C1C;
-    padding: 10px;
-    text-align: center;
-    position: sticky;
-    top: 0; 
-}
+    /* -------------------------------------------------- */
+    /* IMÁGENES                                           */
+    /* -------------------------------------------------- */
+    section img {
+        display: block;
+        margin: 25px auto;
+        border-radius: 15px;
+        box-shadow:0 10px 25px rgba(0,0,0,0.15);
+        transition: all 0.3s ease;
+    }
 
-/* BOTONES DEL MENU DE NAVEGACION                     */
-nav button {
-    background-color: #DC2626;
-    color: white;
-    border: none;
-    padding: 8px 14px;
-    margin: 4px; 
-    cursor: pointer;
-    font-size: 14px;
-}
+    section img:hover {
+        transform: scale(1.02);
+    }
 
-/* BOTON AL PASAR EL MOUSE POR ENCIMA (hover)         */
-nav button:hover {
-    background-color: #991B1B;
-}
 
-/* SECCIONES DE CONTENIDO (etiqueta <section>)        */
-section {
-    max-width: 800px;
-    margin: 30px auto;
+    /* -------------------------------------------------- */
+    /* MENÚ SUPERIOR                                      */
+    /* -------------------------------------------------- */
+    nav {
+        background: #B91C1C;
+        padding: 10px;
+        text-align: center;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow:0 3px 10px rgba(0,0,0,0.2);
+    }
+
+    nav button {
+        background: #DC2626;
+        color: white;
+        border: none;
+        padding: 10px 18px;
+        margin: 4px;
+        cursor: pointer;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+
+    nav button:hover {
+        background: #991B1B;
+        transform: translateY(-2px);
+    }
+
+
+    /* -------------------------------------------------- */
+    /* SECCIONES                                          */
+    /* -------------------------------------------------- */
+    section {
+        background: white;
+        width: 95%;
+        max-width: 1400px;
+        margin: 30px auto;
+        padding: 35px;
+        border-radius: 15px;
+        box-shadow:0 5px 20px rgba(0,0,0,0.08);
+    }
+
+
+    /* -------------------------------------------------- */
+    /* OCULTAR                                            */
+    /* -------------------------------------------------- */
+    .oculto {
+        display: none;
+    }
+
+
+    /* -------------------------------------------------- */
+    /* DOS COLUMNAS                                       */
+    /* -------------------------------------------------- */
+    section.dos-columnas:not(.oculto) {
+        display: flex;
+        gap: 25px;
+        align-items: stretch;
+        background: transparent;
+        box-shadow: none;
+        padding: 0;
+    }
+
+
+    /* -------------------------------------------------- */
+    /* COLUMNA TEORÍA                                     */
+    /* -------------------------------------------------- */
+    .columna-teoria {
+        flex: 1;
+        background: white;
+        padding: 35px;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+
+
+    /* -------------------------------------------------- */
+    /* COLUMNA EJERCICIOS                                 */
+    /* -------------------------------------------------- */
+    .columna-ejercicios {
+        flex: 1;
+        background: white;
+        padding: 35px;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+
+
+    /* -------------------------------------------------- */
+    /* TÍTULOS                                            */
+    /* -------------------------------------------------- */
+    h1 {
+        color: #7F1D1D;
+        text-align: center;
+        font-size: 42px;
+        margin-bottom: 10px;
+    }
+
+    h2 {
+        color: #991B1B;
+        text-align: center;
+        font-size: 34px;
+        margin-bottom: 25px;
+        position: relative;
+    }
+
+    h2::after {
+        content: "";
+        display: block;
+        width: 80px;
+        height: 4px;
+        background: #DC2626;
+        margin: 10px auto 0;
+        border-radius: 10px;
+    }
+
+    h3 {
+        color: #EF4444;
+        border-left: 5px solid #EF4444;
+        padding-left: 12px;
+        margin-top: 25px;
+    }
+
+
+    /* -------------------------------------------------- */
+    /* TEXTO                                              */
+    /* -------------------------------------------------- */
+    p {
+        text-align: justify;
+        margin-bottom: 18px;
+        font-size: 16px;
+    }
+
+
+    /* -------------------------------------------------- */
+    /* LISTAS                                             */
+    /* -------------------------------------------------- */
+    ul,
+    ol {
+        line-height: 2;
+        padding-left: 30px;
+    }
+
+
+    /* -------------------------------------------------- */
+    /* CONSOLA                                            */
+    /* -------------------------------------------------- */
+    .consola {
+        background: #111827;
+        color: #4ADE80;
+        font-family: Consolas, monospace;
+        font-size: 12px;
+        padding: 20px;
+        border-radius: 10px;
+        overflow-x: auto;
+    }
+
+
+    /* -------------------------------------------------- */
+    /* BOTONES                                            */
+    /* -------------------------------------------------- */
+    .btn-interactivo {
+        background: #DC2626;
+        color: white;
+        border: none;
+        padding: 12px 22px;
+        margin-top: 15px;
+        cursor: pointer;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-interactivo:hover {
+        background: #991B1B;
+        transform: translateY(-2px);
+    }
+
+
+    /* -------------------------------------------------- */
+    /* RESULTADOS                                         */
+    /* -------------------------------------------------- */
+    #resultado-media {
+        margin-top: 20px;
+    }
+
+
+    /* -------------------------------------------------- */
+    /* TABLAS                                             */
+    /* -------------------------------------------------- */
+    .tabla-interactiva {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+        overflow: hidden;
+        border-radius: 10px;
+        box-shadow:0 3px 10px rgba(0,0,0,0.08);
+    }
+
+    .tabla-interactiva th {
+        background: #B91C1C;
+        color: white;
+        padding: 12px;
+        text-align: left;
+    }
+
+    .tabla-interactiva td {
+        padding: 12px;
+    }
+
+    .tabla-interactiva tr:nth-child(even) {
+        background: #FFF5F5;
+    }
+
+    .tabla-interactiva tr:hover {
+        background: #FEE2E2;
+    }
+
+
+    /* -------------------------------------------------- */
+    /* CAJA RESULTADO                                     */
+    /* -------------------------------------------------- */
+    .caja-resultado {
+        background: #FFF5F5;
+        border-left: 6px solid #DC2626;
+        padding: 18px;
+        margin-top: 18px;
+        border-radius: 10px;
+        box-shadow:0 3px 10px rgba(0,0,0,0.05);
+    }
+
+    .caja-resultado strong {
+        color: #7F1D1D;
+        font-size: 18px;
+    }
+
+
+    /* -------------------------------------------------- */
+    /* DETALLE DE CÁLCULO                                 */
+    /* -------------------------------------------------- */
+    .detalle-calculo {
+        background: #111827;
+        color: #4ADE80;
+        font-family: Consolas, monospace;
+        font-size: 12px;
+        padding: 15px;
+        margin-top: 12px;
+        border-radius: 10px;
+        overflow-x: auto;
+    }
+
+
+    /* -------------------------------------------------- */
+    /* TEST                                               */
+    /* -------------------------------------------------- */
+    .pregunta {
+        background: white;
+        border: 1px solid #E5E7EB;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow:0 3px 10px rgba(0,0,0,0.05);
+    }
+
+    .pregunta p {
+        text-align: left;
+    }
+
+    .pregunta label {
+        display: block;
+        margin-top: 8px;
+        cursor: pointer;
+    }
+
+
+    /* -------------------------------------------------- */
+    /* RESULTADO TEST                                     */
+    /* -------------------------------------------------- */
+    #resultado-test {
+        margin-top: 25px;
+        padding: 18px;
+        text-align: center;
+        font-weight: bold;
+        border-radius: 10px;
+    }
+
+    .resultado-alerta {
+        background: #FFF7ED;
+        color: #9A3412;
+        border: 1px solid #FDBA74;
+    }
+
+    .resultado-aprobado {
+        background: #DCFCE7;
+        color: #166534;
+        border: 1px solid #86EFAC;
+    }
+
+    .resultado-medio {
+        background: #FEF9C3;
+        color: #854D0E;
+        border: 1px solid #FACC15;
+    }
+
+    .resultado-reprobado {
+        background: #FEE2E2;
+        color: #991B1B;
+        border: 1px solid #FCA5A5;
+    }
+
+
+    /* -------------------------------------------------- */
+    /* RESPONSIVE                                         */
+    /* -------------------------------------------------- */
+    @media (max-width: 900px) {
+
+        section.dos-columnas:not(.oculto) {
+            flex-direction: column;
+        }
+
+        h1 {
+            font-size: 32px;
+        }
+
+        h2 {
+            font-size: 26px;
+        }
+
+        section {
+            width: 98%;
+            padding: 20px;
+        }
+    }
+
+    /* ============================================================
+    LAYOUT DE DOS COLUMNAS (secciones con teoría + ejercicios)
+    ============================================================ */
+
+    /* Sección que usa layout de dos columnas */
+    section.dos-columnas {
+        max-width: 1400px;          /* más ancho que las secciones normales */
+        display: flex;
+        flex-direction: row;
+        gap: 30px;
+        align-items: flex-start;
+    }
+
+    /* Columna izquierda: teoría */
+    .columna-teoria {
+        flex: 0 0 50%;              /* exactamente 50%, no crece ni encoge */
+        max-width: 50%;
+        min-width: 0;               /* permite que flex comprima si es necesario */
+        box-sizing: border-box;
+    }
+
+    /* Columna derecha: ejercicios / gráficos */
+    .columna-ejercicios {
+        flex: 0 0 50%;
+        max-width: 50%;
+        min-width: 0;
+        box-sizing: border-box;
+    }
+
+    /* ============================================================
+    TABLA PREVIEW DEL DATASET - versión compacta
+    ============================================================ */
+
+    #contenedor-tabla-preview {
+        width: 100%;
+        overflow-x: auto;
+        margin-top: 10px;
+    }
+
+    #tabla-preview-dataset {
+        width: 100%;
+        font-size: 11px;
+        border-collapse: collapse;
+        table-layout: auto;         /* deja que el navegador calcule anchos */
+    }
+
+    #tabla-preview-dataset th {
+        background-color: #B91C1C;
+        color: white;
+        padding: 5px 4px;
+        text-align: center;
+        white-space: normal;        /* permite que el encabezado haga wrap */
+        word-break: break-word;
+        line-height: 1.2;
+        font-size: 10px;
+    }
+
+    #tabla-preview-dataset td {
+        padding: 4px 4px;
+        border-bottom: 1px solid #FECACA;
+        text-align: center;
+        font-size: 11px;
+        white-space: nowrap;
+    }
+
+    #tabla-preview-dataset tr:nth-child(even) {
+        background-color: #FEF2F2;
+    }
+    /* ============================================================
+    RESPONSIVE: en pantallas pequeñas las columnas se apilan
+    ============================================================ */
+    @media (max-width: 900px) {
+        section.dos-columnas {
+            flex-direction: column;
+        }
+
+        .columna-teoria,
+        .columna-ejercicios {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+    }
+
+    /* -------------------------------------------------- */
+    /* FIX: .oculto siempre gana, sin importar otras      */
+    /* clases o especificidad                             */
+    /* -------------------------------------------------- */
+    .oculto {
+        display: none !important;
+    }
+
+    /* ── Subsecciones internas del ejercicio práctico ── */
+    .subseccion-interactiva {
+        border-left: 4px solid #e11d48;
+        background: #fff5f7;
+        border-radius: 0 8px 8px 0;
+        padding: 16px 20px;
+        margin-bottom: 0;
+        border-bottom: 2px solid #fecdd3;
+        padding-bottom: 24px;
+    }
+
+    /* Última subsección sin línea inferior */
+    .subseccion-interactiva:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+    }
+
+    /* Espacio superior entre subsecciones */
+    .subseccion-interactiva + .subseccion-interactiva {
+        margin-top: 0;
+        padding-top: 24px;
+    }
+
+    .subseccion-interactiva h4 {
+        color: #be123c;
+        font-size: 1rem;
+        margin: 0 0 8px 0;
+        font-weight: 700;
+    }
+
+    .subseccion-interactiva p {
+        font-size: 0.9rem;
+        color: #374151;
+        margin-bottom: 10px;
+    }
+
+    /* Contenedor principal del pie */
+.portada-footer {
+    margin-top: 60px;
     padding: 30px;
-    background-color: #FFFFFF;
-    border: 1px solid #FECACA;
-}
-
-/* TITULOS                                            */
-
-h1 {
-    color: #7F1D1D;
+    border-top: 3px solid #e11d48;
+    background-color: #ffffff;
     text-align: center;
 }
 
-h2 {
-    color: #7F1D1D;
-    border-bottom: 2px solid #DC2626;
-    padding-bottom: 8px;
+.portada-footer h6 {
+    color: #9ca3af; /* Gris claro para el subtítulo */
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    font-size: 0.75rem;
 }
 
-h3 {
-    color: #EF4444;
-    margin-top: 20px;
+/* Contenedor de los dos autores */
+.autores-contenedor {
+    display: flex;
+    justify-content: center;
+    gap: 40px; /* Espacio entre los dos autores */
+    flex-wrap: wrap;
 }
 
-/* PARRAFOS (etiqueta <p>)                            */
-p {
-    line-height: 1.6;
-    text-align: justify;
+.autor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-/* LISTAS (etiquetas <ul> y <ol>)                     */
-ul, ol {
-    line-height: 1.8;
-    padding-left: 30px;
+.autor-nombre {
+    color: #1e293b; /* Color oscuro profesional */
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 5px;
 }
 
-/* CLASE PARA OCULTAR SECCIONES                       */
-.oculto {
-    display: none;
+/* Estilo del enlace de GitHub */
+.github-link {
+    color: #64748b;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Espacio entre el icono y el texto */
 }
 
-/* ESTILO CONSOLE                  */
-.consola {
-    background-color: #1a1a1a;   
-    color: #00FF00;             
-    font-family: "Courier New", Courier, monospace;
-    font-size: 11px;
-    padding: 20px;
-    overflow-x: auto;
+.github-link i {
+    font-size: 1.1rem;
+    color: #1e293b;
 }
 
+/* Efecto al pasar el mouse */
+.github-link:hover {
+    color: #e11d48; /* Cambia a rojo al pasar el mouse */
+    transform: translateY(-2px);
+}
 
-/* BOTON INTERACTIVO (ejemplos con datos precargados) */
-.btn-interactivo {
-    background-color: #DC2626;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    margin: 16px 0 10px 0;
-    cursor: pointer;
-    font-size: 15px;
+/* Estilo para el enlace de navegación activo */
+.btn-nav.activo {
+    background-color: #9A3412;
     font-weight: bold;
 }
 
-.btn-interactivo:hover {
-    background-color: #991B1B;
+/* ============================================================
+    ESTILO DE BOTONES DE NAVEGACIÓN
+   ============================================================ */
+
+/* Contenedor principal (asegúrate de que tu <nav> o <div> tenga una clase similar) */
+nav {
+    background-color: #a31a1a; /* El rojo oscuro de tu captura */
+    padding: 15px;
+    text-align: center;
 }
 
-/* CONTENEDOR DE RESULTADOS INTERACTIVOS              */
-
-#resultado-media {
-    margin-top: 16px;
+/* Estilo base de los enlaces convertidos a botones */
+nav a {
+    display: inline-block;
+    color: white !important; /* Texto blanco */
+    text-decoration: none; /* Quitar subrayado */
+    padding: 10px 18px;
+    margin: 5px;
+    border-radius: 8px; /* Bordes redondeados */
+    background-color: rgba(255, 255, 255, 0.1); /* Fondo blanco muy transparente */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Borde sutil */
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease; /* Animación suave */
 }
 
-/* Tabla de datos del ejemplo interactivo */
-.tabla-interactiva {
+/* Efecto al pasar el mouse (Hover) */
+nav a:hover {
+    background-color: white; /* El fondo se vuelve blanco */
+    color: #a31a1a !important; /* El texto se vuelve rojo */
+    transform: translateY(-2px); /* Pequeño salto hacia arriba */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Sombra elegante */
+}
+
+/* Estilo para el botón de la página donde estás actualmente (clase opcional) */
+nav a.active {
+    background-color: #f1c40f; /* Color amarillo/oro para resaltar */
+    color: #000 !important;
+    border: none;
+    font-weight: bold;
+}
+
+/* Estilo especial para "Ejercicio Práctico" (si quieres que destaque más) */
+nav a[href*="ejercicio"] {
+    border: 2px solid #f1c40f;
+}
+
+.columna-ejercicios {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Botón de la página actualmente activa */
+.btn-nav.activo {
+    background-color: #6D0F1E; /* Color vino oscuro */
+    color: #ffffff;
+    border-color: #4a0a14;
+    font-weight: bold;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Selector para escoger cálculo en ejercicio práctico */
+.selector-ejercicio-box {
+    background: #fff5f5;
+    border-left: 5px solid #ef4444;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+}
+
+.selector-ejercicio-box h3 {
+    margin-top: 0;
+    color: #dc2626;
+}
+
+.selector-ejercicio-box p {
+    margin-bottom: 14px;
+}
+
+.selector-ejercicio-box select {
     width: 100%;
-    border-collapse: collapse;
-    margin-top: 12px;
+    max-width: 420px;
+    padding: 12px 14px;
+    border: 1px solid #fecaca;
+    border-radius: 10px;
+    background: white;
+    color: #1f2937;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* ============================================================
+    SELECTOR INTERNO PARA TIPOS DE GRÁFICOS
+   ============================================================ */
+.label-selector-grafico {
+    display: block;
+    font-weight: bold;
+    color: #991B1B;
+    margin-bottom: 8px;
     font-size: 14px;
 }
 
-.tabla-interactiva th {
-    background-color: #B91C1C;
-    color: white;
-    padding: 8px 12px;
-    text-align: left;
-}
-
-.tabla-interactiva td {
-    padding: 6px 12px;
-    border-bottom: 1px solid #FECACA;
-}
-
-.tabla-interactiva tr:nth-child(even) {
-    background-color: #FEF2F2;
-}
-
-/* Caja de resultado final (media calculada) */
-.caja-resultado {
-    background-color: #FEF2F2;
-    border-left: 4px solid #DC2626;
-    padding: 14px 18px;
-    margin-top: 16px;
-    font-size: 15px;
-}
-
-.caja-resultado strong {
-    color: #7F1D1D;
-    font-size: 18px;
-}
-
-/* Detalle del paso a paso */
-.detalle-calculo {
-    background-color: #1a1a1a;
-    color: #00FF00;
-    font-family: "Courier New", Courier, monospace;
-    font-size: 12px;
-    padding: 14px;
-    margin-top: 12px;
-    overflow-x: auto;
-}
-
-/* -------------------------------------------------- */
-/* ESTILO PARA LAS PREGUNTAS DEL TEST                 */
-/* -------------------------------------------------- */
-
-.pregunta {
-    background-color: #FEF2F2;
-    border: 1px solid #FECACA;
-    padding: 15px;
-    margin-bottom: 18px;
-}
-
-.pregunta p {
-    text-align: left;
-}
-
-.pregunta label {
-    line-height: 1.8;
-    cursor: pointer;
-}
-
-/* -------------------------------------------------- */
-/* RESULTADO DEL TEST                                 */
-/* -------------------------------------------------- */
-
-#resultado-test {
-    margin-top: 20px;
-    padding: 15px;
-    font-weight: bold;
-    text-align: center;
+.selector-grafico-interno {
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    padding: 10px 14px;
+    margin-bottom: 20px;
+    border: 2px solid #fecaca;
     border-radius: 8px;
+    background-color: white;
+    color: #333;
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
 }
 
-/* Cuando falta responder preguntas */
-.resultado-alerta {
-    background-color: #FFEDD5;
-    color: #9A3412;
-    border: 1px solid #FDBA74;
-}
-
-/* Cuando obtiene buen puntaje */
-.resultado-aprobado {
-    background-color: #DCFCE7;
-    color: #166534;
-    border: 1px solid #86EFAC;
-}
-
-/* Cuando obtiene puntaje medio */
-.resultado-medio {
-    background-color: #FEF9C3;
-    color: #854D0E;
-    border: 1px solid #FACC15;
-}
-
-/* Cuando obtiene bajo puntaje */
-.resultado-reprobado {
-    background-color: #FEE2E2;
-    color: #991B1B;
-    border: 1px solid #FCA5A5;
+.selector-grafico-interno:focus {
+    outline: none;
+    border-color: #EF4444;
 }

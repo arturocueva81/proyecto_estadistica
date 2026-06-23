@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mediana — Estadística Aplicada</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="estadistica.css">
+</head>
+
+<body>
+
+    <nav>
+        <a href="index.html" class="btn-nav">Portada</a>
+        <a href="media.html" class="btn-nav">Media</a>
+        <a href="mediana.html" class="btn-nav activo">Mediana</a>
+        <a href="moda.html" class="btn-nav">Moda</a>
+        <a href="minMax.html" class="btn-nav">Mínimo y Máximo</a>
+        <a href="rango.html" class="btn-nav">Rango</a>
+        <a href="varianza.html" class="btn-nav">Varianza</a>
+        <a href="desvEstandar.html" class="btn-nav">Desviación Estándar</a>
+        <a href="ejPractico.html" class="btn-nav">Ejercicio Práctico</a>
+        <a href="test.html" class="btn-nav">Test</a>
+        <a href="acercaDe.html" class="btn-nav">Acerca De</a>
+    </nav>
+
+
+    <!-- ============================================================
+         SECCIÓN: MEDIANA
+         Visible por defecto al cargar esta página (sin clase 'oculto').
+         ============================================================ -->
+    <section id="mediana" class="dos-columnas">
+
+        <div class="columna-teoria">
+            <h2>Mediana</h2>
+            <img src="images/mediana.jpg" alt="Ilustración de la mediana" width="100%">
+
+            <h3>Definición</h3>
+            <p>
+                La mediana es el valor que se encuentra exactamente en el centro de un
+                conjunto de datos cuando estos están ordenados de menor a mayor.
+            </p>
+            <p>
+                Si la cantidad de datos es impar, la mediana es el valor central.
+                Si es par, la mediana es el promedio de los dos valores centrales.
+            </p>
+
+            <h3>Ejemplo con cantidad impar</h3>
+            <p>Datos: <strong>3, 7, 1, 9, 5</strong></p>
+            <p>Paso 1: Ordenamos de menor a mayor: 1, 3, <strong>5</strong>, 7, 9</p>
+            <p>Paso 2: El valor del centro es <strong>5</strong></p>
+            <p>La mediana es <strong>5</strong>.</p>
+
+            <h3>Ejemplo con cantidad par</h3>
+            <p>Datos: <strong>2, 4, 6, 8</strong></p>
+            <p>Paso 1: Ya están ordenados: 2, <strong>4, 6</strong>, 8</p>
+            <p>Paso 2: Los dos valores centrales son 4 y 6</p>
+            <p>Paso 3: Promediamos: (4 + 6) / 2 = <strong>5</strong></p>
+            <p>La mediana es <strong>5</strong>.</p>
+
+            <h3>¿Cómo se calcula en JavaScript?</h3>
+            <pre class="consola">
+// --- Calcular la MEDIANA ---
+
+let listaCalificaciones = [3, 7, 1, 9, 5];
+
+// Se ordena el arreglo de menor a mayor antes de buscar el centro
+listaCalificaciones.sort(function(valorA, valorB) {
+    return valorA - valorB;
+});
+
+let posicionCentral = Math.floor(listaCalificaciones.length / 2);
+let valorMediana = 0;
+
+// Si la cantidad de datos es par, se promedian los dos valores centrales
+if (listaCalificaciones.length % 2 === 0) {
+    valorMediana = (listaCalificaciones[posicionCentral - 1] +
+                    listaCalificaciones[posicionCentral]) / 2;
+} else {
+    valorMediana = listaCalificaciones[posicionCentral];
+}
+
+console.log("La mediana es: " + valorMediana);
+            </pre>
+        </div>
+
+        <div class="columna-ejercicios">
+            <h3>Ejemplo interactivo</h3>
+            <p>
+                El siguiente ejemplo usa un arreglo de <strong>20 objetos</strong>
+                precargados, cada uno con el nombre de un estudiante y su calificación.
+                Al hacer clic en el botón, JavaScript ordena las calificaciones de
+                menor a mayor y encuentra el valor central.
+            </p>
+
+            <button onclick="toggleEjemploMediana()" class="btn-interactivo" id="btn-ejemplo-mediana">
+                ▶ Calcular Mediana
+            </button>
+
+            <div id="resultado-mediana" class="oculto"></div>
+
+            <h3>Gráfico de calificaciones</h3>
+            <p>
+                Haz clic en el botón para ver el gráfico de barras horizontales
+                con las calificaciones ordenadas y la línea de mediana como referencia.
+            </p>
+
+            <button onclick="toggleGraficoMediana()" class="btn-interactivo" id="btn-grafico-mediana">
+                📊 Ver Gráfico de Barras Horizontales
+            </button>
+
+            <div id="contenedor-grafico-mediana" class="oculto" style="margin-top:20px;">
+                <canvas id="graficaMediana"></canvas>
+            </div>
+        </div>
+    </section>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="datos.js"></script>
+    <script src="social_media_200.js"></script>
+
+    <script src="funciones_estadisticas/mediana.js"></script>
+    <script src="mediana_pagina.js"></script>
+
+</body>
+</html>

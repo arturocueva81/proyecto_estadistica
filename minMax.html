@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mínimo y Máximo — Estadística Aplicada</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="estadistica.css">
+</head>
+
+<body>
+
+    <nav>
+        <a href="index.html" class="btn-nav">Portada</a>
+        <a href="media.html" class="btn-nav">Media</a>
+        <a href="mediana.html" class="btn-nav">Mediana</a>
+        <a href="moda.html" class="btn-nav">Moda</a>
+        <a href="minMax.html" class="btn-nav activo">Mínimo y Máximo</a>
+        <a href="rango.html" class="btn-nav">Rango</a>
+        <a href="varianza.html" class="btn-nav">Varianza</a>
+        <a href="desvEstandar.html" class="btn-nav">Desviación Estándar</a>
+        <a href="ejPractico.html" class="btn-nav">Ejercicio Práctico</a>
+        <a href="test.html" class="btn-nav">Test</a>
+        <a href="acercaDe.html" class="btn-nav">Acerca De</a>
+    </nav>
+
+
+    <!-- ============================================================
+         SECCIÓN: VALOR MÍNIMO Y MÁXIMO
+         Visible por defecto al cargar esta página (sin clase 'oculto').
+         ============================================================ -->
+    <section id="min-max" class="dos-columnas">
+
+        <div class="columna-teoria">
+            <h2>Valor Mínimo y Valor Máximo</h2>
+            <img src="images/val_min_max.jpeg" alt="Ilustración de valor mínimo y máximo" width="100%">
+
+            <h3>Definición</h3>
+            <p>El <strong>valor mínimo</strong> es el número más pequeño dentro de un conjunto de datos.</p>
+            <p>El <strong>valor máximo</strong> es el número más grande dentro de un conjunto de datos.</p>
+            <p>
+                Estos dos valores nos permiten conocer los extremos del conjunto
+                y son la base para calcular el rango.
+            </p>
+
+            <h3>Ejemplo</h3>
+            <p>Temperaturas registradas durante una semana: <strong>18, 22, 15, 28, 20, 25, 17</strong></p>
+            <p>Ordenamos de menor a mayor: 15, 17, 18, 20, 22, 25, 28</p>
+            <p>Valor mínimo: <strong>15°C</strong></p>
+            <p>Valor máximo: <strong>28°C</strong></p>
+
+            <h3>¿Cómo se calcula en JavaScript?</h3>
+            <pre class="consola">
+// --- Calcular el MÍNIMO y MÁXIMO en JavaScript ---
+
+let listaTemperaturas = [18, 22, 15, 28, 20, 25, 17];
+let valorMinimo = listaTemperaturas[0];
+let valorMaximo = listaTemperaturas[0];
+
+// Se recorre desde el índice 1 porque el índice 0 ya fue asignado como referencia
+for (let indiceTemperatura = 1; indiceTemperatura < listaTemperaturas.length; indiceTemperatura++) {
+    if (listaTemperaturas[indiceTemperatura] < valorMinimo) {
+        valorMinimo = listaTemperaturas[indiceTemperatura];
+    }
+    if (listaTemperaturas[indiceTemperatura] > valorMaximo) {
+        valorMaximo = listaTemperaturas[indiceTemperatura];
+    }
+}
+
+console.log("Valor mínimo: " + valorMinimo);
+console.log("Valor máximo: " + valorMaximo);
+            </pre>
+        </div>
+
+        <div class="columna-ejercicios">
+            <h3>Ejemplo interactivo</h3>
+            <p>
+                Al hacer clic, JavaScript recorre el arreglo de <strong>20 estudiantes</strong>
+                y encuentra la calificación más baja y la más alta.
+            </p>
+
+            <button onclick="toggleEjemploMinMax()" class="btn-interactivo" id="btn-ejemplo-minmax">
+                ▶ Calcular Mínimo y Máximo
+            </button>
+
+            <div id="resultado-minmax" class="oculto"></div>
+
+            <h3>Gráfico de calificaciones</h3>
+            <p>
+                Haz clic para ver el gráfico de barras verticales.
+                La barra <strong style="color:#ef4444;">roja</strong> es el mínimo
+                y la barra <strong style="color:#22c55e;">verde</strong> es el máximo.
+            </p>
+
+            <button onclick="toggleGraficoMinMax()" class="btn-interactivo" id="btn-grafico-minmax">
+                📊 Ver Gráfico de Barras Verticales
+            </button>
+
+            <div id="contenedor-grafico-minmax" class="oculto" style="margin-top:20px;">
+                <canvas id="graficaMinMax"></canvas>
+            </div>
+        </div>
+    </section>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="datos.js"></script>
+    <script src="social_media_200.js"></script>
+    <script src="funciones_estadisticas/media.js"></script>
+    <script src="funciones_estadisticas/mediana.js"></script>
+    <script src="funciones_estadisticas/moda.js"></script>
+    <script src="funciones_estadisticas/minMax.js"></script>
+    <script src="funciones_estadisticas/rango.js"></script>
+    <script src="funciones_estadisticas/varianza.js"></script>
+    <script src="funciones_estadisticas/desviacion.js"></script>
+    <script src="estadistica.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acerca De — Estadística Aplicada</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="estadistica.css">
+</head>
+
+<body>
+
+    <nav>
+        <a href="index.html" class="btn-nav">Portada</a>
+        <a href="media.html" class="btn-nav">Media</a>
+        <a href="mediana.html" class="btn-nav">Mediana</a>
+        <a href="moda.html" class="btn-nav">Moda</a>
+        <a href="minMax.html" class="btn-nav">Mínimo y Máximo</a>
+        <a href="rango.html" class="btn-nav">Rango</a>
+        <a href="varianza.html" class="btn-nav">Varianza</a>
+        <a href="desvEstandar.html" class="btn-nav">Desviación Estándar</a>
+        <a href="ejPractico.html" class="btn-nav">Ejercicio Práctico</a>
+        <a href="test.html" class="btn-nav">Test</a>
+        <a href="acercaDe.html" class="btn-nav activo">Acerca De</a>
+    </nav>
+
+
+        <!-- ============================================================
+            SECCIÓN: ACERCA DE
+            Página informativa sobre el proyecto y sus autores.
+            ============================================================ -->
+    <section id="acerca-de" class="dos-columnas">
+
+        <div class="columna-teoria">
+            <h2>Acerca de este Proyecto</h2>
+            <img src="images/portada01.png" alt="Imagen del proyecto" width="100%">
+
+            <h3>Descripción</h3>
+            <p>
+                Este sitio web es el resultado del <strong>Proyecto de Matemática 1</strong>,
+                desarrollado como aplicación práctica de la estadística descriptiva mediante
+                tecnologías web: HTML, CSS y JavaScript puro.
+            </p>
+            <p>
+                El proyecto implementa desde cero, sin librerías externas de cálculo,
+                las principales medidas estadísticas: media, mediana, moda, mínimo,
+                máximo, rango, varianza y desviación estándar. Cada medida cuenta con
+                explicación teórica, ejemplo manual, código JavaScript comentado,
+                ejemplo interactivo y visualización con Chart.js.
+            </p>
+
+            <h3>Tecnologías utilizadas</h3>
+            <ul>
+                <li><strong>HTML5:</strong> estructura semántica del sitio</li>
+                <li><strong>CSS3:</strong> estilos y layout de dos columnas</li>
+                <li><strong>JavaScript (ES6):</strong> lógica estadística y manipulación del DOM</li>
+                <li><strong>Chart.js:</strong> visualización de gráficos interactivos</li>
+                <li><strong>Font Awesome:</strong> iconografía</li>
+            </ul>
+
+            <h3>Dataset</h3>
+            <p>
+                El ejercicio práctico utiliza una muestra de 200 registros del dataset
+                <a href="https://www.kaggle.com/datasets/bhadramohit/social-media-usage-datasetapplications"
+                    target="_blank">Social Media Usage Dataset</a> publicado en Kaggle,
+                que registra el comportamiento diario de usuarios en redes sociales en USA (2024).
+            </p>
+        </div>
+
+        <div class="columna-ejercicios">
+            <h3>Estructura del proyecto</h3>
+            <pre class="consola">
+            proyecto/
+            ├── index.html          ← Portada + ¿Qué es la Estadística?
+            ├── media.html          ← Media aritmética
+            ├── mediana.html        ← Mediana
+            ├── moda.html           ← Moda
+            ├── minMax.html         ← Mínimo y Máximo
+            ├── rango.html          ← Rango
+            ├── varianza.html       ← Varianza
+            ├── devEstandar.html    ← Desviación Estándar
+            ├── ejPractico.html     ← Ejercicio Práctico (dataset Kaggle)
+            ├── test.html           ← Test de Evaluación
+            ├── acercaDe.html       ← Esta página
+            ├── estadistica.css     ← Estilos globales
+            ├── estadistica.js      ← Controlador principal
+            ├── datos.js            ← 20 estudiantes (ejemplos interactivos)
+            ├── social_media_200.js ← 200 registros Kaggle
+            └── funciones_estadisticas/
+                ├── media.js
+                ├── mediana.js
+                ├── moda.js
+                ├── minMax.js
+                ├── rango.js
+                ├── varianza.js
+                └── desviacion.js
+            </pre>
+
+                        <h3>Autores</h3>
+
+            <div class="portada-footer">
+                <div class="autores-contenedor">
+                    <div class="autor">
+                        <span class="autor-nombre">Jonathan Luna</span>
+                        <a href="https://github.com/JonathanLuna95" target="_blank" class="github-link">
+                            <i class="fab fa-github"></i> JonathanLuna95
+                        </a>
+                    </div>
+                    <div class="autor">
+                        <span class="autor-nombre">Arturo Cueva</span>
+                        <a href="https://github.com/arturocueva81" target="_blank" class="github-link">
+                            <i class="fab fa-github"></i> arturocueva81
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Tecnología en Desarrollo de Software</h3>
+            <p>           INSTITUTO MOVILIS             </p>
+        </div>
+    </section>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="datos.js"></script>
+    <script src="social_media_200.js"></script>
+    <script src="funciones_estadisticas/media.js"></script>
+    <script src="funciones_estadisticas/mediana.js"></script>
+    <script src="funciones_estadisticas/moda.js"></script>
+    <script src="funciones_estadisticas/minMax.js"></script>
+    <script src="funciones_estadisticas/rango.js"></script>
+    <script src="funciones_estadisticas/varianza.js"></script>
+    <script src="funciones_estadisticas/desviacion.js"></script>
+    <script src="estadistica.js"></script>
+
+</body>
+</html>

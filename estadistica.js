@@ -1,16 +1,31 @@
+// ============================================================
+// BLOQUE 1: NAVEGACION ENTRE SECCIONES
+// ============================================================
+
 /**
  * Funcion: mostrarSeccion
- * */
-function mostrarSeccion(idSeccion) {
+ * Oculta todas las secciones del documento y muestra únicamente
+ * la sección cuyo ID coincide con el parámetro recibido.
+ */
+function mostrarSeccion(idSeccionObjetivo) {
 
-    let secciones = document.getElementsByTagName('section');
-    for (let i = 0; i < secciones.length; i++) {
-        secciones[i].className = 'oculto';
+    // Se obtiene la lista de todas las etiquetas <section> del DOM
+    let listaSecciones = document.getElementsByTagName('section');
+
+    // BUCLE: Se recorre cada sección para ocultarla agregando la clase 'oculto'
+    for (let indiceSeccion = 0; indiceSeccion < listaSecciones.length; indiceSeccion++) {
+        listaSecciones[indiceSeccion].classList.add('oculto');
     }
 
-    let seccionMostrar = document.getElementById(idSeccion);
-    seccionMostrar.className = '';
+    // Se obtiene la referencia a la sección objetivo mediante su ID
+    let seccionActiva = document.getElementById(idSeccionObjetivo);
+
+    // CONDICIONAL: Solo se remueve la clase 'oculto' si el elemento existe en el DOM
+    if (seccionActiva) {
+        seccionActiva.classList.remove('oculto');
+    }
 }
+
 
 // ============================================================
 // BLOQUE 2: CARGA DE DATOS DESDE datos.js
@@ -18,8 +33,8 @@ function mostrarSeccion(idSeccion) {
 
 /**
  * Funcion: cargarDatos
- * Lee la variable global datosEstudiantes declarada en datos.js
- * y devuelve el arreglo de estudiantes
+ * Accede a la variable global DATOSESTUDIANTES definida en el archivo datos.js
+ * y devuelve el arreglo de objetos que contiene la información de los estudiantes.
  */
 function cargarDatos() {
     return DATOSESTUDIANTES.estudiantes;
@@ -32,1029 +47,655 @@ function cargarDatos() {
 
 /**
  * Funcion: obtenerCalificaciones
- * Recibe el arreglo de estudiantes y devuelve
- * solo un arreglo de numeros con las calificaciones
+ * Recibe el arreglo completo de estudiantes y extrae únicamente
+ * las calificaciones numéricas en un nuevo arreglo.
  */
-function obtenerCalificaciones(estudiantes) {
-    let calificaciones = [];
+function obtenerCalificaciones(listaEstudiantes) {
+    let listaCalificaciones = [];
 
-    for (let i = 0; i < estudiantes.length; i++) {
-        calificaciones.push(estudiantes[i].calificacion);
+    // BUCLE: Se itera sobre cada estudiante para extraer su calificación
+    for (let indiceEstudiante = 0; indiceEstudiante < listaEstudiantes.length; indiceEstudiante++) {
+        listaCalificaciones.push(listaEstudiantes[indiceEstudiante].calificacion);
     }
 
-    return calificaciones;
+    return listaCalificaciones;
 }
 
 
 // ============================================================
-// BLOQUE 4: FUNCIONES ESTADISTICAS
+// BLOQUE 4: FUNCIONES ESTADISTICAS - MEDIA
 // ============================================================
 
-// --- MEDIA ---
+// Variable de control para la instancia del gráfico de media (Chart.js)
+let graficoMediaInstancia = null;
 
-function calcularMediaDesdeArreglo(calificaciones) {
-    let suma = 0;
-
-    for (let i = 0; i < calificaciones.length; i++) {
-        suma = suma + calificaciones[i];
-    }
-
-    let media = suma / calificaciones.length;
-
-    return {
-        suma: suma,
-        cantidad: calificaciones.length,
-        media: media
-    };
+/**
+ * Funcion: obtenerResultadoMedia
+ * Calcula la media utilizando la función externa calcularMedia (media.js)
+ * sin generar tabla visual, únicamente retornando el valor numérico.
+ */
+function obtenerResultadoMedia(listaEstudiantes) {
+    return calcularMedia(listaEstudiantes, 'calificacion', null, null);
 }
 
-// ============================================================
-// MEDIA: toggle del ejemplo interactivo
-// ============================================================
-
-let graficoMediaInstancia = null; // evita crear el grafico dos veces
-
+/**
+ * Funcion: toggleEjemploMedia
+ * Alterna la visibilidad del ejemplo interactivo de cálculo de media.
+ * Si está oculto, calcula y muestra la tabla; si está visible, la oculta.
+ */
 function toggleEjemploMedia() {
-    let contenedor = document.getElementById('resultado-media');
-    let btn = document.getElementById('btn-ejemplo-media');
+    let contenedorResultado = document.getElementById('resultado-media');
+    let botonInteractivo = document.getElementById('btn-ejemplo-media');
 
-    if (contenedor.classList.contains('oculto')) {
-        // Si está oculto: calcular y mostrar
-        calcularMedia();
-        contenedor.classList.remove('oculto');
-        btn.textContent = '✖ Ocultar Ejemplo';
+    // CONDICIONAL: Validación de existencia de elementos en el DOM
+    if (!contenedorResultado || !botonInteractivo) {
+        return;
+    }
+
+    // CONDICIONAL: Si el contenedor tiene la clase 'oculto', se procede a mostrar
+    if (contenedorResultado.classList.contains('oculto')) {
+        calcularMedia(cargarDatos(), 'calificacion', 'resultado-media', 'nombre');
+        contenedorResultado.classList.remove('oculto');
+        botonInteractivo.textContent = '✖ Ocultar Ejemplo';
     } else {
-        // Si está visible: ocultar
-        contenedor.classList.add('oculto');
-        btn.textContent = '▶ Calcular Media';
+        // Si no está oculto, se oculta y se restablece el texto del botón
+        contenedorResultado.classList.add('oculto');
+        botonInteractivo.textContent = '▶ Calcular Media';
     }
 }
 
-function calcularMedia() {
-    let estudiantes = cargarDatos();
-    let calificaciones = obtenerCalificaciones(estudiantes);
-    let resultado = calcularMediaDesdeArreglo(calificaciones);
-
-    let html = '';
-
-    html += '<p><strong>Datos cargados desde datos.js:</strong></p>';
-    html += '<table class="tabla-interactiva">';
-    html += '<tr><th>#</th><th>Estudiante</th><th>Calificación</th></tr>';
-
-    for (let i = 0; i < estudiantes.length; i++) {
-        html += '<tr>';
-        html += '<td>' + (i + 1) + '</td>';
-        html += '<td>' + estudiantes[i].nombre + '</td>';
-        html += '<td>' + estudiantes[i].calificacion + '</td>';
-        html += '</tr>';
-    }
-
-    html += '</table>';
-    html += '<div class="detalle-calculo">';
-    html += 'Suma total: ' + resultado.suma + '<br>';
-    html += 'Número de datos: ' + resultado.cantidad + '<br>';
-    html += 'Fórmula: Media = Suma / Cantidad<br>';
-    html += 'Media = ' + resultado.suma + ' / ' + resultado.cantidad;
-    html += '</div>';
-    html += '<div class="caja-resultado">';
-    html += '📘 La media aritmética es: <strong>' + resultado.media.toFixed(2) + '</strong>';
-    html += '</div>';
-
-    document.getElementById('resultado-media').innerHTML = html;
-}
-
-
-// ============================================================
-// MEDIA: toggle del gráfico
-// ============================================================
-
+/**
+ * Funcion: toggleGraficoMedia
+ * Alterna la visibilidad del gráfico de barras de la media.
+ * Gestiona la destrucción y recreación del canvas para evitar conflictos con Chart.js.
+ */
 function toggleGraficoMedia() {
-    let contenedor = document.getElementById('contenedor-grafico-media');
-    let btn = document.getElementById('btn-grafico-media');
+    let contenedorResultado = document.getElementById('contenedor-grafico-media');
+    let botonInteractivo = document.getElementById('btn-grafico-media');
 
-    if (contenedor.classList.contains('oculto')) {
-        contenedor.classList.remove('oculto');
-        btn.textContent = '✖ Ocultar Gráfico';
-
-        // Solo dibuja el grafico si no existe todavia
-        if (graficoMediaInstancia === null) {
-            graficoMediaInstancia = dibujarGraficoMedia();
-        }
-    } else {
-        contenedor.classList.add('oculto');
-        btn.textContent = '📊 Ver Gráfico de Barras';
-    }
-}
-
-function dibujarGraficoMedia() {
-    let estudiantes = cargarDatos();
-    let calificaciones = obtenerCalificaciones(estudiantes);
-    let resultado = calcularMediaDesdeArreglo(calificaciones);
-
-    let nombres = [];
-    for (let i = 0; i < estudiantes.length; i++) {
-        nombres.push(estudiantes[i].nombre);
+    // CONDICIONAL: Validación de existencia de elementos en el DOM
+    if (!contenedorResultado || !botonInteractivo) {
+        return;
     }
 
-    let ctx = document.getElementById('graficaMedia').getContext('2d');
+    // --- SECCION: OCULTAR GRÁFICO ---
+    if (!contenedorResultado.classList.contains('oculto')) {
+        contenedorResultado.classList.add('oculto');
+        botonInteractivo.textContent = '📊 Ver Gráfico de Barras';
 
-    return new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: nombres,
-            datasets: [{
-                label: 'Calificación',
-                data: calificaciones,
-                backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
-            }, {
-                label: 'Media (' + resultado.media.toFixed(2) + ')',
-                data: new Array(calificaciones.length).fill(resultado.media),
-                type: 'line',
-                borderColor: 'rgba(255, 99, 132, 1)',
-                borderWidth: 2,
-                pointRadius: 0,
-                fill: false
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { position: 'top' },
-                title: {
-                    display: true,
-                    text: 'Calificaciones de estudiantes con línea de media'
-                }
-            },
-            scales: {
-                y: { beginAtZero: true, max: 20 }
+        // CONDICIONAL: Se destruye la instancia anterior del gráfico para liberar memoria
+        if (graficoMediaInstancia !== null) {
+            try {
+                graficoMediaInstancia.destroy();
+            } catch (errorDestruccion) {
+                // En caso de error al destruir, se ignora silenciosamente
             }
+            graficoMediaInstancia = null;
         }
-    });
+        return;
+    }
+
+    // --- SECCION: MOSTRAR GRÁFICO ---
+    contenedorResultado.classList.remove('oculto');
+    botonInteractivo.textContent = '✖ Ocultar Gráfico';
+
+    // Se reemplaza el canvas físicamente para evitar el error "Canvas already in use"
+    let canvasAnterior = document.getElementById('graficaMedia');
+
+    // CONDICIONAL: Si no existe el canvas, se cancela la operación
+    if (!canvasAnterior) {
+        return;
+    }
+
+    let canvasNuevo = document.createElement('canvas');
+    canvasNuevo.id = 'graficaMedia';
+    canvasAnterior.parentNode.replaceChild(canvasNuevo, canvasAnterior);
+
+    // setTimeout: Permite que el navegador calcule el tamaño real del nuevo canvas
+    // antes de que Chart.js intente renderizar el gráfico
+    setTimeout(function () {
+        graficoMediaInstancia = dibujarGraficoMedia(
+            cargarDatos(),
+            'calificacion',
+            'graficaMedia',
+            'Calificaciones de estudiantes con media'
+        );
+    }, 50);
 }
+
 
 // ============================================================
 // BLOQUE 5: FUNCIONES ESTADISTICAS - MEDIANA
 // ============================================================
 
-let graficoMedianaInstancia = null;
-
-// --- Calculo puro de la mediana ---
-function calcularMedianaDesdeArreglo(calificaciones) {
-
-    // Copiamos el arreglo para no modificar el original
-    let ordenadas = calificaciones.slice();
-
-    // Ordenamos de menor a mayor
-    ordenadas.sort(function (a, b) {
-        return a - b;
-    });
-
-    let centro = Math.floor(ordenadas.length / 2);
-    let mediana;
-    let esPar = ordenadas.length % 2 === 0;
-
-    if (esPar) {
-        mediana = (ordenadas[centro - 1] + ordenadas[centro]) / 2;
-    } else {
-        mediana = ordenadas[centro];
-    }
-
-    return {
-        ordenadas: ordenadas,
-        centro: centro,
-        esPar: esPar,
-        mediana: mediana
-    };
-}
-
-// --- Toggle del ejemplo interactivo ---
+/**
+ * Funcion: toggleEjemploMediana
+ * Alterna la visibilidad del ejemplo interactivo de cálculo de mediana.
+ * Utiliza la función externa calcularMediana definida en mediana.js.
+ */
 function toggleEjemploMediana() {
-    let contenedor = document.getElementById('resultado-mediana');
-    let btn = document.getElementById('btn-ejemplo-mediana');
+    let contenedorResultado = document.getElementById('resultado-mediana');
+    let botonInteractivo = document.getElementById('btn-ejemplo-mediana');
 
-    if (contenedor.classList.contains('oculto')) {
-        calcularMediana();
-        contenedor.classList.remove('oculto');
-        btn.textContent = '✖ Ocultar Ejemplo';
+    // CONDICIONAL: Si el contenedor está oculto, se calcula y muestra la tabla
+    if (contenedorResultado.classList.contains('oculto')) {
+        calcularMediana(cargarDatos(), 'calificacion', 'resultado-mediana', 'nombre');
+        contenedorResultado.classList.remove('oculto');
+        botonInteractivo.textContent = '✖ Ocultar Ejemplo';
     } else {
-        contenedor.classList.add('oculto');
-        btn.textContent = '▶ Calcular Mediana';
+        contenedorResultado.classList.add('oculto');
+        botonInteractivo.textContent = '▶ Calcular Mediana';
     }
 }
 
-// --- Genera el HTML del ejemplo interactivo ---
-function calcularMediana() {
-    let estudiantes = cargarDatos();
-    let calificaciones = obtenerCalificaciones(estudiantes);
-    let resultado = calcularMedianaDesdeArreglo(calificaciones);
-
-    let html = '';
-
-    html += '<p><strong>Calificaciones ordenadas de menor a mayor:</strong></p>';
-    html += '<table class="tabla-interactiva">';
-    html += '<tr><th>Posición</th><th>Estudiante</th><th>Calificación</th><th>¿Centro?</th></tr>';
-
-    // Creamos una copia ordenada de estudiantes para mostrar nombres
-    let estudiantesOrdenados = estudiantes.slice();
-    estudiantesOrdenados.sort(function (a, b) {
-        return a.calificacion - b.calificacion;
-    });
-
-    for (let i = 0; i < estudiantesOrdenados.length; i++) {
-        let esCentro = '';
-
-        if (!resultado.esPar && i === resultado.centro) {
-            esCentro = '⬅ centro';
-        }
-        if (resultado.esPar && (i === resultado.centro - 1 || i === resultado.centro)) {
-            esCentro = '⬅ centro';
-        }
-
-        html += '<tr>';
-        html += '<td>' + (i + 1) + '</td>';
-        html += '<td>' + estudiantesOrdenados[i].nombre + '</td>';
-        html += '<td>' + estudiantesOrdenados[i].calificacion + '</td>';
-        html += '<td>' + esCentro + '</td>';
-        html += '</tr>';
-    }
-
-    html += '</table>';
-    html += '<div class="detalle-calculo">';
-    html += 'Total de datos: ' + calificaciones.length + '<br>';
-    html += 'Cantidad de datos: ' + (resultado.esPar ? 'par' : 'impar') + '<br>';
-
-    if (resultado.esPar) {
-        html += 'Valores centrales: ' + resultado.ordenadas[resultado.centro - 1] +
-            ' y ' + resultado.ordenadas[resultado.centro] + '<br>';
-        html += 'Fórmula: (' + resultado.ordenadas[resultado.centro - 1] +
-            ' + ' + resultado.ordenadas[resultado.centro] + ') / 2';
-    } else {
-        html += 'Posición central: ' + (resultado.centro + 1) + '<br>';
-        html += 'Valor en esa posición: ' + resultado.mediana;
-    }
-
-    html += '</div>';
-    html += '<div class="caja-resultado">';
-    html += '📗 La mediana es: <strong>' + resultado.mediana.toFixed(2) + '</strong>';
-    html += '</div>';
-
-    document.getElementById('resultado-mediana').innerHTML = html;
-}
-
-// --- Toggle del gráfico ---
+/**
+ * Funcion: toggleGraficoMediana
+ * Alterna la visibilidad del gráfico de barras horizontales de la mediana.
+ */
 function toggleGraficoMediana() {
-    let contenedor = document.getElementById('contenedor-grafico-mediana');
-    let btn = document.getElementById('btn-grafico-mediana');
+    let contenedorResultado = document.getElementById('contenedor-grafico-mediana');
+    let botonInteractivo = document.getElementById('btn-grafico-mediana');
 
-    if (contenedor.classList.contains('oculto')) {
-        contenedor.classList.remove('oculto');
-        btn.textContent = '✖ Ocultar Gráfico';
+    // CONDICIONAL: Validación de existencia de elementos en el DOM
+    if (!contenedorResultado || !botonInteractivo) {
+        return;
+    }
 
-        // Reemplaza el canvas por uno nuevo limpio para evitar "Canvas already in use"
-        let canvasViejo = document.getElementById('graficaMediana');
+    // --- SECCION: OCULTAR GRÁFICO ---
+    if (!contenedorResultado.classList.contains('oculto')) {
+        contenedorResultado.classList.add('oculto');
+        botonInteractivo.textContent = '📊 Ver Gráfico de Barras Horizontales';
+        return;
+    }
+
+    // --- SECCION: MOSTRAR GRÁFICO ---
+    contenedorResultado.classList.remove('oculto');
+    botonInteractivo.textContent = '✖ Ocultar Gráfico';
+
+    // Se reemplaza el canvas para evitar conflictos de instancia en Chart.js
+    let canvasAnterior = document.getElementById('graficaMediana');
+
+    // CONDICIONAL: Solo se reemplaza si el canvas existe y tiene nodo padre
+    if (canvasAnterior && canvasAnterior.parentNode) {
         let canvasNuevo = document.createElement('canvas');
         canvasNuevo.id = 'graficaMediana';
-        canvasViejo.parentNode.replaceChild(canvasNuevo, canvasViejo);
-
-        graficoMedianaInstancia = dibujarGraficoMediana();
-
-    } else {
-        contenedor.classList.add('oculto');
-        btn.textContent = '📊 Ver Gráfico de Barras Horizontales';
-    }
-}
-
-// --- Dibuja el gráfico de barras horizontales ---
-function dibujarGraficoMediana() {
-    let estudiantes = cargarDatos();
-    let calificaciones = obtenerCalificaciones(estudiantes);
-    let resultado = calcularMedianaDesdeArreglo(calificaciones);
-
-    let estudiantesOrdenados = estudiantes.slice();
-    estudiantesOrdenados.sort(function (a, b) {
-        return a.calificacion - b.calificacion;
-    });
-
-    let nombres = [];
-    let valores = [];
-
-    for (let i = 0; i < estudiantesOrdenados.length; i++) {
-        nombres.push(estudiantesOrdenados[i].nombre);
-        valores.push(estudiantesOrdenados[i].calificacion);
+        canvasAnterior.parentNode.replaceChild(canvasNuevo, canvasAnterior);
     }
 
-    let ctx = document.getElementById('graficaMediana').getContext('2d');
-
-    return new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: nombres,
-            datasets: [{
-                label: 'Calificación (ordenada)',
-                data: valores,
-                backgroundColor: 'rgba(34, 197, 94, 0.6)',
-                borderColor: 'rgba(34, 197, 94, 1)',
-                borderWidth: 1
-            }, {
-                label: 'Mediana (' + resultado.mediana.toFixed(2) + ')',
-                data: new Array(valores.length).fill(resultado.mediana),
-                type: 'line',
-                borderColor: 'rgba(239, 68, 68, 1)',
-                borderWidth: 2,
-                pointRadius: 0,
-                fill: false
-            }]
-        },
-        options: {
-            indexAxis: 'y',        // ← aquí va, solo en options
-            responsive: true,
-            plugins: {
-                legend: { position: 'top' },
-                title: {
-                    display: true,
-                    text: 'Calificaciones ordenadas con línea de mediana'
-                }
-            },
-            scales: {
-                x: { beginAtZero: true, max: 20 }
-            }
-        }
-    });
+    // setTimeout: Da tiempo al DOM para que el nuevo canvas tenga dimensiones reales
+    setTimeout(function () {
+        dibujarGraficoMediana(
+            cargarDatos(),
+            'calificacion',
+            'graficaMediana',
+            'Calificaciones ordenadas con línea de mediana',
+            'nombre'
+        );
+    }, 50);
 }
+
 
 // ============================================================
 // BLOQUE 6: FUNCIONES ESTADISTICAS - MODA
 // ============================================================
 
+// Variable de control para la instancia del gráfico de moda (Chart.js)
 let graficoModaInstancia = null;
 
-// --- Calculo puro de la moda ---
-function calcularModaDesdeArreglo(calificaciones) {
-    let conteos = [];
-
-    for (let i = 0; i < calificaciones.length; i++) {
-        let encontrado = false;
-
-        for (let j = 0; j < conteos.length; j++) {
-            if (conteos[j].valor === calificaciones[i]) {
-                conteos[j].conteo = conteos[j].conteo + 1;
-                encontrado = true;
-            }
-        }
-
-        if (encontrado === false) {
-            conteos.push({ valor: calificaciones[i], conteo: 1 });
-        }
-    }
-
-    // Ordenamos conteos por valor para que el grafico quede ordenado
-    conteos.sort(function (a, b) {
-        return a.valor - b.valor;
-    });
-
-    // Encontramos el maximo conteo
-    let maxConteo = 0;
-    for (let k = 0; k < conteos.length; k++) {
-        if (conteos[k].conteo > maxConteo) {
-            maxConteo = conteos[k].conteo;
-        }
-    }
-
-    // Recopilamos todos los valores que tienen el maximo conteo
-    // (puede haber mas de una moda)
-    let modas = [];
-    for (let k = 0; k < conteos.length; k++) {
-        if (conteos[k].conteo === maxConteo) {
-            modas.push(conteos[k].valor);
-        }
-    }
-
-    return {
-        conteos: conteos,
-        modas: modas,
-        maxConteo: maxConteo
-    };
-}
-
-// --- Toggle del ejemplo interactivo ---
+/**
+ * Funcion: toggleEjemploModa
+ * Alterna la visibilidad del ejemplo interactivo de cálculo de moda.
+ * Utiliza la función externa calcularModa definida en moda.js.
+ */
 function toggleEjemploModa() {
-    let contenedor = document.getElementById('resultado-moda');
-    let btn = document.getElementById('btn-ejemplo-moda');
+    let contenedorResultado = document.getElementById('resultado-moda');
+    let botonInteractivo = document.getElementById('btn-ejemplo-moda');
 
-    if (contenedor.classList.contains('oculto')) {
-        calcularModa();
-        contenedor.classList.remove('oculto');
-        btn.textContent = '✖ Ocultar Ejemplo';
+    // CONDICIONAL: Si está oculto, se calcula la moda y se muestra la tabla
+    if (contenedorResultado.classList.contains('oculto')) {
+        calcularModa(cargarDatos(), 'calificacion', 'resultado-moda', 'nombre');
+        contenedorResultado.classList.remove('oculto');
+        botonInteractivo.textContent = '✖ Ocultar Ejemplo';
     } else {
-        contenedor.classList.add('oculto');
-        btn.textContent = '▶ Calcular Moda';
+        contenedorResultado.classList.add('oculto');
+        botonInteractivo.textContent = '▶ Calcular Moda';
     }
 }
 
-// --- Genera el HTML del ejemplo interactivo ---
-function calcularModa() {
-    let estudiantes = cargarDatos();
-    let calificaciones = obtenerCalificaciones(estudiantes);
-    let resultado = calcularModaDesdeArreglo(calificaciones);
-
-    let html = '';
-
-    html += '<p><strong>Frecuencia de cada calificación:</strong></p>';
-    html += '<table class="tabla-interactiva">';
-    html += '<tr><th>Calificación</th><th>Veces que aparece</th><th>¿Es la moda?</th></tr>';
-
-    for (let i = 0; i < resultado.conteos.length; i++) {
-        let esModa = resultado.conteos[i].conteo === resultado.maxConteo ? '⬅ moda' : '';
-        html += '<tr>';
-        html += '<td>' + resultado.conteos[i].valor + '</td>';
-        html += '<td>' + resultado.conteos[i].conteo + '</td>';
-        html += '<td>' + esModa + '</td>';
-        html += '</tr>';
-    }
-
-    html += '</table>';
-    html += '<div class="detalle-calculo">';
-    html += 'Total de datos: ' + calificaciones.length + '<br>';
-    html += 'Valor(es) que más se repite(n): <strong>' + resultado.modas.join(', ') + '</strong><br>';
-    html += 'Número de veces: ' + resultado.maxConteo;
-    html += '</div>';
-    html += '<div class="caja-resultado">';
-
-    if (resultado.modas.length === 1) {
-        html += '📙 La moda es: <strong>' + resultado.modas[0] + '</strong>';
-    } else {
-        html += '📙 Las modas son: <strong>' + resultado.modas.join(', ') + '</strong> (conjunto multimodal)';
-    }
-
-    html += '</div>';
-
-    document.getElementById('resultado-moda').innerHTML = html;
-}
-
-// --- Toggle del gráfico ---
+/**
+ * Funcion: toggleGraficoModa
+ * Alterna la visibilidad del gráfico de frecuencias de la moda.
+ */
 function toggleGraficoModa() {
-    let contenedor = document.getElementById('contenedor-grafico-moda');
-    let btn = document.getElementById('btn-grafico-moda');
+    let contenedorResultado = document.getElementById('contenedor-grafico-moda');
+    let botonInteractivo = document.getElementById('btn-grafico-moda');
 
-    if (contenedor.classList.contains('oculto')) {
-        contenedor.classList.remove('oculto');
-        btn.textContent = '✖ Ocultar Gráfico';
-
-        if (graficoModaInstancia === null) {
-            graficoModaInstancia = dibujarGraficoModa();
-        }
-    } else {
-        contenedor.classList.add('oculto');
-        btn.textContent = '📊 Ver Gráfico de Frecuencias';
-    }
-}
-
-// --- Dibuja el gráfico de frecuencias ---
-function dibujarGraficoModa() {
-    let estudiantes = cargarDatos();
-    let calificaciones = obtenerCalificaciones(estudiantes);
-    let resultado = calcularModaDesdeArreglo(calificaciones);
-
-    let etiquetas = [];
-    let frecuencias = [];
-    let colores = [];
-
-    for (let i = 0; i < resultado.conteos.length; i++) {
-        etiquetas.push('Calif. ' + resultado.conteos[i].valor);
-        frecuencias.push(resultado.conteos[i].conteo);
-
-        // La barra de la moda se pinta de color diferente
-        if (resultado.conteos[i].conteo === resultado.maxConteo) {
-            colores.push('rgba(22, 151, 249, 0.8)');   // naranja = moda
-        } else {
-            colores.push('rgba(247, 85, 85, 0.52)');   // morado = resto
-        }
+    // CONDICIONAL: Validación de existencia de elementos en el DOM
+    if (!contenedorResultado || !botonInteractivo) {
+        return;
     }
 
-    let ctx = document.getElementById('graficaModa').getContext('2d');
+    // --- SECCION: OCULTAR GRÁFICO ---
+    if (!contenedorResultado.classList.contains('oculto')) {
+        contenedorResultado.classList.add('oculto');
+        botonInteractivo.textContent = '📊 Ver Gráfico de Frecuencias';
 
-    return new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: etiquetas,
-            datasets: [{
-                label: 'Frecuencia (veces que aparece)',
-                data: frecuencias,
-                backgroundColor: colores,
-                borderColor: colores,
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { position: 'top' },
-                title: {
-                    display: true,
-                    text: 'Frecuencia de calificaciones (la barra naranja es la moda)'
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: { stepSize: 1 }
-                }
+        // CONDICIONAL: Se destruye la instancia previa del gráfico
+        if (graficoModaInstancia) {
+            try {
+                graficoModaInstancia.destroy();
+            } catch (errorDestruccion) {
+                // Se ignora el error si la instancia ya no es válida
             }
+            graficoModaInstancia = null;
         }
-    });
+        return;
+    }
+
+    // --- SECCION: MOSTRAR GRÁFICO ---
+    contenedorResultado.classList.remove('oculto');
+    botonInteractivo.textContent = '✖ Ocultar Gráfico';
+
+    // Se reemplaza el canvas físicamente para evitar "Canvas already in use"
+    let canvasAnterior = document.getElementById('graficaModa');
+
+    // CONDICIONAL: Si no existe el canvas, se cancela la operación
+    if (!canvasAnterior) {
+        return;
+    }
+
+    let canvasNuevo = document.createElement('canvas');
+    canvasNuevo.id = 'graficaModa';
+    canvasAnterior.parentNode.replaceChild(canvasNuevo, canvasAnterior);
+
+    // setTimeout: Permite que el navegador renderice el canvas con tamaño correcto
+    setTimeout(function () {
+        graficoModaInstancia = dibujarGraficoModa(
+            cargarDatos(),
+            'calificacion',
+            'graficaModa',
+            'Frecuencia de calificaciones (barra azul = moda)'
+        );
+    }, 50);
 }
+
 
 // ============================================================
 // BLOQUE 7: FUNCIONES ESTADISTICAS - MINIMO Y MAXIMO
 // ============================================================
 
+// Variable de control para la instancia del gráfico de mínimo y máximo (Chart.js)
 let graficoMinMaxInstancia = null;
 
-// --- Calculo puro de minimo y maximo ---
-function calcularMinMaxDesdeArreglo(calificaciones) {
-    let minimo = calificaciones[0];
-    let maximo = calificaciones[0];
-    let indiceMin = 0;
-    let indiceMax = 0;
-
-    for (let i = 1; i < calificaciones.length; i++) {
-        if (calificaciones[i] < minimo) {
-            minimo = calificaciones[i];
-            indiceMin = i;
-        }
-        if (calificaciones[i] > maximo) {
-            maximo = calificaciones[i];
-            indiceMax = i;
-        }
-    }
-
-    return {
-        minimo: minimo,
-        maximo: maximo,
-        indiceMin: indiceMin,
-        indiceMax: indiceMax
-    };
-}
-
-// --- Toggle del ejemplo interactivo ---
+/**
+ * Funcion: toggleEjemploMinMax
+ * Alterna la visibilidad del ejemplo interactivo de mínimo y máximo.
+ * Utiliza la función externa calcularMinMax definida en minMax.js.
+ */
 function toggleEjemploMinMax() {
-    let contenedor = document.getElementById('resultado-minmax');
-    let btn = document.getElementById('btn-ejemplo-minmax');
+    let contenedorResultado = document.getElementById('resultado-minmax');
+    let botonInteractivo = document.getElementById('btn-ejemplo-minmax');
 
-    if (contenedor.classList.contains('oculto')) {
-        calcularMinMax();
-        contenedor.classList.remove('oculto');
-        btn.textContent = '✖ Ocultar Ejemplo';
+    // CONDICIONAL: Validación de existencia de elementos en el DOM
+    if (!contenedorResultado || !botonInteractivo) {
+        return;
+    }
+
+    // CONDICIONAL: Si está oculto, se calcula y muestra la tabla
+    if (contenedorResultado.classList.contains('oculto')) {
+        calcularMinMax(cargarDatos(), 'calificacion', 'resultado-minmax', 'nombre');
+        contenedorResultado.classList.remove('oculto');
+        botonInteractivo.textContent = '✖ Ocultar Ejemplo';
     } else {
-        contenedor.classList.add('oculto');
-        btn.textContent = '▶ Calcular Mínimo y Máximo';
+        contenedorResultado.classList.add('oculto');
+        botonInteractivo.textContent = '▶ Calcular Mínimo y Máximo';
     }
 }
 
-// --- Genera el HTML del ejemplo interactivo ---
-function calcularMinMax() {
-    let estudiantes = cargarDatos();
-    let calificaciones = obtenerCalificaciones(estudiantes);
-    let resultado = calcularMinMaxDesdeArreglo(calificaciones);
-
-    let html = '';
-
-    html += '<p><strong>Calificaciones de los 20 estudiantes:</strong></p>';
-    html += '<table class="tabla-interactiva">';
-    html += '<tr><th>#</th><th>Estudiante</th><th>Calificación</th><th>Destacado</th></tr>';
-
-    for (let i = 0; i < estudiantes.length; i++) {
-        let destacado = '';
-
-        if (i === resultado.indiceMin) {
-            destacado = '⬅ mínimo';
-        }
-        if (i === resultado.indiceMax) {
-            destacado = '⬅ máximo';
-        }
-
-        html += '<tr>';
-        html += '<td>' + (i + 1) + '</td>';
-        html += '<td>' + estudiantes[i].nombre + '</td>';
-        html += '<td>' + estudiantes[i].calificacion + '</td>';
-        html += '<td>' + destacado + '</td>';
-        html += '</tr>';
-    }
-
-    html += '</table>';
-    html += '<div class="detalle-calculo">';
-    html += 'Total de datos recorridos: ' + calificaciones.length + '<br>';
-    html += 'Estudiante con menor calificación: <strong>' + estudiantes[resultado.indiceMin].nombre + '</strong><br>';
-    html += 'Estudiante con mayor calificación: <strong>' + estudiantes[resultado.indiceMax].nombre + '</strong>';
-    html += '</div>';
-    html += '<div class="caja-resultado">';
-    html += '🔴 Valor mínimo: <strong>' + resultado.minimo + '</strong>';
-    html += '&nbsp;&nbsp;&nbsp;';
-    html += '🟢 Valor máximo: <strong>' + resultado.maximo + '</strong>';
-    html += '</div>';
-
-    document.getElementById('resultado-minmax').innerHTML = html;
-}
-
-// --- Toggle del gráfico ---
+/**
+ * Funcion: toggleGraficoMinMax
+ * Alterna la visibilidad del gráfico de barras de mínimo y máximo.
+ */
 function toggleGraficoMinMax() {
-    let contenedor = document.getElementById('contenedor-grafico-minmax');
-    let btn = document.getElementById('btn-grafico-minmax');
+    let contenedorResultado = document.getElementById('contenedor-grafico-minmax');
+    let botonInteractivo = document.getElementById('btn-grafico-minmax');
 
-    if (contenedor.classList.contains('oculto')) {
-        contenedor.classList.remove('oculto');
-        btn.textContent = '✖ Ocultar Gráfico';
-
-        // Reemplaza canvas para evitar "Canvas already in use"
-        let canvasViejo = document.getElementById('graficaMinMax');
-        let canvasNuevo = document.createElement('canvas');
-        canvasNuevo.id = 'graficaMinMax';
-        canvasViejo.parentNode.replaceChild(canvasNuevo, canvasViejo);
-
-        graficoMinMaxInstancia = dibujarGraficoMinMax();
-    } else {
-        contenedor.classList.add('oculto');
-        btn.textContent = '📊 Ver Gráfico de Barras Verticales';
-    }
-}
-
-// --- Dibuja el gráfico de barras verticales ---
-function dibujarGraficoMinMax() {
-    let estudiantes = cargarDatos();
-    let calificaciones = obtenerCalificaciones(estudiantes);
-    let resultado = calcularMinMaxDesdeArreglo(calificaciones);
-
-    let nombres = [];
-    let valores = [];
-    let colores = [];
-
-    for (let i = 0; i < estudiantes.length; i++) {
-        nombres.push(estudiantes[i].nombre);
-        valores.push(estudiantes[i].calificacion);
-
-        // Rojo para minimo, verde para maximo, azul para el resto
-        if (i === resultado.indiceMin) {
-            colores.push('rgba(239, 68, 68, 0.8)');    // rojo
-        } else if (i === resultado.indiceMax) {
-            colores.push('rgba(34, 197, 94, 0.8)');    // verde
-        } else {
-            colores.push('rgba(99, 144, 241, 0.5)');   // azul/indigo
-        }
+    // CONDICIONAL: Validación de existencia de elementos en el DOM
+    if (!contenedorResultado || !botonInteractivo) {
+        return;
     }
 
-    let ctx = document.getElementById('graficaMinMax').getContext('2d');
+    // --- SECCION: OCULTAR GRÁFICO ---
+    if (!contenedorResultado.classList.contains('oculto')) {
+        contenedorResultado.classList.add('oculto');
+        botonInteractivo.textContent = '📊 Ver Gráfico de Barras';
 
-    return new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: nombres,
-            datasets: [{
-                label: 'Calificación',
-                data: valores,
-                backgroundColor: colores,
-                borderColor: colores,
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { position: 'top' },
-                title: {
-                    display: true,
-                    text: 'Calificaciones — rojo: mínimo | verde: máximo'
-                }
-            },
-            scales: {
-                y: { beginAtZero: true, max: 20 }
+        // CONDICIONAL: Se destruye la instancia previa para liberar memoria
+        if (graficoMinMaxInstancia) {
+            try {
+                graficoMinMaxInstancia.destroy();
+            } catch (errorDestruccion) {
+                // Se ignora el error si la instancia ya no es válida
             }
+            graficoMinMaxInstancia = null;
         }
-    });
+        return;
+    }
+
+    // --- SECCION: MOSTRAR GRÁFICO ---
+    contenedorResultado.classList.remove('oculto');
+    botonInteractivo.textContent = '✖ Ocultar Gráfico';
+
+    // CONDICIONAL: Se destruye cualquier instancia previa antes de crear una nueva
+    if (graficoMinMaxInstancia) {
+        try {
+            graficoMinMaxInstancia.destroy();
+        } catch (errorDestruccion) {
+            // Se ignora el error si la instancia ya no es válida
+        }
+        graficoMinMaxInstancia = null;
+    }
+
+    // Se reemplaza el canvas físicamente para evitar "Canvas already in use"
+    let canvasAnterior = document.getElementById('graficaMinMax');
+
+    // CONDICIONAL: Si no existe el canvas, se cancela la operación
+    if (!canvasAnterior) {
+        return;
+    }
+
+    let canvasNuevo = document.createElement('canvas');
+    canvasNuevo.id = 'graficaMinMax';
+    canvasAnterior.parentNode.replaceChild(canvasNuevo, canvasAnterior);
+
+    // setTimeout: Da tiempo al DOM para que el canvas nuevo tenga tamaño real
+    setTimeout(function () {
+        // dibujarGraficoMinMax viene de minMax.js
+        // Parámetros: arreglo, campoNumerico, canvasId, titulo
+        graficoMinMaxInstancia = dibujarGraficoMinMax(
+            cargarDatos(),
+            'calificacion',
+            'graficaMinMax',
+            'Calificaciones — azul: mínimo | rojo: máximo'
+        );
+    }, 50);
 }
+
 
 // ============================================================
 // BLOQUE 8: FUNCIONES ESTADISTICAS - RANGO
 // ============================================================
 
-let graficoRangoInstancia = null;
+// Variable de control para la instancia del gráfico de rango (Chart.js)
+// NOTA: Esta declaración faltaba en el código original y causaba error de referencia
+let graficoRangoEjemploInstancia = null;
 
-// --- Calculo puro del rango ---
-function calcularRangoDesdeArreglo(calificaciones) {
-    let resultado = calcularMinMaxDesdeArreglo(calificaciones);
-    let rango = resultado.maximo - resultado.minimo;
-
-    return {
-        minimo: resultado.minimo,
-        maximo: resultado.maximo,
-        rango: rango
-    };
-}
-
-// --- Toggle del ejemplo interactivo ---
+/**
+ * Funcion: toggleEjemploRango
+ * Alterna la visibilidad del ejemplo interactivo de cálculo de rango.
+ * Utiliza la función externa calcularRango definida en rango.js.
+ */
 function toggleEjemploRango() {
-    let contenedor = document.getElementById('resultado-rango');
-    let btn = document.getElementById('btn-ejemplo-rango');
+    let contenedorResultado = document.getElementById('resultado-rango');
+    let botonInteractivo = document.getElementById('btn-ejemplo-rango');
 
-    if (contenedor.classList.contains('oculto')) {
-        calcularRango();
-        contenedor.classList.remove('oculto');
-        btn.textContent = '✖ Ocultar Ejemplo';
+    // CONDICIONAL: Si está oculto, se calcula y muestra la tabla
+    if (contenedorResultado.classList.contains('oculto')) {
+        calcularRango(cargarDatos(), 'calificacion', 'resultado-rango', 'nombre');
+        contenedorResultado.classList.remove('oculto');
+        botonInteractivo.textContent = '✖ Ocultar Ejemplo';
     } else {
-        contenedor.classList.add('oculto');
-        btn.textContent = '▶ Calcular Rango';
+        contenedorResultado.classList.add('oculto');
+        botonInteractivo.textContent = '▶ Calcular Rango';
     }
 }
 
-// --- Genera el HTML del ejemplo interactivo ---
-function calcularRango() {
-    let estudiantes = cargarDatos();
-    let calificaciones = obtenerCalificaciones(estudiantes);
-    let resultado = calcularRangoDesdeArreglo(calificaciones);
-
-    // Ordenamos de mayor a menor para la tabla
-    let estudiantesOrdenados = estudiantes.slice();
-    estudiantesOrdenados.sort(function (a, b) {
-        return b.calificacion - a.calificacion;
-    });
-
-    let html = '';
-
-    html += '<p><strong>Calificaciones ordenadas de mayor a menor:</strong></p>';
-    html += '<table class="tabla-interactiva">';
-    html += '<tr><th>Posición</th><th>Estudiante</th><th>Calificación</th><th>Destacado</th></tr>';
-
-    for (let i = 0; i < estudiantesOrdenados.length; i++) {
-        let destacado = '';
-
-        if (estudiantesOrdenados[i].calificacion === resultado.maximo && i === 0) {
-            destacado = '⬅ máximo';
-        }
-        if (estudiantesOrdenados[i].calificacion === resultado.minimo &&
-            i === estudiantesOrdenados.length - 1) {
-            destacado = '⬅ mínimo';
-        }
-
-        html += '<tr>';
-        html += '<td>' + (i + 1) + '</td>';
-        html += '<td>' + estudiantesOrdenados[i].nombre + '</td>';
-        html += '<td>' + estudiantesOrdenados[i].calificacion + '</td>';
-        html += '<td>' + destacado + '</td>';
-        html += '</tr>';
-    }
-
-    html += '</table>';
-    html += '<div class="detalle-calculo">';
-    html += 'Valor máximo: <strong>' + resultado.maximo + '</strong><br>';
-    html += 'Valor mínimo: <strong>' + resultado.minimo + '</strong><br>';
-    html += 'Fórmula: Rango = Máximo - Mínimo<br>';
-    html += 'Rango = ' + resultado.maximo + ' - ' + resultado.minimo;
-    html += '</div>';
-    html += '<div class="caja-resultado">';
-    html += '📏 El rango es: <strong>' + resultado.rango + '</strong>';
-    html += '</div>';
-
-    document.getElementById('resultado-rango').innerHTML = html;
-}
-
-// --- Toggle del gráfico ---
+/**
+ * Funcion: toggleGraficoRango
+ * Alterna la visibilidad del gráfico de barras verticales del rango.
+ */
 function toggleGraficoRango() {
-    let contenedor = document.getElementById('contenedor-grafico-rango');
-    let btn = document.getElementById('btn-grafico-rango');
+    let contenedorResultado = document.getElementById('contenedor-grafico-rango');
+    let botonInteractivo = document.getElementById('btn-grafico-rango');
 
-    if (contenedor.classList.contains('oculto')) {
-        contenedor.classList.remove('oculto');
-        btn.textContent = '✖ Ocultar Gráfico';
-
-        // Reemplaza canvas para evitar "Canvas already in use"
-        let canvasViejo = document.getElementById('graficaRango');
-        let canvasNuevo = document.createElement('canvas');
-        canvasNuevo.id = 'graficaRango';
-        canvasViejo.parentNode.replaceChild(canvasNuevo, canvasViejo);
-
-        graficoRangoInstancia = dibujarGraficoRango();
-    } else {
-        contenedor.classList.add('oculto');
-        btn.textContent = '📊 Ver Gráfico de Barras';
-    }
-}
-
-// --- Dibuja el gráfico ordenado de mayor a menor ---
-function dibujarGraficoRango() {
-    let estudiantes = cargarDatos();
-    let calificaciones = obtenerCalificaciones(estudiantes);
-    let resultado = calcularRangoDesdeArreglo(calificaciones);
-
-    // Ordenamos de mayor a menor
-    let estudiantesOrdenados = estudiantes.slice();
-    estudiantesOrdenados.sort(function (a, b) {
-        return b.calificacion - a.calificacion;
-    });
-
-    let nombres = [];
-    let valores = [];
-    let colores = [];
-
-    for (let i = 0; i < estudiantesOrdenados.length; i++) {
-        nombres.push(estudiantesOrdenados[i].nombre);
-        valores.push(estudiantesOrdenados[i].calificacion);
-
-        // Verde para el maximo (primera barra), rojo para el minimo (ultima barra)
-        if (i === 0) {
-            colores.push('rgba(34, 197, 94, 0.8)');    // verde = maximo
-        } else if (i === estudiantesOrdenados.length - 1) {
-            colores.push('rgba(239, 68, 68, 0.8)');    // rojo = minimo
-        } else {
-            colores.push('rgba(251, 191, 36, 0.6)');   // amarillo = resto
-        }
+    // CONDICIONAL: Validación de existencia de elementos en el DOM
+    if (!contenedorResultado || !botonInteractivo) {
+        return;
     }
 
-    let ctx = document.getElementById('graficaRango').getContext('2d');
+    // --- SECCION: OCULTAR GRÁFICO ---
+    if (!contenedorResultado.classList.contains('oculto')) {
+        contenedorResultado.classList.add('oculto');
+        botonInteractivo.textContent = '📊 Ver Gráfico de Barras Verticales';
 
-    return new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: nombres,
-            datasets: [{
-                label: 'Calificación (mayor a menor)',
-                data: valores,
-                backgroundColor: colores,
-                borderColor: colores,
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { position: 'top' },
-                title: {
-                    display: true,
-                    text: 'Calificaciones ordenadas — verde: máximo | rojo: mínimo | rango = ' + resultado.rango
-                }
-            },
-            scales: {
-                y: { beginAtZero: true, max: 20 }
+        // CONDICIONAL: Se destruye la instancia previa si existe
+        if (graficoRangoEjemploInstancia !== null) {
+            try {
+                graficoRangoEjemploInstancia.destroy();
+            } catch (errorDestruccion) {
+                // Se ignora el error si la instancia ya no es válida
             }
+            graficoRangoEjemploInstancia = null;
         }
-    });
+        return;
+    }
+
+    // --- SECCION: MOSTRAR GRÁFICO ---
+    contenedorResultado.classList.remove('oculto');
+    botonInteractivo.textContent = '✖ Ocultar Gráfico';
+
+    // Se reemplaza el canvas físicamente para evitar "Canvas already in use"
+    let canvasAnterior = document.getElementById('graficaRango');
+
+    // CONDICIONAL: Si no existe el canvas, se cancela la operación
+    if (!canvasAnterior) {
+        return;
+    }
+
+    let canvasNuevo = document.createElement('canvas');
+    canvasNuevo.id = 'graficaRango';
+    canvasAnterior.parentNode.replaceChild(canvasNuevo, canvasAnterior);
+
+    // setTimeout: Permite que el navegador calcule el tamaño real del nuevo canvas
+    setTimeout(function () {
+        instanciaGraficoRango = dibujarGraficoRango(
+            cargarDatos(),
+            'calificacion',
+            'nombre',
+            'graficaRango',
+            'Rango de calificaciones — rojo: mínimo | verde: máximo'
+        );
+    }, 50);
 }
+
 
 // ============================================================
 // BLOQUE 9: FUNCIONES ESTADISTICAS - VARIANZA
 // ============================================================
 
+// Variable de control para la instancia del gráfico de varianza (Chart.js)
 let graficoVarianzaInstancia = null;
 
-// --- Calculo puro de la varianza ---
-function calcularVarianzaDesdeArreglo(calificaciones) {
+/**
+ * Funcion: calcularVarianzaDesdeArreglo
+ * Realiza el cálculo matemático completo de la varianza poblacional
+ * a partir de un arreglo de calificaciones numéricas.
+ */
+function calcularVarianzaEjemploDesdeArreglo(listaCalificaciones) {
 
-    let resultadoMedia = calcularMediaDesdeArreglo(calificaciones);
-    let media = resultadoMedia.media;
+    // Se calcula la suma total de todas las calificaciones
+    let sumaCalificaciones = 0;
 
-    let sumaCuadrados = 0;
-    let detalles = [];
+    // BUCLE: Se acumulan todas las calificaciones en sumaCalificaciones
+    for (let indiceCalificacion = 0; indiceCalificacion < listaCalificaciones.length; indiceCalificacion++) {
+        sumaCalificaciones = sumaCalificaciones + listaCalificaciones[indiceCalificacion];
+    }
 
-    for (let i = 0; i < calificaciones.length; i++) {
-        let diferencia = calificaciones[i] - media;
-        let cuadrado = diferencia * diferencia;
+    // Se obtiene la media aritmética dividiendo la suma entre la cantidad de elementos
+    let valorMedia = sumaCalificaciones / listaCalificaciones.length;
 
-        sumaCuadrados = sumaCuadrados + cuadrado;
+    let sumaCuadradosDiferencias = 0;
+    let listaDetallesCalculo = [];
 
-        detalles.push({
-            calificacion: calificaciones[i],
-            diferencia: diferencia,
-            cuadrado: cuadrado
+    // BUCLE: Se calcula la diferencia al cuadrado de cada calificación respecto a la media
+    for (let indiceCalificacion = 0; indiceCalificacion < listaCalificaciones.length; indiceCalificacion++) {
+        let valorDiferencia = listaCalificaciones[indiceCalificacion] - valorMedia;
+        let valorCuadrado = valorDiferencia * valorDiferencia;
+
+        sumaCuadradosDiferencias = sumaCuadradosDiferencias + valorCuadrado;
+
+        listaDetallesCalculo.push({
+            calificacion: listaCalificaciones[indiceCalificacion],
+            diferencia: valorDiferencia,
+            cuadrado: valorCuadrado
         });
     }
 
-    let varianza = sumaCuadrados / calificaciones.length;
+    // La varianza es el promedio de las diferencias al cuadrado
+    let valorVarianza = sumaCuadradosDiferencias / listaCalificaciones.length;
 
     return {
-        media: media,
-        sumaCuadrados: sumaCuadrados,
-        cantidad: calificaciones.length,
-        varianza: varianza,
-        detalles: detalles
+        media: valorMedia,
+        sumaCuadrados: sumaCuadradosDiferencias,
+        cantidad: listaCalificaciones.length,
+        varianza: valorVarianza,
+        detalles: listaDetallesCalculo
     };
 }
 
-
-// --- Toggle del ejemplo interactivo ---
+/**
+ * Funcion: toggleEjemploVarianza
+ * Alterna la visibilidad del ejemplo interactivo de varianza.
+ */
 function toggleEjemploVarianza() {
-    let contenedor = document.getElementById('resultado-varianza');
-    let btn = document.getElementById('btn-ejemplo-varianza');
+    let contenedorResultado = document.getElementById('resultado-varianza');
+    let botonInteractivo = document.getElementById('btn-ejemplo-varianza');
 
-    if (contenedor.classList.contains('oculto')) {
-        calcularVarianza();
-        contenedor.classList.remove('oculto');
-        btn.textContent = '✖ Ocultar Ejemplo';
+    // CONDICIONAL: Si está oculto, se genera el HTML del cálculo y se muestra
+    if (contenedorResultado.classList.contains('oculto')) {
+        calcularVarianzaEjemplo();
+        contenedorResultado.classList.remove('oculto');
+        botonInteractivo.textContent = '✖ Ocultar Ejemplo';
     } else {
-        contenedor.classList.add('oculto');
-        btn.textContent = '▶ Calcular Varianza';
+        contenedorResultado.classList.add('oculto');
+        botonInteractivo.textContent = '▶ Calcular Varianza';
     }
 }
 
+/**
+ * Funcion: calcularVarianza
+ * Genera el HTML completo de la tabla interactiva de varianza
+ * con el paso a paso del cálculo estadístico.
+ */
+function calcularVarianzaEjemplo() {
+    let listaEstudiantes = cargarDatos();
+    let listaCalificaciones = obtenerCalificaciones(listaEstudiantes);
+    let resultadoEstadistico = calcularVarianzaEjemploDesdeArreglo(listaCalificaciones);
 
-// --- Genera el HTML del ejemplo interactivo ---
-function calcularVarianza() {
-    let estudiantes = cargarDatos();
-    let calificaciones = obtenerCalificaciones(estudiantes);
-    let resultado = calcularVarianzaDesdeArreglo(calificaciones);
+    let contenidoHTML = "";
 
-    let html = "";
+    contenidoHTML = contenidoHTML + '<p><strong>Cálculo de varianza usando las calificaciones de los estudiantes:</strong></p>';
 
-    html = html + '<p><strong>Cálculo de varianza usando las calificaciones de los estudiantes:</strong></p>';
+    contenidoHTML = contenidoHTML + '<table class="tabla-interactiva">';
+    contenidoHTML = contenidoHTML + '<tr>';
+    contenidoHTML = contenidoHTML + '<th>#</th>';
+    contenidoHTML = contenidoHTML + '<th>Estudiante</th>';
+    contenidoHTML = contenidoHTML + '<th>Calificación</th>';
+    contenidoHTML = contenidoHTML + '<th>Diferencia con la media</th>';
+    contenidoHTML = contenidoHTML + '<th>Diferencia al cuadrado</th>';
+    contenidoHTML = contenidoHTML + '</tr>';
 
-    html = html + '<table class="tabla-interactiva">';
-    html = html + '<tr>';
-    html = html + '<th>#</th>';
-    html = html + '<th>Estudiante</th>';
-    html = html + '<th>Calificación</th>';
-    html = html + '<th>Diferencia con la media</th>';
-    html = html + '<th>Diferencia al cuadrado</th>';
-    html = html + '</tr>';
-
-    for (let i = 0; i < estudiantes.length; i++) {
-        html = html + '<tr>';
-        html = html + '<td>' + (i + 1) + '</td>';
-        html = html + '<td>' + estudiantes[i].nombre + '</td>';
-        html = html + '<td>' + estudiantes[i].calificacion + '</td>';
-        html = html + '<td>' + resultado.detalles[i].diferencia.toFixed(2) + '</td>';
-        html = html + '<td>' + resultado.detalles[i].cuadrado.toFixed(2) + '</td>';
-        html = html + '</tr>';
+    // BUCLE: Se construye cada fila de la tabla con los datos de cada estudiante
+    for (let indiceEstudiante = 0; indiceEstudiante < listaEstudiantes.length; indiceEstudiante++) {
+        contenidoHTML = contenidoHTML + '<tr>';
+        contenidoHTML = contenidoHTML + '<td>' + (indiceEstudiante + 1) + '</td>';
+        contenidoHTML = contenidoHTML + '<td>' + listaEstudiantes[indiceEstudiante].nombre + '</td>';
+        contenidoHTML = contenidoHTML + '<td>' + listaEstudiantes[indiceEstudiante].calificacion + '</td>';
+        contenidoHTML = contenidoHTML + '<td>' + resultadoEstadistico.detalles[indiceEstudiante].diferencia.toFixed(2) + '</td>';
+        contenidoHTML = contenidoHTML + '<td>' + resultadoEstadistico.detalles[indiceEstudiante].cuadrado.toFixed(2) + '</td>';
+        contenidoHTML = contenidoHTML + '</tr>';
     }
 
-    html = html + '</table>';
+    contenidoHTML = contenidoHTML + '</table>';
 
-    html = html + '<div class="detalle-calculo">';
-    html = html + 'Media: <strong>' + resultado.media.toFixed(2) + '</strong><br>';
-    html = html + 'Suma de diferencias al cuadrado: <strong>' + resultado.sumaCuadrados.toFixed(2) + '</strong><br>';
-    html = html + 'Cantidad de datos: <strong>' + resultado.cantidad + '</strong><br>';
-    html = html + 'Fórmula: Varianza = Suma de cuadrados / Cantidad de datos<br>';
-    html = html + 'Varianza = ' + resultado.sumaCuadrados.toFixed(2) + ' / ' + resultado.cantidad;
-    html = html + '</div>';
+    contenidoHTML = contenidoHTML + '<div class="detalle-calculo">';
+    contenidoHTML = contenidoHTML + 'Media: <strong>' + resultadoEstadistico.media.toFixed(2) + '</strong><br>';
+    contenidoHTML = contenidoHTML + 'Suma de diferencias al cuadrado: <strong>' + resultadoEstadistico.sumaCuadrados.toFixed(2) + '</strong><br>';
+    contenidoHTML = contenidoHTML + 'Cantidad de datos: <strong>' + resultadoEstadistico.cantidad + '</strong><br>';
+    contenidoHTML = contenidoHTML + 'Fórmula: Varianza = Suma de cuadrados / Cantidad de datos<br>';
+    contenidoHTML = contenidoHTML + 'Varianza = ' + resultadoEstadistico.sumaCuadrados.toFixed(2) + ' / ' + resultadoEstadistico.cantidad;
+    contenidoHTML = contenidoHTML + '</div>';
 
-    html = html + '<div class="caja-resultado">';
-    html = html + '📊 La varianza es: <strong>' + resultado.varianza.toFixed(2) + '</strong>';
-    html = html + '</div>';
+    contenidoHTML = contenidoHTML + '<div class="caja-resultado">';
+    contenidoHTML = contenidoHTML + '📊 La varianza es: <strong>' + resultadoEstadistico.varianza.toFixed(2) + '</strong>';
+    contenidoHTML = contenidoHTML + '</div>';
 
-    document.getElementById('resultado-varianza').innerHTML = html;
+    document.getElementById('resultado-varianza').innerHTML = contenidoHTML;
 }
 
-
-// --- Toggle del gráfico ---
+/**
+ * Funcion: toggleGraficoVarianza
+ * Alterna la visibilidad del gráfico comparativo de varianza.
+ */
 function toggleGraficoVarianza() {
-    let contenedor = document.getElementById('contenedor-grafico-varianza');
-    let btn = document.getElementById('btn-grafico-varianza');
+    let contenedorResultado = document.getElementById('contenedor-grafico-varianza');
+    let botonInteractivo = document.getElementById('btn-grafico-varianza');
 
-    if (contenedor.classList.contains('oculto')) {
-        contenedor.classList.remove('oculto');
-        btn.textContent = '✖ Ocultar Gráfico';
+    // CONDICIONAL: Si está oculto, se muestra y se genera el gráfico
+    if (contenedorResultado.classList.contains('oculto')) {
+        contenedorResultado.classList.remove('oculto');
+        botonInteractivo.textContent = '✖ Ocultar Gráfico';
 
-        let canvasViejo = document.getElementById('graficaVarianza');
+        // Se reemplaza el canvas físicamente para evitar conflictos de instancia
+        let canvasAnterior = document.getElementById('graficaVarianza');
         let canvasNuevo = document.createElement('canvas');
         canvasNuevo.id = 'graficaVarianza';
-        canvasViejo.parentNode.replaceChild(canvasNuevo, canvasViejo);
+        canvasAnterior.parentNode.replaceChild(canvasNuevo, canvasAnterior);
 
-        graficoVarianzaInstancia = dibujarGraficoVarianza();
+        graficoVarianzaInstancia = dibujarGraficoVarianzaEjemplo();
 
     } else {
-        contenedor.classList.add('oculto');
-        btn.textContent = '📊 Ver Gráfico de Varianza';
+        // Si está visible, se oculta y se actualiza el texto del botón
+        contenedorResultado.classList.add('oculto');
+        botonInteractivo.textContent = '📊 Ver Gráfico de Varianza';
     }
 }
 
+/**
+ * Funcion: dibujarGraficoVarianza
+ * Renderiza el gráfico de barras de calificaciones superpuesto con la línea de media.
+ * Utiliza Chart.js para la visualización.
+ */
+function dibujarGraficoVarianzaEjemplo() {
+    let listaEstudiantes = cargarDatos();
+    let listaCalificaciones = obtenerCalificaciones(listaEstudiantes);
+    let resultadoEstadistico = calcularVarianzaEjemploDesdeArreglo(listaCalificaciones);
 
-// --- Dibuja el gráfico de varianza ---
-function dibujarGraficoVarianza() {
-    let estudiantes = cargarDatos();
-    let calificaciones = obtenerCalificaciones(estudiantes);
-    let resultado = calcularVarianzaDesdeArreglo(calificaciones);
+    let listaNombresEstudiantes = [];
 
-    let nombres = [];
-
-    for (let i = 0; i < estudiantes.length; i++) {
-        nombres.push(estudiantes[i].nombre);
+    // BUCLE: Se extraen los nombres de los estudiantes para las etiquetas del gráfico
+    for (let indiceEstudiante = 0; indiceEstudiante < listaEstudiantes.length; indiceEstudiante++) {
+        listaNombresEstudiantes.push(listaEstudiantes[indiceEstudiante].nombre);
     }
 
-    let ctx = document.getElementById('graficaVarianza').getContext('2d');
+    // Se obtiene el contexto 2D del canvas para Chart.js
+    let contextoGrafico = document.getElementById('graficaVarianza').getContext('2d');
 
-    return new Chart(ctx, {
+    return new Chart(contextoGrafico, {
         type: 'bar',
         data: {
-            labels: nombres,
+            labels: listaNombresEstudiantes,
             datasets: [
                 {
                     label: 'Calificación',
-                    data: calificaciones,
+                    data: listaCalificaciones,
                     backgroundColor: 'rgba(99, 144, 241, 0.6)',
                     borderColor: 'rgba(99, 144, 241, 1)',
                     borderWidth: 1
                 },
                 {
-                    label: 'Media (' + resultado.media.toFixed(2) + ')',
-                    data: new Array(calificaciones.length).fill(resultado.media),
+                    label: 'Media (' + resultadoEstadistico.media.toFixed(2) + ')',
+                    data: new Array(listaCalificaciones.length).fill(resultadoEstadistico.media),
                     type: 'line',
                     borderColor: 'rgba(239, 68, 68, 1)',
                     borderWidth: 2,
@@ -1069,7 +710,7 @@ function dibujarGraficoVarianza() {
                 legend: { position: 'top' },
                 title: {
                     display: true,
-                    text: 'Calificaciones comparadas con la media — Varianza: ' + resultado.varianza.toFixed(2)
+                    text: 'Calificaciones comparadas con la media — Varianza: ' + resultadoEstadistico.varianza.toFixed(2)
                 }
             },
             scales: {
@@ -1082,149 +723,172 @@ function dibujarGraficoVarianza() {
     });
 }
 
+
 // ============================================================
 // BLOQUE 10: FUNCIONES ESTADISTICAS - DESVIACION ESTANDAR
 // ============================================================
 
+// Variable de control para la instancia del gráfico de desviación estándar (Chart.js)
 let graficoDesviacionInstancia = null;
 
-// --- Calculo puro de la desviacion estandar ---
-function calcularDesviacionDesdeArreglo(calificaciones) {
+/**
+ * Funcion: calcularDesviacionDesdeArreglo
+ * Calcula la desviación estándar poblacional a partir de un arreglo numérico.
+ * Reutiliza el cálculo de varianza y aplica la raíz cuadrada.
+ */
+function calcularDesviacionEjemploDesdeArreglo(listaCalificaciones) {
 
-    let resultadoVarianza = calcularVarianzaDesdeArreglo(calificaciones);
+    let resultadoVarianza = calcularVarianzaEjemploDesdeArreglo(listaCalificaciones);
 
-    let desviacion = Math.sqrt(resultadoVarianza.varianza);
+    let valorDesviacion = Math.sqrt(resultadoVarianza.varianza);
 
     return {
         media: resultadoVarianza.media,
         sumaCuadrados: resultadoVarianza.sumaCuadrados,
         cantidad: resultadoVarianza.cantidad,
         varianza: resultadoVarianza.varianza,
-        desviacion: desviacion,
+        desviacion: valorDesviacion,
         detalles: resultadoVarianza.detalles
     };
 }
 
-
-// --- Toggle del ejemplo interactivo ---
+/**
+ * Funcion: toggleEjemploDesviacion
+ * Alterna la visibilidad del ejemplo interactivo de desviación estándar.
+ */
 function toggleEjemploDesviacion() {
-    let contenedor = document.getElementById('resultado-desviacion');
-    let btn = document.getElementById('btn-ejemplo-desviacion');
+    let contenedorResultado = document.getElementById('resultado-desviacion');
+    let botonInteractivo = document.getElementById('btn-ejemplo-desviacion');
 
-    if (contenedor.classList.contains('oculto')) {
-        calcularDesviacion();
-        contenedor.classList.remove('oculto');
-        btn.textContent = '✖ Ocultar Ejemplo';
+    // CONDICIONAL: Si está oculto, se genera el HTML del cálculo y se muestra
+    if (contenedorResultado.classList.contains('oculto')) {
+        calcularDesviacionEjemplo();
+        contenedorResultado.classList.remove('oculto');
+        botonInteractivo.textContent = '✖ Ocultar Ejemplo';
     } else {
-        contenedor.classList.add('oculto');
-        btn.textContent = '▶ Calcular Desviación Estándar';
+        contenedorResultado.classList.add('oculto');
+        botonInteractivo.textContent = '▶ Calcular Desviación Estándar';
     }
 }
 
+/**
+ * Funcion: calcularDesviacion
+ * Genera el HTML completo de la tabla interactiva de desviación estándar
+ * incluyendo el paso a paso desde la varianza hasta la raíz cuadrada.
+ */
+function calcularDesviacionEjemplo() {
+    let listaEstudiantes = cargarDatos();
+    let listaCalificaciones = obtenerCalificaciones(listaEstudiantes);
+    let resultadoEstadistico = calcularDesviacionEjemploDesdeArreglo(listaCalificaciones);
 
-// --- Genera el HTML del ejemplo interactivo ---
-function calcularDesviacion() {
-    let estudiantes = cargarDatos();
-    let calificaciones = obtenerCalificaciones(estudiantes);
-    let resultado = calcularDesviacionDesdeArreglo(calificaciones);
+    let contenidoHTML = "";
 
-    let html = "";
+    contenidoHTML = contenidoHTML + '<p><strong>Cálculo de desviación estándar usando las calificaciones de los estudiantes:</strong></p>';
 
-    html = html + '<p><strong>Cálculo de desviación estándar usando las calificaciones de los estudiantes:</strong></p>';
+    contenidoHTML = contenidoHTML + '<table class="tabla-interactiva">';
+    contenidoHTML = contenidoHTML + '<tr>';
+    contenidoHTML = contenidoHTML + '<th>#</th>';
+    contenidoHTML = contenidoHTML + '<th>Estudiante</th>';
+    contenidoHTML = contenidoHTML + '<th>Calificación</th>';
+    contenidoHTML = contenidoHTML + '<th>Diferencia con la media</th>';
+    contenidoHTML = contenidoHTML + '<th>Diferencia al cuadrado</th>';
+    contenidoHTML = contenidoHTML + '</tr>';
 
-    html = html + '<table class="tabla-interactiva">';
-    html = html + '<tr>';
-    html = html + '<th>#</th>';
-    html = html + '<th>Estudiante</th>';
-    html = html + '<th>Calificación</th>';
-    html = html + '<th>Diferencia con la media</th>';
-    html = html + '<th>Diferencia al cuadrado</th>';
-    html = html + '</tr>';
-
-    for (let i = 0; i < estudiantes.length; i++) {
-        html = html + '<tr>';
-        html = html + '<td>' + (i + 1) + '</td>';
-        html = html + '<td>' + estudiantes[i].nombre + '</td>';
-        html = html + '<td>' + estudiantes[i].calificacion + '</td>';
-        html = html + '<td>' + resultado.detalles[i].diferencia.toFixed(2) + '</td>';
-        html = html + '<td>' + resultado.detalles[i].cuadrado.toFixed(2) + '</td>';
-        html = html + '</tr>';
+    // BUCLE: Se construye cada fila de la tabla con los datos detallados
+    for (let indiceEstudiante = 0; indiceEstudiante < listaEstudiantes.length; indiceEstudiante++) {
+        contenidoHTML = contenidoHTML + '<tr>';
+        contenidoHTML = contenidoHTML + '<td>' + (indiceEstudiante + 1) + '</td>';
+        contenidoHTML = contenidoHTML + '<td>' + listaEstudiantes[indiceEstudiante].nombre + '</td>';
+        contenidoHTML = contenidoHTML + '<td>' + listaEstudiantes[indiceEstudiante].calificacion + '</td>';
+        contenidoHTML = contenidoHTML + '<td>' + resultadoEstadistico.detalles[indiceEstudiante].diferencia.toFixed(2) + '</td>';
+        contenidoHTML = contenidoHTML + '<td>' + resultadoEstadistico.detalles[indiceEstudiante].cuadrado.toFixed(2) + '</td>';
+        contenidoHTML = contenidoHTML + '</tr>';
     }
 
-    html = html + '</table>';
+    contenidoHTML = contenidoHTML + '</table>';
 
-    html = html + '<div class="detalle-calculo">';
-    html = html + 'Media: <strong>' + resultado.media.toFixed(2) + '</strong><br>';
-    html = html + 'Suma de diferencias al cuadrado: <strong>' + resultado.sumaCuadrados.toFixed(2) + '</strong><br>';
-    html = html + 'Cantidad de datos: <strong>' + resultado.cantidad + '</strong><br>';
-    html = html + 'Varianza: <strong>' + resultado.varianza.toFixed(2) + '</strong><br>';
-    html = html + 'Fórmula: Desviación Estándar = √Varianza<br>';
-    html = html + 'Desviación Estándar = √' + resultado.varianza.toFixed(2);
-    html = html + '</div>';
+    contenidoHTML = contenidoHTML + '<div class="detalle-calculo">';
+    contenidoHTML = contenidoHTML + 'Media: <strong>' + resultadoEstadistico.media.toFixed(2) + '</strong><br>';
+    contenidoHTML = contenidoHTML + 'Suma de diferencias al cuadrado: <strong>' + resultadoEstadistico.sumaCuadrados.toFixed(2) + '</strong><br>';
+    contenidoHTML = contenidoHTML + 'Cantidad de datos: <strong>' + resultadoEstadistico.cantidad + '</strong><br>';
+    contenidoHTML = contenidoHTML + 'Varianza: <strong>' + resultadoEstadistico.varianza.toFixed(2) + '</strong><br>';
+    contenidoHTML = contenidoHTML + 'Fórmula: Desviación Estándar = √Varianza<br>';
+    contenidoHTML = contenidoHTML + 'Desviación Estándar = √' + resultadoEstadistico.varianza.toFixed(2);
+    contenidoHTML = contenidoHTML + '</div>';
 
-    html = html + '<div class="caja-resultado">';
-    html = html + '📈 La desviación estándar es: <strong>' + resultado.desviacion.toFixed(2) + '</strong>';
-    html = html + '</div>';
+    contenidoHTML = contenidoHTML + '<div class="caja-resultado">';
+    contenidoHTML = contenidoHTML + '📈 La desviación estándar es: <strong>' + resultadoEstadistico.desviacion.toFixed(2) + '</strong>';
+    contenidoHTML = contenidoHTML + '</div>';
 
-    document.getElementById('resultado-desviacion').innerHTML = html;
+    document.getElementById('resultado-desviacion').innerHTML = contenidoHTML;
 }
 
-
-// --- Toggle del gráfico ---
+/**
+ * Funcion: toggleGraficoDesviacion
+ * Alterna la visibilidad del gráfico de desviación estándar.
+ */
 function toggleGraficoDesviacion() {
-    let contenedor = document.getElementById('contenedor-grafico-desviacion');
-    let btn = document.getElementById('btn-grafico-desviacion');
+    let contenedorResultado = document.getElementById('contenedor-grafico-desviacion');
+    let botonInteractivo = document.getElementById('btn-grafico-desviacion');
 
-    if (contenedor.classList.contains('oculto')) {
-        contenedor.classList.remove('oculto');
-        btn.textContent = '✖ Ocultar Gráfico';
+    // CONDICIONAL: Si está oculto, se muestra y se genera el gráfico
+    if (contenedorResultado.classList.contains('oculto')) {
+        contenedorResultado.classList.remove('oculto');
+        botonInteractivo.textContent = '✖ Ocultar Gráfico';
 
-        let canvasViejo = document.getElementById('graficaDesviacion');
+        // Se reemplaza el canvas físicamente para evitar conflictos de instancia
+        let canvasAnterior = document.getElementById('graficaDesviacion');
         let canvasNuevo = document.createElement('canvas');
         canvasNuevo.id = 'graficaDesviacion';
-        canvasViejo.parentNode.replaceChild(canvasNuevo, canvasViejo);
+        canvasAnterior.parentNode.replaceChild(canvasNuevo, canvasAnterior);
 
-        graficoDesviacionInstancia = dibujarGraficoDesviacion();
+        graficoDesviacionInstancia = dibujarGraficoDesviacionEjemplo();
 
     } else {
-        contenedor.classList.add('oculto');
-        btn.textContent = '📊 Ver Gráfico de Desviación Estándar';
+        contenedorResultado.classList.add('oculto');
+        botonInteractivo.textContent = '📊 Ver Gráfico de Desviación Estándar';
     }
 }
 
+/**
+ * Funcion: dibujarGraficoDesviacion
+ * Renderiza el gráfico de barras con líneas de media y desviación estándar.
+ * Muestra visualmente los límites superior e inferior (media ± desviación).
+ */
+function dibujarGraficoDesviacionEjemplo() {
+    let listaEstudiantes = cargarDatos();
+    let listaCalificaciones = obtenerCalificaciones(listaEstudiantes);
+    let resultadoEstadistico = calcularDesviacionDesdeArreglo(listaCalificaciones);
 
-// --- Dibuja el gráfico de desviacion estandar ---
-function dibujarGraficoDesviacion() {
-    let estudiantes = cargarDatos();
-    let calificaciones = obtenerCalificaciones(estudiantes);
-    let resultado = calcularDesviacionDesdeArreglo(calificaciones);
+    let listaNombresEstudiantes = [];
 
-    let nombres = [];
-
-    for (let i = 0; i < estudiantes.length; i++) {
-        nombres.push(estudiantes[i].nombre);
+    // BUCLE: Se extraen los nombres para las etiquetas del eje X
+    for (let indiceEstudiante = 0; indiceEstudiante < listaEstudiantes.length; indiceEstudiante++) {
+        listaNombresEstudiantes.push(listaEstudiantes[indiceEstudiante].nombre);
     }
 
-    let limiteSuperior = resultado.media + resultado.desviacion;
-    let limiteInferior = resultado.media - resultado.desviacion;
+    // Se calculan los límites teóricos de la desviación estándar
+    let limiteSuperiorDesviacion = resultadoEstadistico.media + resultadoEstadistico.desviacion;
+    let limiteInferiorDesviacion = resultadoEstadistico.media - resultadoEstadistico.desviacion;
 
-    let ctx = document.getElementById('graficaDesviacion').getContext('2d');
+    // Se obtiene el contexto 2D del canvas para Chart.js
+    let contextoGrafico = document.getElementById('graficaDesviacion').getContext('2d');
 
-    return new Chart(ctx, {
+    return new Chart(contextoGrafico, {
         type: 'bar',
         data: {
-            labels: nombres,
+            labels: listaNombresEstudiantes,
             datasets: [
                 {
                     label: 'Calificación',
-                    data: calificaciones,
+                    data: listaCalificaciones,
                     backgroundColor: 'rgba(99, 144, 241, 0.6)',
                     borderColor: 'rgba(99, 144, 241, 1)',
                     borderWidth: 1
                 },
                 {
-                    label: 'Media (' + resultado.media.toFixed(2) + ')',
-                    data: new Array(calificaciones.length).fill(resultado.media),
+                    label: 'Media (' + resultadoEstadistico.media.toFixed(2) + ')',
+                    data: new Array(listaCalificaciones.length).fill(resultadoEstadistico.media),
                     type: 'line',
                     borderColor: 'rgba(239, 68, 68, 1)',
                     borderWidth: 2,
@@ -1232,8 +896,8 @@ function dibujarGraficoDesviacion() {
                     fill: false
                 },
                 {
-                    label: 'Media + Desviación (' + limiteSuperior.toFixed(2) + ')',
-                    data: new Array(calificaciones.length).fill(limiteSuperior),
+                    label: 'Media + Desviación (' + limiteSuperiorDesviacion.toFixed(2) + ')',
+                    data: new Array(listaCalificaciones.length).fill(limiteSuperiorDesviacion),
                     type: 'line',
                     borderColor: 'rgba(34, 197, 94, 1)',
                     borderWidth: 2,
@@ -1241,8 +905,8 @@ function dibujarGraficoDesviacion() {
                     fill: false
                 },
                 {
-                    label: 'Media - Desviación (' + limiteInferior.toFixed(2) + ')',
-                    data: new Array(calificaciones.length).fill(limiteInferior),
+                    label: 'Media - Desviación (' + limiteInferiorDesviacion.toFixed(2) + ')',
+                    data: new Array(listaCalificaciones.length).fill(limiteInferiorDesviacion),
                     type: 'line',
                     borderColor: 'rgba(251, 191, 36, 1)',
                     borderWidth: 2,
@@ -1257,7 +921,7 @@ function dibujarGraficoDesviacion() {
                 legend: { position: 'top' },
                 title: {
                     display: true,
-                    text: 'Desviación estándar: ' + resultado.desviacion.toFixed(2)
+                    text: 'Desviación estándar: ' + resultadoEstadistico.desviacion.toFixed(2)
                 }
             },
             scales: {
@@ -1270,107 +934,1055 @@ function dibujarGraficoDesviacion() {
     });
 }
 
+
 // ============================================================
 // BLOQUE 11: TEST DE EVALUACION
 // ============================================================
 
+/**
+ * Funcion: generarTest
+ * Construye dinámicamente el HTML del cuestionario de evaluación
+ * utilizando las preguntas definidas en la variable global PREGUNTASTEST.
+ */
 function generarTest() {
-    let contenedorTest = document.getElementById("contenedor-test");
-    let contenido = "";
+    let contenedorEvaluacion = document.getElementById("contenedor-test");
+    let contenidoHTMLTest = "";
 
-    for (let i = 0; i < PREGUNTASTEST.length; i++) {
-        contenido = contenido + '<div class="pregunta">';
-        contenido = contenido + '<p><strong>' + (i + 1) + '. ' + PREGUNTASTEST[i].pregunta + '</strong></p>';
+    // BUCLE EXTERNO: Se recorre cada pregunta del arreglo de preguntas
+    for (let indicePregunta = 0; indicePregunta < PREGUNTASTEST.length; indicePregunta++) {
+        contenidoHTMLTest = contenidoHTMLTest + '<div class="pregunta">';
+        contenidoHTMLTest = contenidoHTMLTest + '<p><strong>' + (indicePregunta + 1) + '. ' + PREGUNTASTEST[indicePregunta].pregunta + '</strong></p>';
 
-        for (let j = 0; j < PREGUNTASTEST[i].opciones.length; j++) {
-            contenido = contenido + '<label>';
-            contenido = contenido + '<input type="radio" name="pregunta' + i + '" value="' + j + '"> ';
-            contenido = contenido + PREGUNTASTEST[i].opciones[j];
-            contenido = contenido + '</label><br>';
+        // BUCLE INTERNO: Se recorren las opciones de respuesta de la pregunta actual
+        for (let indiceOpcion = 0; indiceOpcion < PREGUNTASTEST[indicePregunta].opciones.length; indiceOpcion++) {
+            contenidoHTMLTest = contenidoHTMLTest + '<label>';
+            contenidoHTMLTest = contenidoHTMLTest + '<input type="radio" name="pregunta' + indicePregunta + '" value="' + indiceOpcion + '"> ';
+            contenidoHTMLTest = contenidoHTMLTest + PREGUNTASTEST[indicePregunta].opciones[indiceOpcion];
+            contenidoHTMLTest = contenidoHTMLTest + '</label><br>';
         }
-        contenido = contenido + '</div>';
+        contenidoHTMLTest = contenidoHTMLTest + '</div>';
     }
-    contenedorTest.innerHTML = contenido;
+    contenedorEvaluacion.innerHTML = contenidoHTMLTest;
 }
+
+// Se ejecuta la generación del test inmediatamente al cargar el script
 generarTest();
 
+/**
+ * Funcion: calificarTest
+ * Evalúa las respuestas seleccionadas por el usuario, calcula el puntaje,
+ * muestra la nota final e inserta íconos visuales de validación.
+ */
 function calificarTest() {
-    let puntaje = 0;
-    let preguntasRespondidas = 0;
+    let puntajeObtenido = 0;
+    let cantidadPreguntasRespondidas = 0;
 
-    for (let i = 0; i < PREGUNTASTEST.length; i++) {
-        let respuestaSeleccionada = document.querySelector('input[name="pregunta' + i + '"]:checked');
-        if (respuestaSeleccionada != null) {
-            preguntasRespondidas++;
+    // BUCLE: Se recorre cada pregunta para verificar la respuesta del usuario
+    for (let indicePregunta = 0; indicePregunta < PREGUNTASTEST.length; indicePregunta++) {
+        let opcionSeleccionada = document.querySelector('input[name="pregunta' + indicePregunta + '"]:checked');
 
-            let respuestaUsuario = Number(respuestaSeleccionada.value);
-            if (respuestaUsuario === PREGUNTASTEST[i].correcta) {
-                puntaje++;
+        // CONDICIONAL: Si el usuario seleccionó una respuesta para esta pregunta
+        if (opcionSeleccionada != null) {
+            cantidadPreguntasRespondidas++;
+
+            let indiceRespuestaUsuario = Number(opcionSeleccionada.value);
+
+            // CONDICIONAL: Se compara el índice seleccionado con la respuesta correcta
+            if (indiceRespuestaUsuario === PREGUNTASTEST[indicePregunta].correcta) {
+                puntajeObtenido++;
             }
 
-            // --- VALIDACION VISUAL: X roja y Check verde ---
-            let labels = document.querySelectorAll('input[name="pregunta' + i + '"]');
-            for (let j = 0; j < labels.length; j++) {
-                let icono = document.createElement('span');
-                icono.className = 'icono-validacion';
-                if (j === PREGUNTASTEST[i].correcta) {
-                    icono.textContent = ' ✔';
-                    icono.style.color = '#16a34a';
-                    icono.style.fontWeight = 'bold';
-                } else if (j === respuestaUsuario) {
-                    icono.textContent = ' ✘';
-                    icono.style.color = '#dc2626';
-                    icono.style.fontWeight = 'bold';
+            // --- SECCION: VALIDACION VISUAL CON ICONOS ---
+            let listaOpciones = document.querySelectorAll('input[name="pregunta' + indicePregunta + '"]');
+
+            // BUCLE: Se recorren todas las opciones para agregar íconos de check o X
+            for (let indiceOpcion = 0; indiceOpcion < listaOpciones.length; indiceOpcion++) {
+                let elementoIcono = document.createElement('span');
+                elementoIcono.className = 'icono-validacion';
+
+                // CONDICIONAL: Si la opción actual es la correcta, se agrega check verde
+                if (indiceOpcion === PREGUNTASTEST[indicePregunta].correcta) {
+                    elementoIcono.textContent = ' ✔';
+                    elementoIcono.style.color = '#16a34a';
+                    elementoIcono.style.fontWeight = 'bold';
+                } else if (indiceOpcion === indiceRespuestaUsuario) {
+                    // Si es la opción seleccionada por el usuario pero no es la correcta, X roja
+                    elementoIcono.textContent = ' ✘';
+                    elementoIcono.style.color = '#dc2626';
+                    elementoIcono.style.fontWeight = 'bold';
                 }
-                if (icono.textContent !== '') {
-                    labels[j].parentNode.appendChild(icono);
+
+                // CONDICIONAL: Solo se agrega el ícono al DOM si se asignó un contenido
+                if (elementoIcono.textContent !== '') {
+                    listaOpciones[indiceOpcion].parentNode.appendChild(elementoIcono);
                 }
             }
             // --- FIN VALIDACION VISUAL ---
         }
     }
 
-    let resultado = document.getElementById("resultado-test");
-    if (preguntasRespondidas < PREGUNTASTEST.length) {
-        resultado.innerHTML = "Por favor, responde todas las preguntas antes de calificar.";
-        resultado.className = "resultado-alerta";
-        return;
-    }
-    if (preguntasRespondidas < PREGUNTASTEST.length) {
-        resultado.innerHTML = "Por favor, responde todas las preguntas antes de calificar.";
-        resultado.className = "resultado-alerta";
+    let elementoResultado = document.getElementById("resultado-test");
+
+    // CONDICIONAL: Si no se respondieron todas las preguntas, se muestra alerta
+    if (cantidadPreguntasRespondidas < PREGUNTASTEST.length) {
+        elementoResultado.innerHTML = "Incorrecto - Por favor, responde todas las preguntas antes de calificar.";
+        elementoResultado.className = "resultado-alerta";
         return;
     }
 
-    let nota = puntaje * 2;
-    if (puntaje >= 4) {
-        resultado.innerHTML = "¡Excelente! Obtuviste " + puntaje + " de 5 respuestas correctas. Tu nota es " + nota + "/10.";
-        resultado.className = "resultado-aprobado";
-    } else if (puntaje === 3) {
-        resultado.innerHTML = "Buen intento. Obtuviste " + puntaje + " de 5 respuestas correctas. Tu nota es " + nota + "/10.";
-        resultado.className = "resultado-medio";
+    // Se calcula la nota final sobre 10 puntos
+    let notaFinal = puntajeObtenido * 2;
+
+    // CONDICIONAL: Se determina el mensaje y el estilo según el puntaje obtenido
+    if (puntajeObtenido >= 4) {
+        elementoResultado.innerHTML = "¡Excelente! Obtuviste " + puntajeObtenido + " de 5 respuestas correctas. Tu nota es " + notaFinal + "/10.";
+        elementoResultado.className = "resultado-aprobado";
+    } else if (puntajeObtenido === 3) {
+        elementoResultado.innerHTML = "Buen intento. Obtuviste " + puntajeObtenido + " de 5 respuestas correctas. Tu nota es " + notaFinal + "/10.";
+        elementoResultado.className = "resultado-medio";
     } else {
-        resultado.innerHTML = "Necesitas repasar un poco más. Obtuviste " + puntaje + " de 5 respuestas correctas. Tu nota es " + nota + "/10.";
-        resultado.className = "resultado-reprobado";
+        elementoResultado.innerHTML = "Necesitas repasar un poco más. Obtuviste " + puntajeObtenido + " de 5 respuestas correctas. Tu nota es " + notaFinal + "/10.";
+        elementoResultado.className = "resultado-reprobado";
     }
 }
 
+/**
+ * Funcion: reiniciarTest
+ * Limpia todas las selecciones del usuario, elimina los íconos de validación
+ * y borra el mensaje de resultado para permitir un nuevo intento.
+ */
 function reiniciarTest() {
 
-    let opciones = document.querySelectorAll('#contenedor-test input[type="radio"]');
+    let listaOpcionesRadio = document.querySelectorAll('#contenedor-test input[type="radio"]');
 
-    for (let i = 0; i < opciones.length; i++) {
-        opciones[i].checked = false;
+    // BUCLE: Se desmarcan todos los radio buttons del test
+    for (let indiceOpcion = 0; indiceOpcion < listaOpcionesRadio.length; indiceOpcion++) {
+        listaOpcionesRadio[indiceOpcion].checked = false;
     }
 
-    let resultado = document.getElementById("resultado-test");
+    let elementoResultado = document.getElementById("resultado-test");
 
-    // --- LIMPIAR íconos de validación al reiniciar ---
-    let iconos = document.querySelectorAll('#contenedor-test .icono-validacion');
-    for (let k = 0; k < iconos.length; k++) {
-        iconos[k].remove();
+    // --- SECCION: LIMPIEZA DE ICONOS DE VALIDACION ---
+    let listaIconosValidacion = document.querySelectorAll('#contenedor-test .icono-validacion');
+
+    // BUCLE: Se eliminan todos los íconos de check/X generados previamente
+    for (let indiceIcono = 0; indiceIcono < listaIconosValidacion.length; indiceIcono++) {
+        listaIconosValidacion[indiceIcono].remove();
     }
     // --- FIN LIMPIEZA ---
-    resultado.innerHTML = "";
-    resultado.className = "";
+
+    // Se limpia el contenido y las clases del contenedor de resultados
+    elementoResultado.innerHTML = "";
+    elementoResultado.className = "";
+}
+
+
+// ============================================================
+// BLOQUE 12: EJERCICIO PRACTICO - SOCIAL MEDIA (INTEGRADO con media.js)
+// ============================================================
+
+// Variable de control para la instancia del gráfico del ejercicio práctico (Chart.js)
+let graficoEjercicioInstancia = null;
+
+// Nombre de la columna numérica en social_media_200.js que se utilizará para los cálculos
+const COLUMNA_CALCULO_EJERCICIO = 'Daily_Minutes_Spent';
+// Nombre de la propiedad que identifica cada registro (etiqueta textual)
+const NOMBRE_ETIQUETA_EJERCICIO = 'App';
+
+/**
+ * Funcion: cargarDatosSocial
+ * Obtiene de forma segura los datos desde la variable global SOCIAL_MEDIA_USAGE
+ * definida en el archivo social_media_200.js.
+ */
+function cargarDatosSocial() {
+    if (typeof SOCIAL_MEDIA_USAGE === 'undefined' || !SOCIAL_MEDIA_USAGE.datos_redes) {
+        return [];
+    }
+    return SOCIAL_MEDIA_USAGE.datos_redes;
+}
+
+/**
+ * Funcion: agruparMediaPorApp
+ * Agrupa los registros del dataset por nombre de aplicación (App) y calcula
+ * la media de la columna Daily_Minutes_Spent para cada grupo.
+ * Utiliza calcularMedia de media.js cuando está disponible.
+ */
+function agruparMediaPorApp() {
+    let registrosRedesSociales = cargarDatosSocial();
+
+    // mapaAgrupacion almacena temporalmente listas de registros por aplicación
+    let mapaAgrupacion = {};
+
+    // BUCLE: Se clasifica cada registro según su nombre de aplicación
+    for (let indiceRegistro = 0; indiceRegistro < registrosRedesSociales.length; indiceRegistro++) {
+        let registroIndividual = registrosRedesSociales[indiceRegistro];
+        let nombreAplicacion = registroIndividual[NOMBRE_ETIQUETA_EJERCICIO] || 'SinNombre';
+
+        // CONDICIONAL: Si la aplicación no existe en el mapa, se inicializa su arreglo
+        if (!mapaAgrupacion[nombreAplicacion]) {
+            mapaAgrupacion[nombreAplicacion] = [];
+        }
+        mapaAgrupacion[nombreAplicacion].push(registroIndividual);
+    }
+
+    // Se convierte el mapa en un arreglo de objetos con la media por aplicación
+    let listaMediaPorAplicacion = [];
+
+    // Se extraen los nombres de las aplicaciones y se ordenan alfabéticamente
+    let listaNombresAplicaciones = [];
+    for (let claveAplicacion in mapaAgrupacion) {
+        listaNombresAplicaciones.push(claveAplicacion);
+    }
+    listaNombresAplicaciones.sort();
+
+    // BUCLE: Se calcula la media para cada aplicación ordenada
+    for (let indiceAplicacion = 0; indiceAplicacion < listaNombresAplicaciones.length; indiceAplicacion++) {
+        let nombreAplicacion = listaNombresAplicaciones[indiceAplicacion];
+        let registrosAplicacion = mapaAgrupacion[nombreAplicacion];
+
+        let valorMediaAplicacion = 0;
+
+        // CONDICIONAL: Si existe la función externa calcularMedia, se utiliza
+        if (typeof calcularMedia === 'function') {
+            let resultadoCalculo = calcularMedia(registrosAplicacion, COLUMNA_CALCULO_EJERCICIO, null, null);
+            valorMediaAplicacion = resultadoCalculo.media;
+        } else {
+            // Fallback manual: sumar valores y dividir entre la cantidad de registros válidos
+            let sumaValores = 0;
+            let conteoValores = 0;
+
+            for (let indiceInterno = 0; indiceInterno < registrosAplicacion.length; indiceInterno++) {
+                let valorMinuto = Number(registrosAplicacion[indiceInterno][COLUMNA_CALCULO_EJERCICIO]);
+                if (!isNaN(valorMinuto)) {
+                    sumaValores = sumaValores + valorMinuto;
+                    conteoValores = conteoValores + 1;
+                }
+            }
+            valorMediaAplicacion = conteoValores > 0 ? (sumaValores / conteoValores) : 0;
+            valorMediaAplicacion = parseFloat(valorMediaAplicacion.toFixed(2));
+        }
+
+        listaMediaPorAplicacion.push({
+            App: nombreAplicacion,
+            valor: valorMediaAplicacion
+        });
+    }
+
+    return listaMediaPorAplicacion;
+}
+
+/**
+ * Funcion: mostrarTablaMediaApps
+ * Genera y muestra la tabla HTML con la media de minutos por aplicación.
+ * Aprovecha la función calcularMedia de media.js si está disponible.
+ */
+function mostrarTablaMediaApps() {
+    let listaMediaPorAplicacion = agruparMediaPorApp();
+
+    // CONDICIONAL: Si existe la función externa calcularMedia, se usa para generar la tabla
+    if (typeof calcularMedia === 'function') {
+        calcularMedia(listaMediaPorAplicacion, 'valor', 'resultado-ejercicio', 'App');
+        return;
+    }
+
+    // Fallback: generar tabla manualmente en caso de que media.js no esté cargado
+    let contenidoHTML = '';
+    contenidoHTML += '<p><strong>Media por App (columna: ' + COLUMNA_CALCULO_EJERCICIO + ')</strong></p>';
+    contenidoHTML += '<table class="tabla-interactiva">';
+    contenidoHTML += '<tr><th>#</th><th>Red Social</th><th>Media</th></tr>';
+
+    // BUCLE: Se construye cada fila con los datos de media por aplicación
+    for (let indiceFila = 0; indiceFila < listaMediaPorAplicacion.length; indiceFila++) {
+        contenidoHTML += '<tr>';
+        contenidoHTML += '<td>' + (indiceFila + 1) + '</td>';
+        contenidoHTML += '<td>' + listaMediaPorAplicacion[indiceFila].App + '</td>';
+        contenidoHTML += '<td>' + listaMediaPorAplicacion[indiceFila].valor.toFixed(2) + '</td>';
+        contenidoHTML += '</tr>';
+    }
+
+    contenidoHTML += '</table>';
+    document.getElementById('resultado-ejercicio').innerHTML = contenidoHTML;
+}
+
+/**
+ * Funcion: toggleEjercicioPractico
+ * Alterna la visibilidad de la tabla del ejercicio práctico de media por App.
+ */
+function toggleEjercicioPractico() {
+    let contenedorResultado = document.getElementById('resultado-ejercicio');
+    let botonInteractivo = document.getElementById('btn-ejercicio-practico');
+
+    // CONDICIONAL: Validación de existencia de elementos en el DOM
+    if (!contenedorResultado || !botonInteractivo) {
+        return;
+    }
+
+    // CONDICIONAL: Si está oculto, se genera la tabla y se muestra
+    if (contenedorResultado.classList.contains('oculto')) {
+        mostrarTablaMediaApps();
+        contenedorResultado.classList.remove('oculto');
+        botonInteractivo.textContent = '✖ Ocultar Tabla';
+    } else {
+        contenedorResultado.classList.add('oculto');
+        botonInteractivo.textContent = '▶ Calcular Media por App';
+    }
+}
+
+/**
+ * Funcion: toggleGraficoEjercicio
+ * Alterna la visibilidad del gráfico comparativo del ejercicio práctico.
+ * Utiliza dibujarGraficoMedia de media.js para la renderización.
+ */
+function toggleGraficoEjercicio() {
+    let contenedorResultado = document.getElementById('contenedor-grafico-ejercicio');
+    let botonInteractivo = document.getElementById('btn-grafico-ejercicio');
+
+    // CONDICIONAL: Validación de existencia de elementos en el DOM
+    if (!contenedorResultado || !botonInteractivo) {
+        return;
+    }
+
+    // --- SECCION: OCULTAR GRÁFICO ---
+    if (!contenedorResultado.classList.contains('oculto')) {
+        contenedorResultado.classList.add('oculto');
+        botonInteractivo.textContent = '📊 Ver Gráfico Comparativo';
+
+        // CONDICIONAL: Se destruye la instancia previa para liberar memoria
+        if (graficoEjercicioInstancia) {
+            graficoEjercicioInstancia.destroy();
+            graficoEjercicioInstancia = null;
+        }
+        return;
+    }
+
+    // --- SECCION: MOSTRAR GRÁFICO ---
+    contenedorResultado.classList.remove('oculto');
+    botonInteractivo.textContent = '✖ Ocultar Gráfico';
+
+    // CONDICIONAL: Se destruye cualquier instancia previa antes de crear una nueva
+    if (graficoEjercicioInstancia) {
+        graficoEjercicioInstancia.destroy();
+        graficoEjercicioInstancia = null;
+    }
+
+    // Se crea el canvas si no existe en el DOM
+    let canvasGrafico = document.getElementById('graficaEjercicio');
+
+    if (!canvasGrafico) {
+        canvasGrafico = document.createElement('canvas');
+        canvasGrafico.id = 'graficaEjercicio';
+        contenedorResultado.appendChild(canvasGrafico);
+    }
+
+    // Se agrupan los datos por App y se calcula la media de cada una
+    let listaMediaPorAplicacion = agruparMediaPorApp();
+
+    // dibujarGraficoMedia (media.js): arreglo, propiedad, canvasId, titulo
+    graficoEjercicioInstancia = dibujarGraficoMedia(
+        listaMediaPorAplicacion,
+        'valor',
+        'graficaEjercicio',
+        'Media por App (' + COLUMNA_CALCULO_EJERCICIO + ')'
+    );
+}
+
+// ============================================================
+// FUNCION: cargarTablaPreviewDataset
+// Muestra los primeros 10 registros de SOCIAL_MEDIA_USAGE
+// en la tabla #tabla-preview-dataset al cargar la sección.
+// Se llama una sola vez desde el evento DOMContentLoaded.
+// ============================================================
+
+/**
+ * Funcion: cargarTablaPreviewDataset
+ * Inserta dinámicamente las primeras 10 filas del dataset de redes sociales
+ * en la tabla de previsualización definida en el HTML.
+ */
+function cargarTablaPreviewDataset() {
+    let cuerpoTablaPreview = document.getElementById("cuerpo-tabla-preview");
+
+    // CONDICIONAL: Si no existe el cuerpo de la tabla, se cancela la operación
+    if (!cuerpoTablaPreview) {
+        return;
+    }
+
+    let registrosRedesSociales = SOCIAL_MEDIA_USAGE.datos_redes;
+    let filasTablaHTML = "";
+
+    // BUCLE: Se recorren únicamente los primeros 10 registros del dataset
+    for (let indiceFila = 0; indiceFila < 10 && indiceFila < registrosRedesSociales.length; indiceFila++) {
+        let registroRedSocial = registrosRedesSociales[indiceFila];
+        filasTablaHTML += "<tr>";
+        filasTablaHTML += "<td>" + (indiceFila + 1) + "</td>";
+        filasTablaHTML += "<td>" + registroRedSocial.User_ID + "</td>";
+        filasTablaHTML += "<td>" + registroRedSocial.App + "</td>";
+        filasTablaHTML += "<td>" + registroRedSocial.Daily_Minutes_Spent + "</td>";
+        filasTablaHTML += "<td>" + registroRedSocial.Posts_Per_Day + "</td>";
+        filasTablaHTML += "<td>" + registroRedSocial.Likes_Per_Day + "</td>";
+        filasTablaHTML += "<td>" + registroRedSocial.Follows_Per_Day + "</td>";
+        filasTablaHTML += "</tr>";
+    }
+
+    cuerpoTablaPreview.innerHTML = filasTablaHTML;
+}
+
+// Llenar la tabla preview cuando el DOM esté completamente cargado
+document.addEventListener("DOMContentLoaded", function () {
+    cargarTablaPreviewDataset();
+});
+
+// ============================================================
+// BLOQUE 12B: EJERCICIO PRACTICO - MEDIANA
+// ============================================================
+
+// Variable de control para la instancia del gráfico de mediana del ejercicio (Chart.js)
+let graficoEjercicioMedianaInstancia = null;
+
+/**
+ * Funcion: mostrarTablaMedianaDataset
+ * Calcula la mediana del dataset completo (200 registros) sobre la columna
+ * Daily_Minutes_Spent y genera el HTML con el resultado.
+ */
+function mostrarTablaMedianaDataset() {
+    let registrosRedesSociales = cargarDatosSocial();
+    let identificadorContenedor = 'resultado-ejercicio-mediana';
+
+    // CONDICIONAL: Si existe la función externa calcularMediana, se utiliza
+    if (typeof calcularMediana === 'function') {
+        calcularMediana(registrosRedesSociales, COLUMNA_CALCULO_EJERCICIO, identificadorContenedor, NOMBRE_ETIQUETA_EJERCICIO);
+        return;
+    }
+
+    // Fallback manual si mediana.js no está cargado
+    let listaValoresNumericos = [];
+
+    // BUCLE: Se extraen únicamente los valores numéricos válidos de la columna objetivo
+    for (let indiceRegistro = 0; indiceRegistro < registrosRedesSociales.length; indiceRegistro++) {
+        let valorNumerico = Number(registrosRedesSociales[indiceRegistro][COLUMNA_CALCULO_EJERCICIO]);
+        if (!isNaN(valorNumerico)) {
+            listaValoresNumericos.push(valorNumerico);
+        }
+    }
+
+    // Se ordenan los valores de menor a mayor
+    listaValoresNumericos.sort(function (valorA, valorB) {
+        return valorA - valorB;
+    });
+
+    let posicionCentral = Math.floor(listaValoresNumericos.length / 2);
+    let valorMediana = 0;
+
+    // CONDICIONAL: Si la cantidad de datos es par, la mediana es el promedio de los dos centrales
+    if (listaValoresNumericos.length % 2 === 0) {
+        valorMediana = (listaValoresNumericos[posicionCentral - 1] + listaValoresNumericos[posicionCentral]) / 2;
+    } else {
+        // Si es impar, la mediana es el valor exacto del centro
+        valorMediana = listaValoresNumericos[posicionCentral];
+    }
+
+    let contenidoHTML = '';
+    contenidoHTML += '<p><strong>Mediana de ' + COLUMNA_CALCULO_EJERCICIO + ' (200 registros ordenados):</strong></p>';
+    contenidoHTML += '<div class="detalle-calculo">';
+    contenidoHTML += 'Total de registros: <strong>' + listaValoresNumericos.length + '</strong><br>';
+    contenidoHTML += 'Posición central: <strong>' + (posicionCentral + 1) + '</strong><br>';
+    contenidoHTML += 'Mediana: <strong>' + valorMediana.toFixed(2) + '</strong>';
+    contenidoHTML += '</div>';
+    contenidoHTML += '<div class="caja-resultado">';
+    contenidoHTML += '📊 La mediana es: <strong>' + valorMediana.toFixed(2) + '</strong> minutos/día';
+    contenidoHTML += '</div>';
+
+    document.getElementById(identificadorContenedor).innerHTML = contenidoHTML;
+}
+
+/**
+ * Funcion: toggleEjercicioMediana
+ * Alterna la visibilidad de la tabla de mediana del ejercicio práctico.
+ */
+function toggleEjercicioMediana() {
+    let contenedorResultado = document.getElementById('resultado-ejercicio-mediana');
+    let botonInteractivo = document.getElementById('btn-ejercicio-mediana');
+
+    // CONDICIONAL: Validación de existencia de elementos en el DOM
+    if (!contenedorResultado || !botonInteractivo) {
+        return;
+    }
+
+    // CONDICIONAL: Si está oculto, se calcula la mediana y se muestra
+    if (contenedorResultado.classList.contains('oculto')) {
+        mostrarTablaMedianaDataset();
+        contenedorResultado.classList.remove('oculto');
+        botonInteractivo.textContent = '✖ Ocultar Tabla';
+    } else {
+        contenedorResultado.classList.add('oculto');
+        botonInteractivo.textContent = '▶ Calcular Mediana';
+    }
+}
+
+/**
+ * Funcion: toggleGraficoEjercicioMediana
+ * Alterna la visibilidad del gráfico de distribución de mediana del ejercicio práctico.
+ * Utiliza dibujarGraficoMediana de mediana.js con los 200 registros.
+ */
+function toggleGraficoEjercicioMediana() {
+    let contenedorResultado = document.getElementById('contenedor-grafico-ejercicio-mediana');
+    let botonInteractivo = document.getElementById('btn-grafico-ejercicio-mediana');
+
+    // CONDICIONAL: Validación de existencia de elementos en el DOM
+    if (!contenedorResultado || !botonInteractivo) {
+        return;
+    }
+
+    // --- SECCION: OCULTAR GRÁFICO ---
+    if (!contenedorResultado.classList.contains('oculto')) {
+        contenedorResultado.classList.add('oculto');
+        botonInteractivo.textContent = '📊 Ver Gráfico de Distribución';
+        return;
+    }
+
+    // --- SECCION: MOSTRAR GRÁFICO ---
+    contenedorResultado.classList.remove('oculto');
+    botonInteractivo.textContent = '✖ Ocultar Gráfico';
+
+    // Se reemplaza el canvas para evitar el error "Canvas already in use"
+    let canvasAnterior = document.getElementById('graficaEjercicioMediana');
+
+    // CONDICIONAL: Solo se reemplaza si el canvas existe y tiene nodo padre
+    if (canvasAnterior && canvasAnterior.parentNode) {
+        let canvasNuevo = document.createElement('canvas');
+        canvasNuevo.id = 'graficaEjercicioMediana';
+        canvasAnterior.parentNode.replaceChild(canvasNuevo, canvasAnterior);
+    }
+
+    // setTimeout: Da tiempo al DOM para que el nuevo canvas tenga tamaño real
+    setTimeout(function () {
+        dibujarGraficoMediana(
+            cargarDatosSocial(),
+            COLUMNA_CALCULO_EJERCICIO,
+            'graficaEjercicioMediana',
+            'Distribución de minutos diarios con línea de mediana',
+            NOMBRE_ETIQUETA_EJERCICIO
+        );
+    }, 50);
+}
+
+// ============================================================
+// BLOQUE 12F: EJERCICIO PRACTICO - VARIANZA
+// ============================================================
+
+// Variable de control para la instancia del gráfico de varianza del ejercicio
+let graficoEjercicioVarianzaInstancia = null;
+
+/**
+ * Funcion: mostrarTablaVarianzaDataset
+ * Muestra la varianza del dataset completo usando varianza.js.
+ */
+function mostrarTablaVarianzaDataset() {
+    let registrosRedesSociales = cargarDatosSocial();
+    let identificadorContenedor = 'resultado-ejercicio-varianza';
+
+    calcularVarianza(
+        registrosRedesSociales,
+        COLUMNA_CALCULO_EJERCICIO,
+        identificadorContenedor,
+        NOMBRE_ETIQUETA_EJERCICIO
+    );
+}
+
+/**
+ * Funcion: toggleEjercicioVarianza
+ * Alterna la visibilidad de la tabla de varianza del ejercicio práctico.
+ */
+function toggleEjercicioVarianza() {
+    let contenedorResultado = document.getElementById('resultado-ejercicio-varianza');
+    let botonInteractivo = document.getElementById('btn-ejercicio-varianza');
+
+    if (!contenedorResultado || !botonInteractivo) {
+        return;
+    }
+
+    if (contenedorResultado.classList.contains('oculto')) {
+        mostrarTablaVarianzaDataset();
+        contenedorResultado.classList.remove('oculto');
+        botonInteractivo.textContent = '✖ Ocultar Tabla';
+    } else {
+        contenedorResultado.classList.add('oculto');
+        botonInteractivo.textContent = '▶ Calcular Varianza';
+    }
+}
+
+/**
+ * Funcion: toggleGraficoEjercicioVarianza
+ * Alterna la visibilidad del gráfico de varianza del ejercicio práctico.
+ */
+function toggleGraficoEjercicioVarianza() {
+    let contenedorResultado = document.getElementById('contenedor-grafico-ejercicio-varianza');
+    let botonInteractivo = document.getElementById('btn-grafico-ejercicio-varianza');
+
+    if (!contenedorResultado || !botonInteractivo) {
+        return;
+    }
+
+    if (!contenedorResultado.classList.contains('oculto')) {
+        contenedorResultado.classList.add('oculto');
+        botonInteractivo.textContent = '📊 Ver Gráfico de Desviaciones';
+
+        if (graficoEjercicioVarianzaInstancia) {
+            try {
+                graficoEjercicioVarianzaInstancia.destroy();
+            } catch (errorDestruccion) {
+                // Se ignora el error si la instancia ya no es válida
+            }
+
+            graficoEjercicioVarianzaInstancia = null;
+        }
+
+        return;
+    }
+
+    contenedorResultado.classList.remove('oculto');
+    botonInteractivo.textContent = '✖ Ocultar Gráfico';
+
+    if (graficoEjercicioVarianzaInstancia) {
+        try {
+            graficoEjercicioVarianzaInstancia.destroy();
+        } catch (errorDestruccion) {
+            // Se ignora el error si la instancia ya no es válida
+        }
+
+        graficoEjercicioVarianzaInstancia = null;
+    }
+
+    let canvasAnterior = document.getElementById('graficaEjercicioVarianza');
+
+    if (!canvasAnterior) {
+        return;
+    }
+
+    let canvasNuevo = document.createElement('canvas');
+    canvasNuevo.id = 'graficaEjercicioVarianza';
+    canvasAnterior.parentNode.replaceChild(canvasNuevo, canvasAnterior);
+
+    setTimeout(function () {
+        graficoEjercicioVarianzaInstancia = dibujarGraficoVarianza(
+            cargarDatosSocial(),
+            COLUMNA_CALCULO_EJERCICIO,
+            'graficaEjercicioVarianza',
+            'Varianza de minutos diarios en redes sociales',
+            NOMBRE_ETIQUETA_EJERCICIO
+        );
+    }, 50);
+}
+
+// ============================================================
+// BLOQUE 12G: EJERCICIO PRACTICO - DESVIACION ESTANDAR
+// ============================================================
+
+// Variable de control para la instancia del gráfico de desviación del ejercicio
+let graficoEjercicioDesviacionInstancia = null;
+
+/**
+ * Funcion: mostrarTablaDesviacionDataset
+ * Muestra la desviación estándar del dataset completo usando desviacion.js.
+ */
+function mostrarTablaDesviacionDataset() {
+    let registrosRedesSociales = cargarDatosSocial();
+    let identificadorContenedor = 'resultado-ejercicio-desviacion';
+
+    calcularDesviacion(
+        registrosRedesSociales,
+        COLUMNA_CALCULO_EJERCICIO,
+        identificadorContenedor,
+        NOMBRE_ETIQUETA_EJERCICIO
+    );
+}
+
+/**
+ * Funcion: toggleEjercicioDesviacion
+ * Alterna la visibilidad de la tabla de desviación estándar del ejercicio práctico.
+ */
+function toggleEjercicioDesviacion() {
+    let contenedorResultado = document.getElementById('resultado-ejercicio-desviacion');
+    let botonInteractivo = document.getElementById('btn-ejercicio-desviacion');
+
+    if (!contenedorResultado || !botonInteractivo) {
+        return;
+    }
+
+    if (contenedorResultado.classList.contains('oculto')) {
+        mostrarTablaDesviacionDataset();
+        contenedorResultado.classList.remove('oculto');
+        botonInteractivo.textContent = '✖ Ocultar Tabla';
+    } else {
+        contenedorResultado.classList.add('oculto');
+        botonInteractivo.textContent = '▶ Calcular Desviación Estándar';
+    }
+}
+
+/**
+ * Funcion: toggleGraficoEjercicioDesviacion
+ * Alterna la visibilidad del gráfico de desviación estándar del ejercicio práctico.
+ */
+function toggleGraficoEjercicioDesviacion() {
+    let contenedorResultado = document.getElementById('contenedor-grafico-ejercicio-desviacion');
+    let botonInteractivo = document.getElementById('btn-grafico-ejercicio-desviacion');
+
+    if (!contenedorResultado || !botonInteractivo) {
+        return;
+    }
+
+    if (!contenedorResultado.classList.contains('oculto')) {
+        contenedorResultado.classList.add('oculto');
+        botonInteractivo.textContent = '📊 Ver Gráfico de Desviación Estándar';
+
+        if (graficoEjercicioDesviacionInstancia) {
+            try {
+                graficoEjercicioDesviacionInstancia.destroy();
+            } catch (errorDestruccion) {
+                // Se ignora el error si la instancia ya no es válida
+            }
+
+            graficoEjercicioDesviacionInstancia = null;
+        }
+
+        return;
+    }
+
+    contenedorResultado.classList.remove('oculto');
+    botonInteractivo.textContent = '✖ Ocultar Gráfico';
+
+    if (graficoEjercicioDesviacionInstancia) {
+        try {
+            graficoEjercicioDesviacionInstancia.destroy();
+        } catch (errorDestruccion) {
+            // Se ignora el error si la instancia ya no es válida
+        }
+
+        graficoEjercicioDesviacionInstancia = null;
+    }
+
+    let canvasAnterior = document.getElementById('graficaEjercicioDesviacion');
+
+    if (!canvasAnterior) {
+        return;
+    }
+
+    let canvasNuevo = document.createElement('canvas');
+    canvasNuevo.id = 'graficaEjercicioDesviacion';
+    canvasAnterior.parentNode.replaceChild(canvasNuevo, canvasAnterior);
+
+    setTimeout(function () {
+        graficoEjercicioDesviacionInstancia = dibujarGraficoDesviacion(
+            cargarDatosSocial(),
+            COLUMNA_CALCULO_EJERCICIO,
+            'graficaEjercicioDesviacion',
+            'Desviación estándar de minutos diarios en redes sociales',
+            NOMBRE_ETIQUETA_EJERCICIO
+        );
+    }, 50);
+}
+
+// ============================================================
+// BLOQUE 12C: EJERCICIO PRACTICO - MINIMO Y MAXIMO
+// ============================================================
+
+// Variable de control para la instancia del gráfico de mínimo y máximo del ejercicio (Chart.js)
+let graficoEjercicioMinMaxInstancia = null;
+
+/**
+ * Funcion: mostrarTablaMinMaxDataset
+ * Muestra la tabla del dataset completo (200 registros) destacando
+ * el valor mínimo y máximo mediante la función calcularMinMax de minMax.js.
+ */
+function mostrarTablaMinMaxDataset() {
+    let registrosRedesSociales = cargarDatosSocial();
+    let identificadorContenedor = 'resultado-ejercicio-minmax';
+
+    // Se utiliza la función externa calcularMinMax con los datos de redes sociales
+    calcularMinMax(registrosRedesSociales, COLUMNA_CALCULO_EJERCICIO, identificadorContenedor, NOMBRE_ETIQUETA_EJERCICIO);
+}
+
+/**
+ * Funcion: toggleEjercicioMinMax
+ * Alterna la visibilidad de la tabla del ejercicio práctico de mínimo y máximo.
+ */
+function toggleEjercicioMinMax() {
+    let contenedorResultado = document.getElementById('resultado-ejercicio-minmax');
+    let botonInteractivo = document.getElementById('btn-ejercicio-minmax');
+
+    // CONDICIONAL: Validación de existencia de elementos en el DOM
+    if (!contenedorResultado || !botonInteractivo) {
+        return;
+    }
+
+    // CONDICIONAL: Si está oculto, se genera la tabla y se muestra
+    if (contenedorResultado.classList.contains('oculto')) {
+        mostrarTablaMinMaxDataset();
+        contenedorResultado.classList.remove('oculto');
+        botonInteractivo.textContent = '✖ Ocultar Tabla';
+    } else {
+        contenedorResultado.classList.add('oculto');
+        botonInteractivo.textContent = '▶ Calcular Mínimo y Máximo';
+    }
+}
+
+/**
+ * Funcion: toggleGraficoEjercicioMinMax
+ * Alterna la visibilidad del gráfico de barras de mínimo y máximo del ejercicio práctico.
+ */
+function toggleGraficoEjercicioMinMax() {
+    let contenedorResultado = document.getElementById('contenedor-grafico-ejercicio-minmax');
+    let botonInteractivo = document.getElementById('btn-grafico-ejercicio-minmax');
+
+    // CONDICIONAL: Validación de existencia de elementos en el DOM
+    if (!contenedorResultado || !botonInteractivo) {
+        return;
+    }
+
+    // --- SECCION: OCULTAR GRÁFICO ---
+    if (!contenedorResultado.classList.contains('oculto')) {
+        contenedorResultado.classList.add('oculto');
+        botonInteractivo.textContent = '📊 Ver Gráfico de Barras';
+
+        // CONDICIONAL: Se destruye la instancia previa para liberar memoria
+        if (graficoEjercicioMinMaxInstancia) {
+            try {
+                graficoEjercicioMinMaxInstancia.destroy();
+            } catch (errorDestruccion) {
+                // Se ignora el error si la instancia ya no es válida
+            }
+            graficoEjercicioMinMaxInstancia = null;
+        }
+        return;
+    }
+
+    // --- SECCION: MOSTRAR GRÁFICO ---
+    contenedorResultado.classList.remove('oculto');
+    botonInteractivo.textContent = '✖ Ocultar Gráfico';
+
+    // Se reemplaza el canvas físicamente para evitar "Canvas already in use"
+    let canvasAnterior = document.getElementById('graficaEjercicioMinMax');
+
+    // CONDICIONAL: Si no existe el canvas, se cancela la operación
+    if (!canvasAnterior) {
+        return;
+    }
+
+    let canvasNuevo = document.createElement('canvas');
+    canvasNuevo.id = 'graficaEjercicioMinMax';
+    canvasAnterior.parentNode.replaceChild(canvasNuevo, canvasAnterior);
+
+    // setTimeout: Da tiempo al DOM para que el canvas nuevo tenga tamaño real
+    setTimeout(function () {
+        // Parámetros: arreglo, campoNumerico, canvasId, titulo
+        // (campoLabel detectado automáticamente por minMax.js)
+        graficoEjercicioMinMaxInstancia = dibujarGraficoMinMax(
+            cargarDatosSocial(),
+            COLUMNA_CALCULO_EJERCICIO,
+            'graficaEjercicioMinMax',
+            'Distribución de minutos diarios — azul: mínimo | rojo: máximo'
+        );
+    }, 50);
+}
+
+// ============================================================
+// BLOQUE 12D: EJERCICIO PRACTICO - MODA
+// ============================================================
+
+// Variable de control para la instancia del gráfico de moda del ejercicio (Chart.js)
+let graficoEjercicioModaInstancia = null;
+
+/**
+ * Funcion: mostrarTablaModaDataset
+ * Muestra la tabla del dataset completo (200 registros) destacando
+ * la moda mediante la función calcularModa de moda.js.
+ */
+function mostrarTablaModaDataset() {
+    let registrosRedesSociales = cargarDatosSocial();
+    let identificadorContenedor = 'resultado-ejercicio-moda';
+
+    // Se utiliza la función externa calcularModa con los datos de redes sociales
+    calcularModa(registrosRedesSociales, COLUMNA_CALCULO_EJERCICIO, identificadorContenedor, NOMBRE_ETIQUETA_EJERCICIO);
+}
+
+/**
+ * Funcion: toggleEjercicioModa
+ * Alterna la visibilidad de la tabla del ejercicio práctico de moda.
+ */
+function toggleEjercicioModa() {
+    let contenedorResultado = document.getElementById('resultado-ejercicio-moda');
+    let botonInteractivo = document.getElementById('btn-ejercicio-moda');
+
+    // CONDICIONAL: Validación de existencia de elementos en el DOM
+    if (!contenedorResultado || !botonInteractivo) {
+        return;
+    }
+
+    // CONDICIONAL: Si está oculto, se genera la tabla y se muestra
+    if (contenedorResultado.classList.contains('oculto')) {
+        mostrarTablaModaDataset();
+        contenedorResultado.classList.remove('oculto');
+        botonInteractivo.textContent = '✖ Ocultar Tabla';
+    } else {
+        contenedorResultado.classList.add('oculto');
+        botonInteractivo.textContent = '▶ Calcular Moda';
+    }
+}
+
+/**
+ * Funcion: toggleGraficoEjercicioModa
+ * Alterna la visibilidad del gráfico de frecuencias de moda del ejercicio práctico.
+ */
+function toggleGraficoEjercicioModa() {
+    let contenedorResultado = document.getElementById('contenedor-grafico-ejercicio-moda');
+    let botonInteractivo = document.getElementById('btn-grafico-ejercicio-moda');
+
+    // CONDICIONAL: Validación de existencia de elementos en el DOM
+    if (!contenedorResultado || !botonInteractivo) {
+        return;
+    }
+
+    // --- SECCION: OCULTAR GRÁFICO ---
+    if (!contenedorResultado.classList.contains('oculto')) {
+        contenedorResultado.classList.add('oculto');
+        botonInteractivo.textContent = '📊 Ver Gráfico de Frecuencias';
+
+        // CONDICIONAL: Se destruye la instancia previa para liberar memoria
+        if (graficoEjercicioModaInstancia) {
+            try {
+                graficoEjercicioModaInstancia.destroy();
+            } catch (errorDestruccion) {
+                // Se ignora el error si la instancia ya no es válida
+            }
+            graficoEjercicioModaInstancia = null;
+        }
+        return;
+    }
+
+    // --- SECCION: MOSTRAR GRÁFICO ---
+    contenedorResultado.classList.remove('oculto');
+    botonInteractivo.textContent = '✖ Ocultar Gráfico';
+
+    // Se reemplaza el canvas físicamente para evitar "Canvas already in use"
+    let canvasAnterior = document.getElementById('graficaEjercicioModa');
+
+    // CONDICIONAL: Si no existe el canvas, se cancela la operación
+    if (!canvasAnterior) {
+        return;
+    }
+
+    let canvasNuevo = document.createElement('canvas');
+    canvasNuevo.id = 'graficaEjercicioModa';
+    canvasAnterior.parentNode.replaceChild(canvasNuevo, canvasAnterior);
+
+    // setTimeout: Permite que el navegador calcule el tamaño real del nuevo canvas
+    setTimeout(function () {
+        graficoEjercicioModaInstancia = dibujarGraficoModa(
+            cargarDatosSocial(),
+            COLUMNA_CALCULO_EJERCICIO,
+            'graficaEjercicioModa',
+            'Frecuencia de minutos diarios (barra azul = moda)'
+        );
+    }, 50);
+}
+
+// ============================================================
+// BLOQUE 12E: EJERCICIO PRACTICO - RANGO
+// ============================================================
+
+// Variable de control para la instancia del gráfico de rango del ejercicio (Chart.js)
+let graficoEjercicioRangoInstancia = null;
+
+/**
+ * Funcion: mostrarTablaRangoDataset
+ * Muestra la tabla del dataset completo (200 registros) con el cálculo
+ * del rango utilizando la función calcularRango de rango.js.
+ */
+function mostrarTablaRangoDataset() {
+    let registrosRedesSociales = cargarDatosSocial();
+    let identificadorContenedor = 'resultado-ejercicio-rango';
+
+    // Se utiliza la función externa calcularRango con los datos de redes sociales
+    calcularRango(registrosRedesSociales, COLUMNA_CALCULO_EJERCICIO, identificadorContenedor, NOMBRE_ETIQUETA_EJERCICIO);
+}
+
+/**
+ * Funcion: toggleEjercicioRango
+ * Alterna la visibilidad de la tabla del ejercicio práctico de rango.
+ */
+function toggleEjercicioRango() {
+    let contenedorResultado = document.getElementById('resultado-ejercicio-rango');
+    let botonInteractivo = document.getElementById('btn-ejercicio-rango');
+
+    // CONDICIONAL: Validación de existencia de elementos en el DOM
+    if (!contenedorResultado || !botonInteractivo) {
+        return;
+    }
+
+    // CONDICIONAL: Si está oculto, se genera la tabla y se muestra
+    if (contenedorResultado.classList.contains('oculto')) {
+        mostrarTablaRangoDataset();
+        contenedorResultado.classList.remove('oculto');
+        botonInteractivo.textContent = '✖ Ocultar Tabla';
+    } else {
+        contenedorResultado.classList.add('oculto');
+        botonInteractivo.textContent = '▶ Calcular Rango';
+    }
+}
+
+/**
+ * Funcion: toggleGraficoEjercicioRango
+ * Alterna la visibilidad del gráfico de amplitud de rango del ejercicio práctico.
+ */
+function toggleGraficoEjercicioRango() {
+    let contenedorResultado = document.getElementById('contenedor-grafico-ejercicio-rango');
+    let botonInteractivo = document.getElementById('btn-grafico-ejercicio-rango');
+
+    // CONDICIONAL: Validación de existencia de elementos en el DOM
+    if (!contenedorResultado || !botonInteractivo) {
+        return;
+    }
+
+    // --- SECCION: OCULTAR GRÁFICO ---
+    if (!contenedorResultado.classList.contains('oculto')) {
+        contenedorResultado.classList.add('oculto');
+        botonInteractivo.textContent = '📊 Ver Gráfico de Amplitud';
+
+        // CONDICIONAL: Se destruye la instancia previa para liberar memoria
+        if (graficoEjercicioRangoInstancia) {
+            try {
+                graficoEjercicioRangoInstancia.destroy();
+            } catch (errorDestruccion) {
+                // Se ignora el error si la instancia ya no es válida
+            }
+            graficoEjercicioRangoInstancia = null;
+        }
+        return;
+    }
+
+    // --- SECCION: MOSTRAR GRÁFICO ---
+    contenedorResultado.classList.remove('oculto');
+    botonInteractivo.textContent = '✖ Ocultar Gráfico';
+
+    // Se reemplaza el canvas físicamente para evitar "Canvas already in use"
+    let canvasAnterior = document.getElementById('graficaEjercicioRango');
+
+    // CONDICIONAL: Si no existe el canvas, se cancela la operación
+    if (!canvasAnterior) {
+        return;
+    }
+
+    let canvasNuevo = document.createElement('canvas');
+    canvasNuevo.id = 'graficaEjercicioRango';
+    canvasAnterior.parentNode.replaceChild(canvasNuevo, canvasAnterior);
+
+    // setTimeout: Permite que el navegador calcule el tamaño real del nuevo canvas
+    setTimeout(function () {
+        graficoEjercicioRangoInstancia = dibujarGraficoRango(
+            cargarDatosSocial(),
+            COLUMNA_CALCULO_EJERCICIO,
+            NOMBRE_ETIQUETA_EJERCICIO,
+            'graficaEjercicioRango',
+            'Amplitud de minutos diarios — rojo: mínimo | verde: máximo'
+        );
+    }, 50);
 }

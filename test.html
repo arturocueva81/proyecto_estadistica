@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test — Estadística Aplicada</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="estadistica.css">
+</head>
+
+<body>
+
+    <nav>
+        <a href="index.html" class="btn-nav">Portada</a>
+        <a href="media.html" class="btn-nav">Media</a>
+        <a href="mediana.html" class="btn-nav">Mediana</a>
+        <a href="moda.html" class="btn-nav">Moda</a>
+        <a href="minMax.html" class="btn-nav">Mínimo y Máximo</a>
+        <a href="rango.html" class="btn-nav">Rango</a>
+        <a href="varianza.html" class="btn-nav">Varianza</a>
+        <a href="desvEstandar.html" class="btn-nav">Desviación Estándar</a>
+        <a href="ejPractico.html" class="btn-nav">Ejercicio Práctico</a>
+        <a href="test.html" class="btn-nav activo">Test</a>
+        <a href="acercaDe.html" class="btn-nav">Acerca De</a>
+    </nav>
+
+
+    <!-- ============================================================
+         SECCIÓN: TEST DE EVALUACIÓN
+         Visible por defecto al cargar esta página (sin clase 'oculto').
+         El id se mantiene como 'test' para que estadistica.js
+         siga funcionando sin cambios (generarTest, calificarTest, etc.)
+         ============================================================ -->
+    <section id="test">
+        <h2>Test de Evaluación</h2>
+
+        <p>
+            Responde las siguientes preguntas sobre estadística descriptiva.
+            Al finalizar, presiona el botón para conocer tu calificación.
+        </p>
+
+        <!-- Contenedor donde generarTest() inyecta las preguntas dinámicamente -->
+        <div id="contenedor-test"></div>
+
+        <button onclick="calificarTest()" class="btn-interactivo">
+            Calificar Test
+        </button>
+
+        <button onclick="reiniciarTest()" class="btn-interactivo">
+            Reiniciar Test
+        </button>
+
+        <div id="resultado-test"></div>
+    </section>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="datos.js"></script>
+    <script src="social_media_200.js"></script>
+    <script src="funciones_estadisticas/media.js"></script>
+    <script src="funciones_estadisticas/mediana.js"></script>
+    <script src="funciones_estadisticas/moda.js"></script>
+    <script src="funciones_estadisticas/minMax.js"></script>
+    <script src="funciones_estadisticas/rango.js"></script>
+    <script src="funciones_estadisticas/varianza.js"></script>
+    <script src="funciones_estadisticas/desviacion.js"></script>
+    <script src="estadistica.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rango — Estadística Aplicada</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="estadistica.css">
+</head>
+
+<body>
+
+    <nav>
+        <a href="index.html" class="btn-nav">Portada</a>
+        <a href="media.html" class="btn-nav">Media</a>
+        <a href="mediana.html" class="btn-nav">Mediana</a>
+        <a href="moda.html" class="btn-nav">Moda</a>
+        <a href="minMax.html" class="btn-nav">Mínimo y Máximo</a>
+        <a href="rango.html" class="btn-nav activo">Rango</a>
+        <a href="varianza.html" class="btn-nav">Varianza</a>
+        <a href="desvEstandar.html" class="btn-nav">Desviación Estándar</a>
+        <a href="ejPractico.html" class="btn-nav">Ejercicio Práctico</a>
+        <a href="test.html" class="btn-nav">Test</a>
+        <a href="acercaDe.html" class="btn-nav">Acerca De</a>
+    </nav>
+
+
+    <!-- ============================================================
+         SECCIÓN: RANGO
+         Visible por defecto al cargar esta página (sin clase 'oculto').
+         ============================================================ -->
+    <section id="rango" class="dos-columnas">
+
+        <div class="columna-teoria">
+            <h2>Rango</h2>
+            <img src="images/rango.jpg" alt="Ilustración del rango estadístico" width="50%">
+
+            <h3>Definición</h3>
+            <p>
+                El rango es la diferencia entre el valor máximo y el valor mínimo de un
+                conjunto de datos. Nos indica qué tan dispersos o separados están los datos.
+            </p>
+            <p><strong>Fórmula:</strong> Rango = Valor Máximo - Valor Mínimo</p>
+
+            <h3>Ejemplo</h3>
+            <p>Temperaturas de la semana: <strong>15, 17, 18, 20, 22, 25, 28</strong></p>
+            <p>Valor máximo: 28</p>
+            <p>Valor mínimo: 15</p>
+            <p>Rango = 28 - 15 = <strong>13°C</strong></p>
+            <p>Esto significa que la temperatura varió 13 grados durante la semana.</p>
+
+            <h3>¿Cómo se calcula en JavaScript?</h3>
+            <pre class="consola">
+// --- Calcular el RANGO en JavaScript ---
+
+let listaTemperaturas = [15, 17, 18, 20, 22, 25, 28];
+let valorMinimo = listaTemperaturas[0];
+let valorMaximo = listaTemperaturas[0];
+
+for (let indiceTemperatura = 1; indiceTemperatura < listaTemperaturas.length; indiceTemperatura++) {
+    if (listaTemperaturas[indiceTemperatura] < valorMinimo) {
+        valorMinimo = listaTemperaturas[indiceTemperatura];
+    }
+    if (listaTemperaturas[indiceTemperatura] > valorMaximo) {
+        valorMaximo = listaTemperaturas[indiceTemperatura];
+    }
+}
+
+let valorRango = valorMaximo - valorMinimo;
+console.log("El rango es: " + valorRango);
+            </pre>
+        </div>
+
+        <div class="columna-ejercicios">
+            <h3>Ejemplo interactivo</h3>
+            <p>
+                Al hacer clic, JavaScript calcula el rango restando el valor mínimo
+                al valor máximo del arreglo de <strong>20 estudiantes</strong>.
+            </p>
+
+            <button onclick="toggleEjemploRango()" class="btn-interactivo" id="btn-ejemplo-rango">
+                ▶ Calcular Rango
+            </button>
+
+            <div id="resultado-rango" class="oculto"></div>
+
+            <h3>Gráfico de calificaciones</h3>
+            <p>
+                Haz clic para ver el gráfico. Las barras
+                <strong style="color:#ef4444;">roja</strong> y
+                <strong style="color:#22c55e;">verde</strong> marcan el mínimo y el máximo,
+                y la zona entre ellas representa el rango.
+            </p>
+
+            <button onclick="toggleGraficoRango()" class="btn-interactivo" id="btn-grafico-rango">
+                📊 Ver Gráfico de Barras Verticales
+            </button>
+
+            <div id="contenedor-grafico-rango" class="oculto" style="margin-top:20px;">
+                <canvas id="graficaRango"></canvas>
+            </div>
+        </div>
+    </section>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="datos.js"></script>
+    <script src="social_media_200.js"></script>
+    <script src="funciones_estadisticas/media.js"></script>
+    <script src="funciones_estadisticas/mediana.js"></script>
+    <script src="funciones_estadisticas/moda.js"></script>
+    <script src="funciones_estadisticas/minMax.js"></script>
+    <script src="funciones_estadisticas/rango.js"></script>
+    <script src="funciones_estadisticas/varianza.js"></script>
+    <script src="funciones_estadisticas/desviacion.js"></script>
+    <script src="estadistica.js"></script>
+
+</body>
+</html>

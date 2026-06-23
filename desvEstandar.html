@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desviación Estándar — Estadística Aplicada</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="estadistica.css">
+</head>
+
+<body>
+
+    <nav>
+        <a href="index.html" class="btn-nav">Portada</a>
+        <a href="media.html" class="btn-nav">Media</a>
+        <a href="mediana.html" class="btn-nav">Mediana</a>
+        <a href="moda.html" class="btn-nav">Moda</a>
+        <a href="minMax.html" class="btn-nav">Mínimo y Máximo</a>
+        <a href="rango.html" class="btn-nav">Rango</a>
+        <a href="varianza.html" class="btn-nav">Varianza</a>
+        <a href="desvEstandar.html" class="btn-nav activo">Desviación Estándar</a>
+        <a href="ejPractico.html" class="btn-nav">Ejercicio Práctico</a>
+        <a href="test.html" class="btn-nav">Test</a>
+        <a href="acercaDe.html" class="btn-nav">Acerca De</a>
+    </nav>
+
+
+        <!-- ============================================================
+            SECCIÓN: DESVIACIÓN ESTÁNDAR
+            Visible por defecto al cargar esta página (sin clase 'oculto').
+            El id se mantiene como 'desviacion' para que estadistica.js
+            siga funcionando sin cambios.
+            ============================================================ -->
+        <section id="desviacion" class="dos-columnas">
+
+        <div class="columna-teoria">
+            <h2>Desviación Estándar</h2>
+            <img src="images/desv_estandar.jpeg" alt="Ilustración de la desviación estándar" width="100%">
+
+            <h3>Definición</h3>
+            <p>
+                La desviación estándar es la raíz cuadrada de la varianza. Nos indica,
+                en las mismas unidades de los datos originales, qué tanto se desvían
+                los valores respecto a la media.
+            </p>
+            <p><strong>Fórmula:</strong> Desviación Estándar = √Varianza</p>
+            <p>
+                Una desviación estándar baja indica que los datos están agrupados cerca
+                del promedio. Una desviación alta indica que están muy dispersos.
+            </p>
+
+            <h3>Ejemplo</h3>
+            <p>Usando los datos del ejemplo anterior: <strong>4, 8, 6, 2, 10</strong></p>
+            <p>Ya calculamos que la varianza es <strong>8</strong>.</p>
+            <p>Desviación estándar = √8 = <strong>2.83</strong> (aproximadamente)</p>
+            <p>
+                Esto significa que, en promedio, los datos se desvían 2.83 unidades
+                respecto a la media de 6.
+            </p>
+
+            <h3>¿Cómo se calcula en JavaScript?</h3>
+            <pre class="consola">
+// --- Calcular la DESVIACIÓN ESTÁNDAR en JavaScript ---
+
+let listaDatos = [4, 8, 6, 2, 10];
+let sumaDatos = 0;
+
+for (let indiceDato = 0; indiceDato < listaDatos.length; indiceDato++) {
+    sumaDatos = sumaDatos + listaDatos[indiceDato];
+}
+
+let valorMedia = sumaDatos / listaDatos.length;
+let sumaCuadradosDiferencias = 0;
+
+for (let indiceDato = 0; indiceDato < listaDatos.length; indiceDato++) {
+    let valorDiferencia = listaDatos[indiceDato] - valorMedia;
+    sumaCuadradosDiferencias = sumaCuadradosDiferencias + (valorDiferencia * valorDiferencia);
+}
+
+let valorVarianza = sumaCuadradosDiferencias / listaDatos.length;
+let valorDesviacion = Math.sqrt(valorVarianza);
+
+console.log("La desviación estándar es: " + valorDesviacion.toFixed(2));
+            </pre>
+        </div>
+
+        <div class="columna-ejercicios">
+            <h3>Ejemplo interactivo</h3>
+            <p>
+                Al hacer clic, JavaScript calcula la desviación estándar usando las
+                calificaciones de los <strong>20 estudiantes</strong> cargados desde datos.js.
+            </p>
+
+            <button onclick="toggleEjemploDesviacion()" class="btn-interactivo" id="btn-ejemplo-desviacion">
+                ▶ Calcular Desviación Estándar
+            </button>
+
+            <div id="resultado-desviacion" class="oculto"></div>
+
+            <h3>Gráfico de desviación estándar</h3>
+            <p>
+                Haz clic para ver un gráfico donde se comparan las calificaciones con la
+                media y se muestra visualmente la dispersión de los datos.
+            </p>
+
+            <button onclick="toggleGraficoDesviacion()" class="btn-interactivo" id="btn-grafico-desviacion">
+                📊 Ver Gráfico de Desviación Estándar
+            </button>
+
+            <div id="contenedor-grafico-desviacion" class="oculto" style="margin-top:20px;">
+                <canvas id="graficaDesviacion"></canvas>
+            </div>
+        </div>
+    </section>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="datos.js"></script>
+    <script src="social_media_200.js"></script>
+    <script src="funciones_estadisticas/media.js"></script>
+    <script src="funciones_estadisticas/mediana.js"></script>
+    <script src="funciones_estadisticas/moda.js"></script>
+    <script src="funciones_estadisticas/minMax.js"></script>
+    <script src="funciones_estadisticas/rango.js"></script>
+    <script src="funciones_estadisticas/varianza.js"></script>
+    <script src="funciones_estadisticas/desviacion.js"></script>
+    <script src="estadistica.js"></script>
+
+</body>
+</html>

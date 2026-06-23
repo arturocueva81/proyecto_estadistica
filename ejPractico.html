@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio Práctico — Estadística Aplicada</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="estadistica.css">
+</head>
+
+<body>
+
+    <nav>
+        <a href="index.html" class="btn-nav">Portada</a>
+        <a href="media.html" class="btn-nav">Media</a>
+        <a href="mediana.html" class="btn-nav">Mediana</a>
+        <a href="moda.html" class="btn-nav">Moda</a>
+        <a href="minMax.html" class="btn-nav">Mínimo y Máximo</a>
+        <a href="rango.html" class="btn-nav">Rango</a>
+        <a href="varianza.html" class="btn-nav">Varianza</a>
+        <a href="desvEstandar.html" class="btn-nav">Desviación Estándar</a>
+        <a href="ejPractico.html" class="btn-nav activo">Ejercicio Práctico</a>
+        <a href="test.html" class="btn-nav">Test</a>
+        <a href="acercaDe.html" class="btn-nav">Acerca De</a>
+    </nav>
+
+
+    <!-- ============================================================
+         SECCIÓN: EJERCICIO PRÁCTICO
+         Visible por defecto al cargar esta página (sin clase 'oculto').
+         El id se mantiene como 'ejercicio-practico' para que
+         estadistica.js siga funcionando sin cambios.
+         ============================================================ -->
+    <section id="ejercicio-practico" class="dos-columnas">
+
+        <!-- Columna izquierda: descripción del dataset y tabla de previsualización -->
+        <div class="columna-teoria">
+            <h2>Ejercicio Práctico</h2>
+            <img src="images/social_media.jpeg" alt="Imagen de redes sociales" width="50%">
+
+            <h3>Contexto del dataset</h3>
+            <p>
+                Este ejercicio utiliza una muestra de <strong>200 registros</strong>
+                tomados aleatoriamente de un dataset original de 1.000 usuarios de
+                redes sociales, publicado en
+                <a href="https://www.kaggle.com/datasets/bhadramohit/social-media-usage-datasetapplications"
+                    target="_blank">Kaggle</a>.
+            </p>
+            <p>
+                Cada registro representa el comportamiento diario de un usuario en
+                una red social específica en USA en el año 2024. Las variables registradas son:
+            </p>
+            <ul>
+                <li><strong>App:</strong> red social utilizada (Instagram, TikTok, Facebook, etc.)</li>
+                <li><strong>Daily_Minutes_Spent:</strong> minutos diarios que el usuario pasa en la app</li>
+                <li><strong>Posts_Per_Day:</strong> publicaciones realizadas por día</li>
+                <li><strong>Likes_Per_Day:</strong> likes dados por día</li>
+                <li><strong>Follows_Per_Day:</strong> cuentas seguidas por día</li>
+            </ul>
+
+            <h3>Vista previa del dataset</h3>
+            <p>
+                Los primeros <strong>10 registros</strong> del dataset para
+                entender la estructura de los datos que se van a analizar:
+            </p>
+
+            <div id="contenedor-tabla-preview">
+                <table id="tabla-preview-dataset" class="tabla-interactiva">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>User ID</th>
+                            <th>App</th>
+                            <th>Min / Día</th>
+                            <th>Posts / Día</th>
+                            <th>Likes / Día</th>
+                            <th>Follows / Día</th>
+                        </tr>
+                    </thead>
+                    <!-- El tbody es llenado dinámicamente por cargarTablaPreviewDataset() en estadistica.js -->
+                    <tbody id="cuerpo-tabla-preview">
+                    </tbody>
+                </table>
+            </div>
+
+            <p>
+                El objetivo de este ejercicio es calcular métricas estadísticas
+                para comparar el comportamiento de los usuarios en cada red social.
+            </p>
+        </div>
+
+        <!-- Columna derecha: 7 subsecciones estadísticas interactivas -->
+        <div class="columna-ejercicios">
+            <div class="selector-ejercicio-box">
+                <h3>Selecciona el cálculo estadístico</h3>
+                <p>Elige una opción para visualizar únicamente el ejercicio correspondiente.</p>
+
+                <select id="selectorEjercicioPractico" onchange="mostrarEjercicioSeleccionado()">
+                    <option value="">-- Selecciona un cálculo --</option>
+                    <option value="sub-ep-media">Media</option>
+                    <option value="sub-ep-mediana">Mediana</option>
+                    <option value="sub-ep-moda">Moda</option>
+                    <option value="sub-ep-minmax">Mínimo y Máximo</option>
+                    <option value="sub-ep-rango">Rango</option>
+                    <option value="sub-ep-varianza">Varianza</option>
+                    <option value="sub-ep-desviacion">Desviación Estándar</option>
+                </select>
+            </div>
+
+            <!-- SUBSECCIÓN 1: MEDIA -->
+            <div class="subseccion-interactiva" id="sub-ep-media">
+                <h4>📘 Media — Minutos diarios por App</h4>
+                <p>
+                    JavaScript recorre los 200 registros, los agrupa por
+                    <strong>App</strong> y calcula la media de
+                    <strong>Daily_Minutes_Spent</strong> para cada red social.
+                </p>
+                <button onclick="toggleEjercicioPractico()" class="btn-interactivo" id="btn-ejercicio-practico">
+                    ▶ Calcular Media por App
+                </button>
+                <div id="resultado-ejercicio" class="oculto"></div>
+                <h4>📊 Gráfico comparativo</h4>
+                <p>Gráfico de barras con la media de minutos diarios por red social.</p>
+                
+                <label for="select-grafico-media" class="label-selector-grafico">Tipo de gráfico:</label>
+                <select id="select-grafico-media" class="selector-grafico-interno">
+                    <option value="barHorizontal">Barras horizontales</option>
+                    <option value="bar">Barras verticales</option>
+                    <option value="line">Líneas</option>
+                    <option value="doughnut">Dona</option>
+                </select>
+
+                <button onclick="toggleGraficoEjercicio()" class="btn-interactivo" id="btn-grafico-ejercicio">
+                    📊 Ver Gráfico Comparativo
+                </button>
+                <div id="contenedor-grafico-ejercicio" class="oculto" style="margin-top:16px;">
+                    <canvas id="graficaEjercicio"></canvas>
+                </div>
+            </div>
+
+            <!-- SUBSECCIÓN 2: MEDIANA -->
+            <div class="subseccion-interactiva" id="sub-ep-mediana">
+                <h4>📗 Mediana — Minutos diarios</h4>
+                <p>
+                    JavaScript ordena los 200 valores de
+                    <strong>Daily_Minutes_Spent</strong> de menor a mayor
+                    y encuentra el valor central del dataset completo.
+                </p>
+                <button onclick="toggleEjercicioPracticoMediana()" class="btn-interactivo"
+                    id="btn-ejercicio-practico-mediana">
+                    ▶ Calcular Mediana
+                </button>
+                <div id="resultado-ejercicio-mediana" class="oculto"></div>
+                <h4>📊 Gráfico de distribución</h4>
+                <p>Valores ordenados con la línea de mediana como referencia visual.</p>
+                <label for="select-grafico-mediana" class="label-selector-grafico">Tipo de gráfico:</label>
+                <select id="select-grafico-mediana" class="selector-grafico-interno">
+                    <option value="barHorizontal">Barras horizontales</option>
+                    <option value="bar">Barras verticales</option>
+                    <option value="line">Líneas</option>
+                </select>
+                <button onclick="toggleGraficoEjercicioMediana()" class="btn-interactivo"
+                    id="btn-grafico-ejercicio-mediana">
+                    📊 Ver Gráfico de Distribución
+                </button>
+                <div id="contenedor-grafico-ejercicio-mediana" class="oculto" style="margin-top:16px;">
+                    <canvas id="graficaEjercicioMediana"></canvas>
+                </div>
+            </div>
+
+            <!-- SUBSECCIÓN 3: MODA -->
+            <div class="subseccion-interactiva" id="sub-ep-moda">
+                <h4>📙 Moda — App más frecuente</h4>
+                <p>
+                    JavaScript cuenta cuántas veces aparece cada
+                    <strong>App</strong> en los 200 registros y determina
+                    cuál es la red social más representada en el dataset.
+                </p>
+                <button onclick="toggleEjercicioPracticoModa()" class="btn-interactivo"
+                    id="btn-ejercicio-practico-moda">
+                    ▶ Calcular Moda
+                </button>
+                <div id="resultado-ejercicio-moda" class="oculto"></div>
+                <h4>📊 Gráfico de frecuencias</h4>
+                <p>La barra más alta representa la App que más se repite (moda).</p>
+                <label for="select-grafico-moda" class="label-selector-grafico">Tipo de gráfico:</label>
+                <select id="select-grafico-moda" class="selector-grafico-interno">
+                    <option value="barHorizontal">Barras horizontales</option>
+                    <option value="bar">Barras verticales</option>
+                    <option value="line">Líneas</option>
+                </select>
+                <button onclick="toggleGraficoEjercicioModa()" class="btn-interactivo" id="btn-grafico-ejercicio-moda">
+                    📊 Ver Gráfico de Frecuencias
+                </button>
+                <div id="contenedor-grafico-ejercicio-moda" class="oculto" style="margin-top:16px;">
+                    <canvas id="graficaEjercicioModa"></canvas>
+                </div>
+            </div>
+
+            <!-- SUBSECCIÓN 4: MÍNIMO Y MÁXIMO -->
+            <div class="subseccion-interactiva" id="sub-ep-minmax">
+                <h4>📕 Mínimo y Máximo — Minutos diarios</h4>
+                <p>
+                    JavaScript recorre los 200 registros y encuentra el valor más bajo
+                    y el más alto de <strong>Daily_Minutes_Spent</strong> en todo el dataset.
+                </p>
+                <button onclick="toggleEjercicioMinMax()" class="btn-interactivo" id="btn-ejercicio-minmax">
+                    ▶ Calcular Mínimo y Máximo
+                </button>
+                <div id="resultado-ejercicio-minmax" class="oculto"></div>
+                <h4>📊 Gráfico de extremos</h4>
+                <p>
+                    La barra <strong style="color:#ef4444;">roja</strong> es el mínimo
+                    y la barra <strong style="color:#22c55e;">verde</strong> es el máximo.
+                </p>
+                <label for="select-grafico-minmax" class="label-selector-grafico">Tipo de gráfico:</label>
+                <select id="select-grafico-minmax" class="selector-grafico-interno">
+                    <option value="bar">Barras verticales</option>
+                    <option value="barHorizontal">Barras horizontales</option>
+                </select>
+                <button onclick="toggleGraficoEjercicioMinMax()" class="btn-interactivo"
+                    id="btn-grafico-ejercicio-minmax">
+                    📊 Ver Gráfico de Extremos
+                </button>
+                <div id="contenedor-grafico-ejercicio-minmax" class="oculto" style="margin-top:16px;">
+                    <canvas id="graficaEjercicioMinMax"></canvas>
+                </div>
+            </div>
+
+            <!-- SUBSECCIÓN 5: RANGO -->
+            <div class="subseccion-interactiva" id="sub-ep-rango">
+                <h4>📒 Rango — Amplitud de minutos diarios</h4>
+                <p>
+                    JavaScript calcula la diferencia entre el valor máximo y el mínimo
+                    de <strong>Daily_Minutes_Spent</strong> para conocer la amplitud
+                    total del dataset.
+                </p>
+                <button onclick="toggleEjercicioRango()" class="btn-interactivo" id="btn-ejercicio-rango">
+                    ▶ Calcular Rango
+                </button>
+                <div id="resultado-ejercicio-rango" class="oculto"></div>
+                <h4>📊 Gráfico de amplitud</h4>
+                <p>Visualiza la distancia entre el valor mínimo y el máximo del dataset.</p>
+                <label for="select-grafico-rango" class="label-selector-grafico">Tipo de gráfico:</label>
+                <select id="select-grafico-rango" class="selector-grafico-interno">
+                    <option value="bar">Barras verticales</option>
+                    <option value="line">Líneas</option>
+                </select>
+                <button onclick="toggleGraficoEjercicioRango()" class="btn-interactivo"
+                    id="btn-grafico-ejercicio-rango">
+                    📊 Ver Gráfico de Amplitud
+                </button>
+                <div id="contenedor-grafico-ejercicio-rango" class="oculto" style="margin-top:16px;">
+                    <canvas id="graficaEjercicioRango"></canvas>
+                </div>
+            </div>
+
+            <!-- SUBSECCIÓN 6: VARIANZA -->
+            <div class="subseccion-interactiva" id="sub-ep-varianza">
+                <h4>📓 Varianza — Dispersión de minutos diarios</h4>
+                <p>
+                    JavaScript calcula qué tan dispersos están los 200 valores de
+                    <strong>Daily_Minutes_Spent</strong> respecto a la media del dataset completo.
+                </p>
+                <button onclick="toggleEjercicioVarianza()" class="btn-interactivo" id="btn-ejercicio-varianza">
+                    ▶ Calcular Varianza
+                </button>
+                <div id="resultado-ejercicio-varianza" class="oculto"></div>
+                <h4>📊 Gráfico de desviaciones</h4>
+                <p>Compara cada valor con la media y visualiza la dispersión del dataset.</p>
+                <label for="select-grafico-varianza" class="label-selector-grafico">Tipo de gráfico:</label>
+                <select id="select-grafico-varianza" class="selector-grafico-interno">
+                    <option value="bar">Barras verticales</option>
+                    <option value="line">Líneas</option>
+                </select>
+                <button onclick="toggleGraficoEjercicioVarianza()" class="btn-interactivo"
+                    id="btn-grafico-ejercicio-varianza">
+                    📊 Ver Gráfico de Desviaciones
+                </button>
+                <div id="contenedor-grafico-ejercicio-varianza" class="oculto" style="margin-top:16px;">
+                    <canvas id="graficaEjercicioVarianza"></canvas>
+                </div>
+            </div>
+
+            <!-- SUBSECCIÓN 7: DESVIACIÓN ESTÁNDAR -->
+            <div class="subseccion-interactiva" id="sub-ep-desviacion">
+                <h4>📔 Desviación Estándar — Minutos diarios</h4>
+                <p>
+                    JavaScript calcula la raíz cuadrada de la varianza de
+                    <strong>Daily_Minutes_Spent</strong> para obtener la dispersión
+                    en las mismas unidades que los datos originales.
+                </p>
+                <button onclick="toggleEjercicioDesviacion()" class="btn-interactivo" id="btn-ejercicio-desviacion">
+                    ▶ Calcular Desviación Estándar
+                </button>
+                <div id="resultado-ejercicio-desviacion" class="oculto"></div>
+                <h4>📊 Gráfico de dispersión</h4>
+                <p>Muestra visualmente qué tan alejados están los datos respecto al promedio.</p>
+                <label for="select-grafico-desviacion" class="label-selector-grafico">Tipo de gráfico:</label>
+                <select id="select-grafico-desviacion" class="selector-grafico-interno">
+                    <option value="bar">Barras verticales</option>
+                    <option value="line">Líneas</option>
+                </select>
+                <button onclick="toggleGraficoEjercicioDesviacion()" class="btn-interactivo"
+                    id="btn-grafico-ejercicio-desviacion">
+                    📊 Ver Gráfico de Dispersión
+                </button>
+                <div id="contenedor-grafico-ejercicio-desviacion" class="oculto" style="margin-top:16px;">
+                    <canvas id="graficaEjercicioDesviacion"></canvas>
+                </div>
+            </div>
+
+        </div><!-- fin columna-ejercicios -->
+    </section>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3"></script>
+
+    <script src="datos.js"></script>
+    <script src="social_media_200.js"></script>
+    <script src="funciones_estadisticas/media.js"></script>
+    <script src="media_pagina.js"></script>
+    <script src="funciones_estadisticas/mediana.js"></script>
+    <script src="mediana_pagina.js"></script>
+    <script src="funciones_estadisticas/moda.js"></script>
+    <script src="moda_pagina.js"></script>
+    <script src="funciones_estadisticas/minMax.js"></script>
+    <script src="minMax_pagina.js"></script>
+    <script src="funciones_estadisticas/rango.js"></script>
+    <script src="rango_pagina.js"></script>
+    <script src="funciones_estadisticas/varianza.js"></script>
+    <script src="varianza_pagina.js"></script>
+    <script src="funciones_estadisticas/desviacion.js"></script>
+    <script src="desviacion_pagina.js"></script>
+    <script src="selector_ejercicios.js"></script>
+    <!-- <script src="estadistica.js"></script> -->
+
+</body>
+
+</html>
