@@ -241,7 +241,7 @@ function toggleGraficoEjercicio() {
         botonAccion.textContent = '📊 Ver Gráfico Comparativo';
 
         if (instanciaGraficoEjercicioPractico !== null) {
-            try { instanciaGraficoEjercicioPractico.destroy(); } catch(errorDestruccion) {}
+            try { instanciaGraficoEjercicioPractico.destroy(); } catch(e) {}
             instanciaGraficoEjercicioPractico = null;
         }
         return;
@@ -251,13 +251,13 @@ function toggleGraficoEjercicio() {
     contenedorGraficoEjercicio.classList.remove('oculto');
     botonAccion.textContent = '✖ Ocultar Gráfico';
 
-    // Liberamos instancia previa si quedó activa
+    // Destruir instancia previa
     if (instanciaGraficoEjercicioPractico !== null) {
-        try { instanciaGraficoEjercicioPractico.destroy(); } catch(errorDestruccion) {}
+        try { instanciaGraficoEjercicioPractico.destroy(); } catch(e) {}
         instanciaGraficoEjercicioPractico = null;
     }
 
-    // Reemplazamos el canvas para evitar conflictos de Chart.js
+    // ✅ REEMPLAZAR canvas siempre antes de dibujar
     let canvasExistente = document.getElementById('graficaEjercicio');
     if (!canvasExistente) { return; }
 
@@ -265,20 +265,35 @@ function toggleGraficoEjercicio() {
     canvasFresco.id  = 'graficaEjercicio';
     canvasExistente.parentNode.replaceChild(canvasFresco, canvasExistente);
 
+    // ✅ Verificar que el canvas nuevo está en el DOM antes de dibujar
     setTimeout(function() {
+
+        let canvasVerificado = document.getElementById('graficaEjercicio');
+        if (!canvasVerificado) {
+            console.error('❌ Canvas graficaEjercicio no encontrado en el DOM');
+            return;
+        }
+
         let resumenPorApp = agruparRegistrosPorApp();
 
+        if (!resumenPorApp || resumenPorApp.length === 0) {
+            console.warn('⚠️ No hay datos para graficar');
+            return;
+        }
+
         let selectorGrafico = document.getElementById('select-grafico-media');
-        let tipoElegido = selectorGrafico ? selectorGrafico.value : null;
+        let tipoElegido = selectorGrafico ? selectorGrafico.value : 'bar';
+
+        console.log('📊 Dibujando gráfico con', resumenPorApp.length, 'apps, tipo:', tipoElegido);
 
         instanciaGraficoEjercicioPractico = dibujarGraficoMedia(
             resumenPorApp,
-            'mediaMinutos',   // propiedad numérica del resumen agrupado
+            'mediaMinutos',
             'graficaEjercicio',
             'Media de ' + PROPIEDAD_NUMERICA_EJERCICIO + ' por App',
             tipoElegido
         );
-    }, 50);
+    }, 100); // ✅ 100ms en lugar de 50ms para dar más tiempo al DOM
 }
 
 
@@ -289,35 +304,35 @@ function toggleGraficoEjercicio() {
 // con id #cuerpo-tabla-preview al cargar la página.
 // ============================================================
 
-function cargarVistaPreviaDataset() {
+// function cargarVistaPreviaDataset() {
 
-    let cuerpoTablaPreview = document.getElementById('cuerpo-tabla-preview');
-    if (!cuerpoTablaPreview) { return; } // No estamos en ejPractico.html
+//     let cuerpoTablaPreview = document.getElementById('cuerpo-tabla-preview');
+//     if (!cuerpoTablaPreview) { return; } // No estamos en ejPractico.html
 
-    let todosLosRegistros    = obtenerListaRedesSociales();
-    let filasGeneradasHTML   = '';
-    let LIMITE_FILAS_PREVIEW = 10;
+//     let todosLosRegistros    = obtenerListaRedesSociales();
+//     let filasGeneradasHTML   = '';
+//     let LIMITE_FILAS_PREVIEW = 10;
 
-    for (let posicionFila = 0; posicionFila < LIMITE_FILAS_PREVIEW && posicionFila < todosLosRegistros.length; posicionFila++) {
-        let registroFila = todosLosRegistros[posicionFila];
+//     for (let posicionFila = 0; posicionFila < LIMITE_FILAS_PREVIEW && posicionFila < todosLosRegistros.length; posicionFila++) {
+//         let registroFila = todosLosRegistros[posicionFila];
 
-        filasGeneradasHTML += '<tr>';
-        filasGeneradasHTML += '<td>' + (posicionFila + 1)          + '</td>';
-        filasGeneradasHTML += '<td>' + registroFila.User_ID         + '</td>';
-        filasGeneradasHTML += '<td>' + registroFila.App             + '</td>';
-        filasGeneradasHTML += '<td>' + registroFila.Daily_Minutes_Spent + '</td>';
-        filasGeneradasHTML += '<td>' + registroFila.Posts_Per_Day   + '</td>';
-        filasGeneradasHTML += '<td>' + registroFila.Likes_Per_Day   + '</td>';
-        filasGeneradasHTML += '<td>' + registroFila.Follows_Per_Day + '</td>';
-        filasGeneradasHTML += '</tr>';
-    }
+//         filasGeneradasHTML += '<tr>';
+//         filasGeneradasHTML += '<td>' + (posicionFila + 1)          + '</td>';
+//         filasGeneradasHTML += '<td>' + registroFila.User_ID         + '</td>';
+//         filasGeneradasHTML += '<td>' + registroFila.App             + '</td>';
+//         filasGeneradasHTML += '<td>' + registroFila.Daily_Minutes_Spent + '</td>';
+//         filasGeneradasHTML += '<td>' + registroFila.Posts_Per_Day   + '</td>';
+//         filasGeneradasHTML += '<td>' + registroFila.Likes_Per_Day   + '</td>';
+//         filasGeneradasHTML += '<td>' + registroFila.Follows_Per_Day + '</td>';
+//         filasGeneradasHTML += '</tr>';
+//     }
 
-    cuerpoTablaPreview.innerHTML = filasGeneradasHTML;
-}
+//     cuerpoTablaPreview.innerHTML = filasGeneradasHTML;
+// }
 
 // Se ejecuta automáticamente cuando el HTML termina de cargarse
 document.addEventListener('DOMContentLoaded', function() {
-    cargarVistaPreviaDataset();
+    //cargarVistaPreviaDataset();
 
     // Evento para ocultar el gráfico al cambiar el tipo en el combo box
     let selectorGraficoMedia = document.getElementById('select-grafico-media');

@@ -26,12 +26,12 @@
     </nav>
 
 
-    <!-- ============================================================
-         SECCIÓN: EJERCICIO PRÁCTICO
-         Visible por defecto al cargar esta página (sin clase 'oculto').
-         El id se mantiene como 'ejercicio-practico' para que
-         estadistica.js siga funcionando sin cambios.
-         ============================================================ -->
+        <!-- ============================================================
+            SECCIÓN: EJERCICIO PRÁCTICO
+            Visible por defecto al cargar esta página (sin clase 'oculto').
+            El id se mantiene como 'ejercicio-practico' para que
+            estadistica.js siga funcionando sin cambios.
+            ============================================================ -->
     <section id="ejercicio-practico" class="dos-columnas">
 
         <!-- Columna izquierda: descripción del dataset y tabla de previsualización -->
@@ -60,6 +60,24 @@
             </ul>
 
             <h3>Vista previa del dataset</h3>
+
+            <!-- combobox que llama a la funcion numRegistros.js -->
+            <div class="selector-ejercicio-box">
+                <h3>Muestra Aleatoria</h3>
+                <p>Selecciona el tamaño de la muestra para el análisis.</p>
+                <select id="selectRegistros">
+                    <option value="10">10 Registros</option>
+                    <option value="50">50 Registros</option>
+                    <option value="100">100 Registros</option>
+                    <option value="150">150 Registros</option>
+                    <option value="200" selected>Todos (200)</option>
+                </select>
+                <button onclick="confirmarMuestra()" class="btn-interactivo" id="btn-aplicar-muestra">
+                    🔀 Aplicar Muestra
+                </button>
+
+            </div>
+
             <p>
                 Los primeros <strong>10 registros</strong> del dataset para
                 entender la estructura de los datos que se van a analizar:
@@ -320,6 +338,7 @@
 
     <script src="datos.js"></script>
     <script src="social_media_200.js"></script>
+    <script src="numRegistros.js"></script>
     <script src="funciones_estadisticas/media.js"></script>
     <script src="media_pagina.js"></script>
     <script src="funciones_estadisticas/mediana.js"></script>
